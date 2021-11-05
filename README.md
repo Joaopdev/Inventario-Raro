@@ -1,6 +1,31 @@
-# Inventario-Raro
-Repositório criado para o projeto de conclusão da RaroAcademy, com o fim de implementar um sistema que faça o controle do inventário dos equipamentos eletrônicos da Raro Labs que são enviados aos colaboradores que entram na empresa.
+<div style="text-align:center"><img src="./assets/images/logo-inventario-project.png" alt="Logo do projeto Inventário RaroLabs" width="350px" display="flex" align-items="center"></div>
 
-O projeto será implementado pelo grupo 02 - `Undefined`, composto por Bernardo, Gabriel, Jackson e João Paulo.
+<br>
+<h1 align='center'>Inventario-Raro </h1>
+<br>
 
-Os commits deverão ser realizados em suas branchs próprias e para serem aprovadas passarão por code-review de pelo menos 02 membros.
+<h2 align="center"> Descrição </h2>
+
+<br>
+
+<h3> Repositório criado para o projeto de conclusão da RaroAcademy, com o fim de implementar um sistema que faça o controle do inventário dos equipamentos eletrônicos da Raro Labs que são enviados aos colaboradores que entram na empresa. </h3>
+
+<br>
+
+<h2 align="center"> 
+	Status do Projeto
+</h2> 
+
+<br>
+
+<h3> Em andamento </h3>
+
+<br>
+
+<h2 align="center"> Composição da squad </h2>
+
+<br>
+
+<h3> O projeto é realizado pelo grupo 02 - `Undefined`, composto por Bernardo, Gabriel, Jackson e João Paulo.</h3>
+
+
