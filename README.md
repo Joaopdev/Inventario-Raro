@@ -1,4 +1,4 @@
-<div style="text-align:center"><img src="./assets/images/logo-inventario-project.png" alt="Logo do projeto Inventário RaroLabs" width="350px" display="flex" align-items="center"></div>
+<p align="center"><img src="./assets/images/logo-inventario-project.png" alt="Logo do projeto Inventário RaroLabs" width="520px" display="flex" align-items="center"></p>
 
 <br>
 <h1 align='center'>Inventario-Raro </h1>
@@ -8,7 +8,7 @@
 
 <br>
 
-<h3> Repositório criado para o projeto de conclusão da RaroAcademy, com o fim de implementar um sistema que faça o controle do inventário dos equipamentos eletrônicos da Raro Labs que são enviados aos colaboradores que entram na empresa. </h3>
+<h3 justify-content> Repositório criado para o projeto de conclusão da RaroAcademy, com o fim de implementar um sistema que faça o controle do inventário dos equipamentos eletrônicos da Raro Labs que são enviados aos colaboradores que entram na empresa. </h3>
 
 <br>
 
