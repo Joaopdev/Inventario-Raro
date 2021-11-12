@@ -1,4 +1,4 @@
-<p align="center"><img src="./assets/images/logo-inventario-project.png" alt="Logo do projeto Inventário RaroLabs" width="520px" display="flex" align-items="center"></p>
+<p align="center"><img src="./inventario-app/assets/images/logo-inventario-project.png" alt="Logo do projeto Inventário RaroLabs" width="520px" display="flex" align-items="center"></p>
 
 <br>
 <h1 align='center'>Inventario-Raro </h1>
