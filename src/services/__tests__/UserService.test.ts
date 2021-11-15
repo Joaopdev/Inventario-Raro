@@ -1,5 +1,5 @@
 import * as faker from "faker";
-import { UserService } from "../../services/UserService";
+import { UsuarioService } from "../../services/UserService";
 import { UsuarioDto } from "../../@types/dto/UsuarioDto";
 import { UsuarioRepository } from "repositories/UsuarioRepository";
 import { Usuario } from "models/UsuarioEntity";
@@ -7,7 +7,7 @@ import { Usuario } from "models/UsuarioEntity";
 describe("UserService", () => {
   let usuarioDto: UsuarioDto;
   let usuarioRepository: UsuarioRepository;
-  let userService: UserService;
+  let userService: UsuarioService;
 
   beforeEach(jest.clearAllMocks);
   beforeEach(() => {
@@ -18,7 +18,7 @@ describe("UserService", () => {
       email: faker.internet.email(),
     };
     usuarioRepository = new UsuarioRepository();
-    userService = new UserService(usuarioRepository);
+    userService = new UsuarioService(usuarioRepository);
   });
 
   describe("list", () => {
