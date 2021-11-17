@@ -24,7 +24,7 @@ export class Equipamento {
   numeroDeSerie: string;
 
   @Column()
-  dataAquisicao: string;
+  dataAquisicao: number;
 
   @ManyToOne(
     () => TipoEquipamento,
