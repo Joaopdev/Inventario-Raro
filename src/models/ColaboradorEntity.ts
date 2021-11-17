@@ -21,10 +21,10 @@ export class Colaborador {
   email: string;
 
   @Column()
-  dataInicio: string;
+  dataInicio: Date;
 
   @Column({ nullable: true })
-  dataRecisao: string;
+  dataRecisao: Date;
 
   @OneToMany(() => Equipamento, (equipamento) => equipamento.colaborador)
   equipamentos: Equipamento[];

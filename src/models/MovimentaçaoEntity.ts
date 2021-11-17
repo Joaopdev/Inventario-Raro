@@ -14,13 +14,13 @@ export class Movimentacao {
   tipoMovimentacao: TipoMovimentacao;
 
   @Column()
-  dataMovimentacao: string;
+  dataMovimentacao: Date;
 
   @Column()
-  dataInicio: string;
+  dataInicio: Date;
 
   @Column({ nullable: true })
-  dataEntrega?: string;
+  dataEntrega?: Date;
 
   @Column({ nullable: true })
   descricao?: string;
