@@ -7,7 +7,7 @@ const getController = (): UserController => {
   return Container.get<UserController>("UserController");
 };
 
-const crateRouter = () => {
+const createRouter = () => {
   router.get("", (req, res) => getController().list(req, res));
   router.post("", (req, res) => getController().create(req, res));
   router.get("/:id", (req, res) => getController().get(req, res));
@@ -17,4 +17,4 @@ const crateRouter = () => {
   return router;
 };
 
-export default crateRouter;
+export default createRouter;

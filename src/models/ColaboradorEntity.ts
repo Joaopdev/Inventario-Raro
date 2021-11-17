@@ -15,10 +15,13 @@ export class Colaborador {
   id: number;
 
   @Column()
-  name: string;
+  nome: string;
 
   @Column()
   email: string;
+
+  @Column()
+  telefone: string;
 
   @Column()
   dataInicio: string;
