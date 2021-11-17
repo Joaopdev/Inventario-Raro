@@ -3,5 +3,5 @@ import { Equipamento } from "models/EquipamentoEntity";
 
 export interface IEquipamentoRepository {
   save(equipamento: CriarEquipamentoDto): Promise<Equipamento>;
-  listar(): Promise<Equipamento[]>;
+  find(): Promise<Equipamento[]>;
 }

@@ -8,3 +8,5 @@ export type ParametroDto = {
   quantidadeCritica: number;
   tipoEquipamento: TipoEquipamentoDto;
 };
+
+export type CriarParametroDto = Omit<ParametroDto, "id">;

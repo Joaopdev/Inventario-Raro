@@ -11,4 +11,4 @@ export type TipoEquipamentoDto = {
   parametro: ParametroDto;
 };
 
-export type SalvarTipoEquipamentoDto = Omit<TipoEquipamentoDto, "id">;
+export type CriarTipoEquipamentoDto = Omit<TipoEquipamentoDto, "id">;
