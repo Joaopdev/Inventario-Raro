@@ -13,7 +13,7 @@ export class ColaboradorService implements IColaboradorService {
     private colaboradorRepository: IColaboradorRepository
   ) {}
   async listar(): Promise<Colaborador[]> {
-    return this.colaboradorRepository.findAll();
+    return await this.colaboradorRepository.findAll();
   }
   async buscar(id: number): Promise<Colaborador> {
     return await this.checaColaborador(id);
@@ -23,7 +23,7 @@ export class ColaboradorService implements IColaboradorService {
     return await this.colaboradorRepository.save(novoColaborador);
   }
   async atualizar(id: number, colaboradorDto: ColaboradorDto): Promise<void> {
-    const colaborador = await this.colaboradorRepository.findById(id);
+    const colaborador = await this.checaColaborador(id);
     const colaboradorAtualizado = { ...colaborador, ...colaboradorDto };
     await this.colaboradorRepository.save(colaboradorAtualizado);
     return;

@@ -1,6 +1,6 @@
-export interface ColaboradorDto {
+export type ColaboradorDto = {
   nome: string;
   email: string;
   telefone: string;
-  dataInicio: string;
-}
+  dataInicio: Date;
+};

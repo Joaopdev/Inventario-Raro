@@ -2,7 +2,7 @@ import { Inject, Service } from "typedi";
 import { UsuarioDto } from "../@types/dto/UsuarioDto";
 import { IUsuarioService } from "../@types/services/IUsuarioService";
 import { IUsuarioRepository } from "../@types/repositories/IUsuarioRepository";
-import { Usuario } from "models/UsuarioEntity";
+import { Usuario } from "../models/UsuarioEntity";
 
 @Service("UsuarioService")
 export class UsuarioService implements IUsuarioService {
