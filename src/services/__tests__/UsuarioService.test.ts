@@ -1,5 +1,5 @@
 import * as faker from "faker";
-import { UsuarioService } from "../../services/UserService";
+import { UsuarioService } from "../UsuarioService";
 import { UsuarioDto } from "../../@types/dto/UsuarioDto";
 import { UsuarioRepository } from "repositories/UsuarioRepository";
 import { Usuario } from "models/UsuarioEntity";
