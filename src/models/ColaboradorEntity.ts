@@ -15,7 +15,7 @@ export class Colaborador {
   id: number;
 
   @Column()
-  name: string;
+  nome: string;
 
   @Column()
   email: string;
