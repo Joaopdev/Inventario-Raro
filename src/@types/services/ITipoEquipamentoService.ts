@@ -3,7 +3,7 @@ import { CriarTipoEquipamentoDto } from "../dto/TipoEquipamentoDto";
 
 export interface ITipoEquipamentoService {
   criarTipoEquipamento(
-    tipoEquipamento: CriarTipoEquipamentoDto
+    tipoEquipamentoDto: CriarTipoEquipamentoDto
   ): Promise<TipoEquipamento>;
   listarTipoEquipamento(): Promise<TipoEquipamento>;
 }

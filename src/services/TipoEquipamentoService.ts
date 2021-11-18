@@ -1,5 +1,5 @@
 import { CriarTipoEquipamentoDto } from "../@types/dto/TipoEquipamentoDto";
-import { TipoEquipamento } from "models/TipoEquipamentoEntity";
+import { TipoEquipamento } from "../models/TipoEquipamentoEntity";
 import { ITipoEquipamentoService } from "../@types/services/ITipoEquipamentoService";
 import { Inject, Service } from "typedi";
 import { ITipoEquipamentoRepository } from "../@types/repositories/ITipoEquipamentoRepository";
@@ -11,7 +11,7 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
     private tipoEquipamentoRepository: ITipoEquipamentoRepository
   ) {}
   criarTipoEquipamento(
-    tipoEquipamento: CriarTipoEquipamentoDto
+    tipoEquipamentoDto: CriarTipoEquipamentoDto
   ): Promise<TipoEquipamento> {
     /**
      * todo
