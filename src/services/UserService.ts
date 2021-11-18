@@ -7,7 +7,7 @@ import { Usuario } from "models/UsuarioEntity";
 @Service("UsuarioService")
 export class UsuarioService implements IUsuarioService {
   constructor(
-    @Inject("UserRepository") private userRepository: IUsuarioRepository
+    @Inject("UsuarioRepository") private userRepository: IUsuarioRepository
   ) {}
 
   async listar(): Promise<Usuario[]> {
