@@ -1,6 +1,6 @@
 import { Role } from "../enums/Role";
 
-export interface UsuarioDto {
+export type UsuarioDto = {
   id?: number;
   nome: string;
   email: string;

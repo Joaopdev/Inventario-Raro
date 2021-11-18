@@ -1,8 +1,8 @@
 import * as faker from "faker";
 import { UsuarioService } from "../UsuarioService";
 import { UsuarioDto } from "../../@types/dto/UsuarioDto";
-import { UsuarioRepository } from "repositories/UsuarioRepository";
-import { Usuario } from "models/UsuarioEntity";
+import { UsuarioRepository } from "../../repositories/UsuarioRepository";
+import { Usuario } from "../../models/UsuarioEntity";
 
 describe("UserService", () => {
   let usuarioDto: UsuarioDto;
