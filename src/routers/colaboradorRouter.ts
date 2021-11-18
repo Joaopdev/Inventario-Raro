@@ -1,4 +1,4 @@
-import { ColaboradorController } from "controllers/ColaboradorController";
+import { ColaboradorController } from "../controllers/ColaboradorController";
 import { Router } from "express";
 import Container from "typedi";
 const router = Router();
