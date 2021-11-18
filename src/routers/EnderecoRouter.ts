@@ -7,10 +7,10 @@ const getController = (): EnderecoController => {
   return Container.get<EnderecoController>("EnderecoController");
 };
 
-const crateRouter = () => {
+const createRouter = () => {
   router.get("/:cep", (req, res) => getController().get(req, res));
 
   return router;
 };
 
-export default crateRouter;
+export default createRouter;

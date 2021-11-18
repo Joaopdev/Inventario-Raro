@@ -1,6 +1,8 @@
 import { getCustomRepository } from "typeorm";
 import Container from "typedi";
 import { UsuarioRepository } from "../../repositories/UsuarioRepository";
+import { ColaboradorRepository } from "repositories/ColaboradorRepository";
+=======
 import { EquipamentoRepository } from "../../repositories/EquipamentoRepository";
 import { TipoEquipamentoRepository } from "../../repositories/TipoEquipamentoRepository";
 import { ParametroRepository } from "../../repositories/ParametroRepository";
@@ -9,10 +11,13 @@ import { ParametroRepository } from "../../repositories/ParametroRepository";
 // inicializa controllers
 import "../../controllers/UserController";
 import "../../controllers/EnderecoController";
+import "../../controllers/ColaboradorController";
 
 // inicializa services
 import "../../services/UserService";
 import "../../services/EnderecoService";
+import "../../services/ColaboradorService";
+=======
 import "../../services/EquipamentoService";
 import "../../services/TipoEquipamentoService";
 import "../../services/ParametroService";
@@ -24,6 +29,9 @@ import "../../infra/http/AxiosHttpClient";
 const createDependencyInjector = (): void => {
   Container.set("UsuarioRepository", getCustomRepository(UsuarioRepository));
   Container.set(
+    "ColaboradorRepository",
+    getCustomRepository(ColaboradorRepository)
+=======
     "EquipamentoRepository",
     getCustomRepository(EquipamentoRepository)
   );

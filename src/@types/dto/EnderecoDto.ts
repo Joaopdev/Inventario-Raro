@@ -1,4 +1,4 @@
-export interface EnderecoDto {
+export type EnderecoDto = {
   cep: string;
   logradouro: string;
   complemento: string;
@@ -9,4 +9,4 @@ export interface EnderecoDto {
   gia: string;
   ddd: string;
   siafi: string;
-}
+};
