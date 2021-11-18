@@ -21,6 +21,9 @@ export class Colaborador {
   email: string;
 
   @Column()
+  telefone: string;
+
+  @Column()
   dataInicio: Date;
 
   @Column({ nullable: true })

@@ -5,7 +5,7 @@ export type TipoEquipamentoDto = {
   id: number;
   tipo: string;
   modelo: string;
-  descricao: string;
+  descricao?: string;
   quantidade: number;
   equipamentos?: EquipamentoDto[];
   parametro: ParametroDto;
