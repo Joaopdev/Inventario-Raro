@@ -1,6 +1,6 @@
 import { CriarEquipamentoDto } from "../@types/dto/EquipamentoDto";
 import { IEquipamentoService } from "../@types/services/IEquipamentoService";
-import { Equipamento } from "models/EquipamentoEntity";
+import { Equipamento } from "../models/EquipamentoEntity";
 import { Service, Inject } from "typedi";
 import { IEquipamentoRepository } from "../@types/repositories/IEquipamentoRepository";
 @Service("EquipamentoService")

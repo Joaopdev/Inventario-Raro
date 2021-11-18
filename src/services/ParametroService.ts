@@ -1,5 +1,5 @@
 import { CriarParametroDto } from "../@types/dto/ParametroDto";
-import { Parametro } from "models/ParametroEntity";
+import { Parametro } from "../models/ParametroEntity";
 import { IParametroService } from "../@types/services/IParametroService";
 import { Inject, Service } from "typedi";
 import { IParametroRepository } from "../@types/repositories/IParametroRepository";
@@ -10,7 +10,7 @@ export class ParametroService implements IParametroService {
     @Inject("ParametroRepository")
     private parametroRepository: IParametroRepository
   ) {}
-  criarParametro(parametro: CriarParametroDto): Promise<Parametro> {
+  criarParametro(parametroDto: CriarParametroDto): Promise<Parametro> {
     /**
      * todo
      */
