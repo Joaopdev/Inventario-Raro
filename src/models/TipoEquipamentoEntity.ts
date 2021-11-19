@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Equipamento } from "./EquipamentoEntity";
-import { Movimentacao } from "./MovimentaçaoEntity";
+import { Movimentacao } from "./MovimentacaoEntity";
 import { Parametro } from "./ParametroEntity";
 
 @Entity()
