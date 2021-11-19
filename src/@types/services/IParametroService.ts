@@ -1,5 +1,5 @@
 import { CriarParametroDto } from "../dto/ParametroDto";
-import { Parametro } from "models/ParametroEntity";
+import { Parametro } from "../../models/ParametroEntity";
 
 export interface IParametroService {
   criarParametro(parametroDto: CriarParametroDto): Promise<Parametro>;

@@ -1,7 +1,10 @@
 import { TipoEquipamento } from "../../models/TipoEquipamentoEntity";
-import { CriarTipoEquipamentoDto } from "../dto/TipoEquipamentoDto";
 
 export interface ITipoEquipamentoRepository {
-  save(tipoEquipamentoDto: CriarTipoEquipamentoDto): Promise<TipoEquipamento>;
+  save(tipoEquipamento: TipoEquipamento): Promise<TipoEquipamento>;
   find(): Promise<TipoEquipamento[]>;
+  findOne(id: number): Promise<TipoEquipamento>;
+  remove(
+    tipoEquipamento: TipoEquipamento | TipoEquipamento[]
+  ): Promise<TipoEquipamento[]>;
 }

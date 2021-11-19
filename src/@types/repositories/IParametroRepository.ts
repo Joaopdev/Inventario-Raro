@@ -1,7 +1,6 @@
-import { Parametro } from "models/ParametroEntity";
-import { CriarParametroDto } from "../dto/ParametroDto";
+import { Parametro } from "../../models/ParametroEntity";
 
 export interface IParametroRepository {
-  save(parametroDto: CriarParametroDto): Promise<Parametro>;
+  save(parametro: Parametro): Promise<Parametro>;
   find(): Promise<Parametro[]>;
 }
