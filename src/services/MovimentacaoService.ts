@@ -31,4 +31,11 @@ export class MovimentacaoService implements IMovimentacaoService {
      */
      throw new Error("Method not implemented.");
   }
+
+  async atualizar(id: number, movimentacaoDto: MovimentacaoDto): Promise<void> {
+    /**
+     * todo
+     */
+     throw new Error("Method not implemented.");
+  }
 };
