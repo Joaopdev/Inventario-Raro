@@ -1,4 +1,4 @@
-import { Movimentacao } from "models/MovimentacaoEntity";
+import { Movimentacao } from "../../models/MovimentacaoEntity";
 
 export interface IMovimentacaoRepository {
   find(): Promise<Movimentacao[]>

@@ -1,7 +1,7 @@
 import { MovimentacaoDto } from "../@types/dto/MovimentacaoDto";
 import { IMovimentacaoRepository } from "../@types/repositories/IMovimentacaoRepository";
 import { IMovimentacaoService } from "../@types/services/IMovimentacaoService";
-import { Movimentacao } from "models/MovimentacaoEntity";
+import { Movimentacao } from "../models/MovimentacaoEntity";
 import { Inject, Service } from "typedi";
 
 @Service("MovimentacaoService")
