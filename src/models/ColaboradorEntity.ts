@@ -24,7 +24,6 @@ export class Colaborador {
   telefone: string;
 
   @Column()
-=======
   dataInicio: Date;
 
   @Column({ nullable: true })
