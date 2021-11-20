@@ -13,26 +13,21 @@ export class UsuarioService implements IUsuarioService {
   ) {}
 
   async listar(): Promise<Usuario[]> {
-    return await this.usuarioRepository.find()
+    return await this.usuarioRepository.find();
   }
 
   async buscar(id: number): Promise<Usuario> {
-    return await this.usuarioRepository.findOne(id);
+    const usuario = await this.usuarioRepository.findOne(id);
+    if(!usuario) {
+      throw new Error("Usuário não encontrado");
+    }
+    return usuario;
   }
 
   async criar(usuarioDto: UsuarioDto): Promise<Usuario> {
-    try {
-      const usuario = usuarioFactory(usuarioDto);
-      const resultado = await this.usuarioRepository.save(usuario);
-      return resultado;
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(
-          `Falha ao cadastrar um novo usuário. Motivo: ${error.message}`
-        );
-      }
-      throw error;
-    }
+    const usuario = usuarioFactory(usuarioDto);
+    const resultado = await this.usuarioRepository.save(usuario);
+    return resultado;
   }
 
   async atualizar(id: number, usuarioDto: UsuarioDto): Promise<void> {
@@ -41,7 +36,7 @@ export class UsuarioService implements IUsuarioService {
   }
 
   async remover(id: number): Promise<void> {
-    const usuario = await this.usuarioRepository.findOne(id);
+    const usuario = await this.buscar(id);
     await this.usuarioRepository.remove(usuario);
   }
 }
