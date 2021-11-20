@@ -3,6 +3,7 @@ import { UsuarioDto } from "../@types/dto/UsuarioDto";
 import { IUsuarioService } from "../@types/services/IUsuarioService";
 import { IUsuarioRepository } from "../@types/repositories/IUsuarioRepository";
 import { Usuario } from "../models/UsuarioEntity";
+import { usuarioFactory } from "../dataMappers/usuarioFactory";
 
 @Service("UsuarioService")
 export class UsuarioService implements IUsuarioService {
@@ -12,37 +13,35 @@ export class UsuarioService implements IUsuarioService {
   ) {}
 
   async listar(): Promise<Usuario[]> {
-    /**
-     * todo
-     */
-     throw new Error("Method not implemented.");
+    return await this.usuarioRepository.find()
   }
 
   async buscar(id: number): Promise<Usuario> {
-    /**
-     * todo
-     */
-     throw new Error("Method not implemented.");
+    return await this.usuarioRepository.findOne(id);
   }
 
-  async criar(usuario: UsuarioDto): Promise<Usuario> {
-    /**
-     * todo
-     */
-     throw new Error("Method not implemented.");
+  async criar(usuarioDto: UsuarioDto): Promise<Usuario> {
+    try {
+      const usuario = usuarioFactory(usuarioDto);
+      const resultado = await this.usuarioRepository.save(usuario);
+      return resultado;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(
+          `Falha ao cadastrar um novo usuário. Motivo: ${error.message}`
+        );
+      }
+      throw error;
+    }
   }
 
-  async atualizar(id: number, usuario: UsuarioDto): Promise<void> {
-    /**
-     * todo
-     */
-     throw new Error("Method not implemented.");
+  async atualizar(id: number, usuarioDto: UsuarioDto): Promise<void> {
+    const { senha, ...dadosUsuario } = usuarioDto;
+    await this.usuarioRepository.update(id, dadosUsuario);
   }
 
   async remover(id: number): Promise<void> {
-    /**
-     * todo
-     */
-     throw new Error("Method not implemented.");
+    const usuario = await this.usuarioRepository.findOne(id);
+    await this.usuarioRepository.remove(usuario);
   }
 }
