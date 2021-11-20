@@ -1,7 +1,15 @@
-import { CriarEquipamentoDto } from "../dto/EquipamentoDto";
+import {
+  AtualizarEquipamentoDto,
+  CriarEquipamentoDto,
+} from "../dto/EquipamentoDto";
 import { Equipamento } from "../../models/EquipamentoEntity";
 
 export interface IEquipamentoService {
   criarEquipamento(equipamentoDto: CriarEquipamentoDto): Promise<Equipamento>;
   listarEquipamentos(): Promise<Equipamento[]>;
+  removerEquipamento(id: number): Promise<void>;
+  atualizarEquipamento(
+    equipamentoDto: AtualizarEquipamentoDto
+  ): Promise<Equipamento>;
+  buscarEquipamentoColaborador(idColaborador: number): Promise<Equipamento[]>;
 }

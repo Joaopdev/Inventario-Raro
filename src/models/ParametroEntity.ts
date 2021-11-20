@@ -1,4 +1,10 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { TipoEquipamento } from "./TipoEquipamentoEntity";
 
 @Entity()
@@ -22,5 +28,6 @@ export class Parametro {
     () => TipoEquipamento,
     (tipoEquipamento) => tipoEquipamento.parametro
   )
+  @JoinColumn()
   tipoEquipamento: TipoEquipamento;
 }

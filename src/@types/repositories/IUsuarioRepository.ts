@@ -6,4 +6,4 @@ export interface IUsuarioRepository {
   findOne(id: number): Promise<Usuario>;
   save(usuarioDto: UsuarioDto): Promise<Usuario>;
   remove(entities: Usuario | Usuario[]): Promise<Usuario[]>;
-};
+}

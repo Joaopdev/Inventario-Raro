@@ -33,7 +33,8 @@ export class TipoEquipamento {
   @OneToMany(() => Movimentacao, (movimentacao) => movimentacao.tipoEquipamento)
   movimentacoes: Movimentacao[];
 
-  @OneToOne(() => Parametro, (parametro) => parametro.tipoEquipamento)
-  @JoinColumn()
+  @OneToOne(() => Parametro, (parametro) => parametro.tipoEquipamento, {
+    cascade: true,
+  })
   parametro: Parametro;
 }

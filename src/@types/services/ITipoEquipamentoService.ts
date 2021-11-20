@@ -1,12 +1,18 @@
 import { CriarParametroDto } from "../dto/ParametroDto";
 import { TipoEquipamento } from "../../models/TipoEquipamentoEntity";
-import { CriarTipoEquipamentoDto } from "../dto/TipoEquipamentoDto";
+import {
+  AtualizarTipoEquipamentoDto,
+  CriarTipoEquipamentoDto,
+} from "../dto/TipoEquipamentoDto";
 
 export interface ITipoEquipamentoService {
   criarTipoEquipamento(
-    tipoEquipamentoDto: CriarTipoEquipamentoDto,
-    parametroDto: CriarParametroDto
+    tipoEquipamentoDto: CriarTipoEquipamentoDto
   ): Promise<TipoEquipamento>;
   listarTipoEquipamento(): Promise<TipoEquipamento[]>;
+  buscarTipoEquipamento(id: number): Promise<TipoEquipamento>;
+  atualizarTipoEquipamento(
+    tipoEquipamentoDto: AtualizarTipoEquipamentoDto
+  ): Promise<TipoEquipamento>;
   removerTipoEquipamento(id: number): Promise<void>;
 }

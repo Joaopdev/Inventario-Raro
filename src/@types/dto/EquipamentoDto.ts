@@ -2,11 +2,24 @@ import { TipoEquipamentoDto } from "./TipoEquipamentoDto";
 
 export type EquipamentoDto = {
   id: number;
-  lote: number;
-  descricao: string;
-  numeroDeSerie: number;
-  dataAquisicao: number;
+  lote: string;
+  descricao?: string;
+  numeroDeSerie: string;
+  dataAquisicao: Date;
   tipoEquipamento: TipoEquipamentoDto;
 };
 
-export type CriarEquipamentoDto = Omit<EquipamentoDto, "id">;
+export type AtualizarEquipamentoDto = {
+  id: number;
+  lote?: string;
+  descricao?: string;
+  numeroDeSerie?: string;
+  dataAquisicao?: Date;
+};
+
+export type CriarEquipamentoDto = Omit<
+  EquipamentoDto,
+  "id" | "tipoEquipamento"
+> & {
+  tipoEquipamentoId: number;
+};
