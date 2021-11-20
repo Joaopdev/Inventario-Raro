@@ -7,7 +7,7 @@ import {
 } from "typeorm";
 import { Endereco } from "./EnderecoEntity";
 import { Equipamento } from "./EquipamentoEntity";
-import { Movimentacao } from "./MovimentaçaoEntity";
+import { Movimentacao } from "./MovimentacaoEntity";
 
 @Entity()
 export class Colaborador {

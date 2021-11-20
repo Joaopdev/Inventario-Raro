@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Colaborador } from "./ColaboradorEntity";
-import { Movimentacao } from "./MovimentaçaoEntity";
+import { Movimentacao } from "./MovimentacaoEntity";
 import { TipoEquipamento } from "./TipoEquipamentoEntity";
 
 @Entity()
