@@ -1,5 +1,4 @@
 import { TipoEquipamento } from "../models/TipoEquipamentoEntity";
-import { CriarParametroDto } from "../@types/dto/ParametroDto";
 import { CriarTipoEquipamentoDto } from "../@types/dto/TipoEquipamentoDto";
 import { parametroFactory } from "./parametroFactory";
 
