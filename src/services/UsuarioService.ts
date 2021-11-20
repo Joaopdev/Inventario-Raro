@@ -1,8 +1,9 @@
 import { Inject, Service } from "typedi";
-import { UsuarioDto } from "../@types/dto/UsuarioDto";
+import { UsuarioDto, AtualizarUsuarioDto } from "../@types/dto/UsuarioDto";
 import { IUsuarioService } from "../@types/services/IUsuarioService";
 import { IUsuarioRepository } from "../@types/repositories/IUsuarioRepository";
 import { Usuario } from "../models/UsuarioEntity";
+import { usuarioFactory } from "../dataMappers/usuarioFactory";
 
 @Service("UsuarioService")
 export class UsuarioService implements IUsuarioService {
@@ -12,37 +13,31 @@ export class UsuarioService implements IUsuarioService {
   ) {}
 
   async listar(): Promise<Usuario[]> {
-    /**
-     * todo
-     */
-     throw new Error("Method not implemented.");
+    return await this.usuarioRepository.find();
   }
 
   async buscar(id: number): Promise<Usuario> {
-    /**
-     * todo
-     */
-     throw new Error("Method not implemented.");
+    const usuario = await this.usuarioRepository.findOne(id);
+    if(!usuario) {
+      throw new Error("Usuário não encontrado");
+    }
+    return usuario;
   }
 
-  async criar(usuario: UsuarioDto): Promise<Usuario> {
-    /**
-     * todo
-     */
-     throw new Error("Method not implemented.");
+  async criar(usuarioDto: UsuarioDto): Promise<Usuario> {
+    const usuario = usuarioFactory(usuarioDto);
+    const resultado = await this.usuarioRepository.save(usuario);
+    return resultado;
   }
 
-  async atualizar(id: number, usuario: UsuarioDto): Promise<void> {
-    /**
-     * todo
-     */
-     throw new Error("Method not implemented.");
+  async atualizar(usuarioAtualizadoDto: AtualizarUsuarioDto): Promise<void> {
+    const usuario = await this.buscar(usuarioAtualizadoDto.id);
+    const usuarioAtualizado = { ...usuario, ...usuarioAtualizadoDto };
+    await this.usuarioRepository.save(usuarioAtualizado);
   }
 
   async remover(id: number): Promise<void> {
-    /**
-     * todo
-     */
-     throw new Error("Method not implemented.");
+    const usuario = await this.buscar(id);
+    await this.usuarioRepository.remove(usuario);
   }
 }

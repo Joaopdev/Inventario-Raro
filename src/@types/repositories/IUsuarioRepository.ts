@@ -1,5 +1,7 @@
-import { UsuarioDto } from "../dto/UsuarioDto";
 import { Usuario } from "../../models/UsuarioEntity";
+import { UpdateResult } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
+
 
 export interface IUsuarioRepository {
   find(): Promise<Usuario[]>;
