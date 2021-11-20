@@ -7,7 +7,7 @@ export class EquipamentoRepository
   extends Repository<Equipamento>
   implements IEquipamentoRepository
 {
-  buscarEquipamentoColaborador(idColaborador: number): Promise<Equipamento[]> {
+  findEquipamentoDoColaborador(idColaborador: number): Promise<Equipamento[]> {
     return this.find({
       where: { colaborador: { id: idColaborador } },
       relations: ["colaborador", "tipoEquipamento"],

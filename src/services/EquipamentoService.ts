@@ -59,11 +59,11 @@ export class EquipamentoService implements IEquipamentoService {
     }
   }
 
-  async buscarEquipamentoColaborador(
+  async buscarEquipamentoDoColaborador(
     idColaborador: number
   ): Promise<Equipamento[]> {
     try {
-      return await this.equipamentoRepository.buscarEquipamentoColaborador(
+      return await this.equipamentoRepository.findEquipamentoDoColaborador(
         idColaborador
       );
     } catch (error) {

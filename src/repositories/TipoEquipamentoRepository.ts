@@ -7,7 +7,7 @@ export class TipoEquipamentoRepository
   extends Repository<TipoEquipamento>
   implements ITipoEquipamentoRepository
 {
-  buscarTipoEquipamento(id: number): Promise<TipoEquipamento> {
+  findTipoEquipamento(id: number): Promise<TipoEquipamento> {
     return this.findOne({
       where: { id: id },
       relations: ["parametro"],

@@ -1,4 +1,3 @@
-import { CriarParametroDto } from "../dto/ParametroDto";
 import { TipoEquipamento } from "../../models/TipoEquipamentoEntity";
 import {
   AtualizarTipoEquipamentoDto,

@@ -52,7 +52,7 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
   ): Promise<TipoEquipamento> {
     try {
       const tipoEquipamento =
-        await this.tipoEquipamentoRepository.buscarTipoEquipamento(
+        await this.tipoEquipamentoRepository.findTipoEquipamento(
           tipoEquipamentoDto.id
         );
 

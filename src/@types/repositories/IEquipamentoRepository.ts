@@ -5,5 +5,5 @@ export interface IEquipamentoRepository {
   find(): Promise<Equipamento[]>;
   remove(entities: Equipamento | Equipamento[]): Promise<Equipamento[]>;
   findOne(id: number): Promise<Equipamento>;
-  buscarEquipamentoColaborador(idColaborador: number): Promise<Equipamento[]>;
+  findEquipamentoDoColaborador(idColaborador: number): Promise<Equipamento[]>;
 }
