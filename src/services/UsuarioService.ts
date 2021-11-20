@@ -1,5 +1,5 @@
 import { Inject, Service } from "typedi";
-import { UsuarioDto } from "../@types/dto/UsuarioDto";
+import { UsuarioDto, AtualizarUsuarioDto } from "../@types/dto/UsuarioDto";
 import { IUsuarioService } from "../@types/services/IUsuarioService";
 import { IUsuarioRepository } from "../@types/repositories/IUsuarioRepository";
 import { Usuario } from "../models/UsuarioEntity";
@@ -30,8 +30,8 @@ export class UsuarioService implements IUsuarioService {
     return resultado;
   }
 
-  async atualizar(id: number, usuarioAtualizadoDto: UsuarioDto): Promise<void> {
-    const usuario = await this.buscar(id);
+  async atualizar(usuarioAtualizadoDto: AtualizarUsuarioDto): Promise<void> {
+    const usuario = await this.buscar(usuarioAtualizadoDto.id);
     const usuarioAtualizado = { ...usuario, ...usuarioAtualizadoDto };
     await this.usuarioRepository.save(usuarioAtualizado);
   }
