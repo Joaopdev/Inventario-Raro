@@ -7,12 +7,17 @@ export class ColaboradorRepository
   extends Repository<Colaborador>
   implements IColaboradorRepository
 {
-  findByEmail(emailColaborador: "string"): Promise<Colaborador> {
+  findById(usuarioId: number): Promise<Colaborador> {
     return this.findOne({
-      relations: ["equipamentos"],
+      relations: ["endereco"],
       where: {
-        email: emailColaborador,
+        id: usuarioId,
       },
+    });
+  }
+  findAll(): Promise<Colaborador[]> {
+    return this.find({
+      relations: ["endereco"],
     });
   }
 }

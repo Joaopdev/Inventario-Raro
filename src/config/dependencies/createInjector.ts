@@ -19,10 +19,12 @@ import "../../services/ColaboradorService";
 import "../../services/EquipamentoService";
 import "../../services/TipoEquipamentoService";
 import "../../services/ParametroService";
+import "../../services/MovimentacaoService";
 
 // inicializa clientes
 import "../../clients/CepClient";
 import "../../infra/http/AxiosHttpClient";
+import { MovimentacaoRepository } from "repositories/MovimentacaoRepository";
 
 const createDependencyInjector = (): void => {
   Container.set(
@@ -44,6 +46,9 @@ const createDependencyInjector = (): void => {
   Container.set(
     "ParametroRepository",
     getCustomRepository(ParametroRepository)
+  );
+  Container.set("MovimentacaoRepository",
+  getCustomRepository(MovimentacaoRepository)
   );
 };
 

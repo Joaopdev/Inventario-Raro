@@ -30,9 +30,10 @@ export class UsuarioService implements IUsuarioService {
     return resultado;
   }
 
-  async atualizar(id: number, usuarioDto: UsuarioDto): Promise<void> {
-    const { senha, ...dadosUsuario } = usuarioDto;
-    await this.usuarioRepository.update(id, dadosUsuario);
+  async atualizar(id: number, usuarioAtualizadoDto: UsuarioDto): Promise<void> {
+    const usuario = await this.buscar(id);
+    const usuarioAtualizado = { ...usuario, ...usuarioAtualizadoDto };
+    await this.usuarioRepository.save(usuarioAtualizado);
   }
 
   async remover(id: number): Promise<void> {
