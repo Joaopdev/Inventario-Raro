@@ -60,10 +60,29 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
         throw new Error("tipo de equipamento nao existe para ser atualizado");
       }
 
-      const tipoEquipamentoAtualizado = {
-        ...tipoEquipamento,
+      const { id, descricao, modelo, quantidade, tipo } = {
         ...tipoEquipamentoDto,
       };
+
+      const tipoEquipamentoAtualizadoDto = {
+        id,
+        descricao,
+        modelo,
+        quantidade,
+        tipo,
+      };
+
+      const tipoEquipamentoAtualizado = {
+        ...tipoEquipamento,
+        ...tipoEquipamentoAtualizadoDto,
+      };
+
+      if (tipoEquipamentoDto.parametro) {
+        tipoEquipamentoAtualizado.parametro = {
+          ...tipoEquipamento.parametro,
+          ...tipoEquipamentoDto.parametro,
+        };
+      }
 
       return await this.tipoEquipamentoRepository.save(
         tipoEquipamentoAtualizado

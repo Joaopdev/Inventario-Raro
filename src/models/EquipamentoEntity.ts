@@ -20,7 +20,7 @@ export class Equipamento {
   @Column()
   descricao: string;
 
-  @Column()
+  @Column({ unique: true })
   numeroDeSerie: string;
 
   @Column()
