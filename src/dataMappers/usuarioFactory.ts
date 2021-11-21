@@ -9,4 +9,4 @@ export const usuarioFactory = (novoUsuario: UsuarioDto): Usuario => {
   usuario.hashSenha = getHashSenha(novoUsuario.senha);
   usuario.role = novoUsuario.role;
   return usuario;
-};
+}
