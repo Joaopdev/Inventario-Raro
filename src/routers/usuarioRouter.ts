@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { RequestHandler, Router } from "express";
 import Container from "typedi";
 const router = Router();
 import { UsuarioController } from "../controllers/UsuarioController";
@@ -8,11 +8,21 @@ const getController = (): UsuarioController => {
 };
 
 const createRouter = () => {
-  router.get("", (req, res) => getController().listar(req, res));
-  router.post("", (req, res) => getController().criar(req, res));
-  router.get("/:id", (req, res) => getController().buscar(req, res));
-  router.patch("", (req, res) => getController().atualizar(req, res));
-  router.delete("/:id", (req, res) => getController().remover(req, res));
+  router.get("", (async (req, res) => {
+    await getController().listar(req, res);
+  }) as RequestHandler);
+  router.post("", (async (req, res) => {
+    await getController().criar(req, res);
+  }) as RequestHandler);
+  router.get("/:id", (async (req, res) => {
+    await getController().buscar(req, res);
+  }) as RequestHandler);
+  router.patch("", (async (req, res) => {
+    await getController().atualizar(req, res);
+  }) as RequestHandler);
+  router.delete("/:id", (async (req, res) => {
+    await getController().remover(req, res);
+  }) as RequestHandler);
 
   return router;
 };

@@ -27,10 +27,7 @@ import "../../clients/CepClient";
 import "../../infra/http/AxiosHttpClient";
 
 const createDependencyInjector = (): void => {
-  Container.set(
-    "UsuarioRepository",
-    getCustomRepository(UsuarioRepository)
-    );
+  Container.set("UsuarioRepository", getCustomRepository(UsuarioRepository));
   Container.set(
     "ColaboradorRepository",
     getCustomRepository(ColaboradorRepository)
@@ -47,8 +44,9 @@ const createDependencyInjector = (): void => {
     "ParametroRepository",
     getCustomRepository(ParametroRepository)
   );
-  Container.set("MovimentacaoRepository",
-  getCustomRepository(MovimentacaoRepository)
+  Container.set(
+    "MovimentacaoRepository",
+    getCustomRepository(MovimentacaoRepository)
   );
 };
 
