@@ -8,34 +8,32 @@ import { InformacoesIncorretas } from "../@types/errors/InformacoesIncorretas";
 export class UsuarioController {
   constructor(@Inject("UsuarioService") private usuarioService: IUsuarioService) {}
 
-  async list(request: Request, response: Response): Promise<void> {
+  async listar(request: Request, response: Response): Promise<void> {
     const usuarios = await this.usuarioService.listar();
     if(!usuarios) {
-      response.status(404);
-      throw new UsuarioNaoEncontrado();
+      response.status(204);
     }
     response.send(usuarios).status(200);
   }
 
-    async get(request: Request, response: Response): Promise<void> {
-      const usuario = await this.usuarioService.buscar(Number(request.params.id));
+  async buscar(request: Request, response: Response): Promise<void> {
+    const usuario = await this.usuarioService.buscar(Number(request.params.id));
     if(!usuario) {
-      response.status(404);
-      throw new UsuarioNaoEncontrado();
+      response.status(204);
     }
     response.send(usuario).status(200);
   }
 
-  async create(request: Request, response: Response): Promise<void> {
+  async criar(request: Request, response: Response): Promise<void> {
     if(!request.body) {
       response.status(400);
       throw new InformacoesIncorretas();
     }
     const usuario = await this.usuarioService.criar(request.body);
-    response.send(usuario).status(200);
+    response.send(usuario).status(201);
   }
 
-  async update(request: Request, response: Response): Promise<void> {
+  async atualizar(request: Request, response: Response): Promise<void> {
     if(!request.body) {
       response.status(400);
       throw new InformacoesIncorretas();
@@ -44,12 +42,12 @@ export class UsuarioController {
     response.send(usuario).status(200);
   }
 
-  async remove(request: Request, response: Response): Promise<void> {
+  async remover(request: Request, response: Response): Promise<void> {
     if(!request.params.id) {
       response.status(400);
       throw new InformacoesIncorretas();
     }
     await this.usuarioService.remover(Number(request.params.id));
-    response.send();
+    response.send().status(200);
   }
 }
