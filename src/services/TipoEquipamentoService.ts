@@ -98,6 +98,7 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
   async removerTipoEquipamento(id: number): Promise<void> {
     try {
       const tipoEquipamento = await this.tipoEquipamentoRepository.findOne(id);
+
       if (!tipoEquipamento) {
         throw new Error("tipo equipamento não existe");
       }

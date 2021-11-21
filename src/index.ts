@@ -6,15 +6,14 @@ import createApp from "./config/app";
 import createDatabaseConnection from "./config/database/connect";
 import createDependencyInjector from "./config/dependencies/createInjector";
 import createServer from "./infra/server/server";
-import { testandoEquipamento } from "../src/exemplosDeTestes/equipamento";
 
 export const start = async (): Promise<void> => {
   try {
-    const connection = await createDatabaseConnection();
-    // createDependencyInjector();
-    // const app = createApp();
-    await testandoEquipamento(connection);
-    // createServer(app);
+    await createDatabaseConnection();
+    createDependencyInjector();
+    const app = createApp();
+
+    createServer(app);
   } catch (error) {
     console.error("Fatal error: ", error);
   }

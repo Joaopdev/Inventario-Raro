@@ -50,4 +50,21 @@ export class ParametroService implements IParametroService {
       throw error;
     }
   }
+
+  async removerParametro(id: number): Promise<void> {
+    try {
+      const parametro = await this.parametroRepository.findOne(id);
+
+      if (!parametro) {
+        throw new Error("parametro não existe");
+      }
+
+      await this.parametroRepository.remove(parametro);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`erro no remover parametro: ${error.message}`);
+      }
+      throw error;
+    }
+  }
 }
