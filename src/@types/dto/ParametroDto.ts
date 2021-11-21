@@ -6,7 +6,15 @@ export type ParametroDto = {
   tempoMedioConsumo: number;
   tempoMedioReposicao: number;
   quantidadeCritica: number;
-  tipoEquipamento: TipoEquipamentoDto;
+  tipoEquipamento?: TipoEquipamentoDto;
+};
+
+export type AtualizarParametroDto = {
+  id: number;
+  tempoMedioEnvio?: number;
+  tempoMedioConsumo?: number;
+  tempoMedioReposicao?: number;
+  quantidadeCritica?: number;
 };
 
 export type CriarParametroDto = Omit<ParametroDto, "id">;

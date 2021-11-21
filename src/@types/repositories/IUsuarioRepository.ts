@@ -8,4 +8,4 @@ export interface IUsuarioRepository {
   findOne(id: number): Promise<Usuario>;
   save(usuario: Usuario): Promise<Usuario>;
   remove(entities: Usuario | Usuario[]): Promise<Usuario[]>;
-};
+}
