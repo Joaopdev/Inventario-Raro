@@ -4,7 +4,10 @@ import { TipoEquipamentoService } from "../services/TipoEquipamentoService";
 import { TipoEquipamento } from "../models/TipoEquipamentoEntity";
 import { Parametro } from "../models/ParametroEntity";
 import { Equipamento } from "../models/EquipamentoEntity";
-import { CriarTipoEquipamentoDto } from "../@types/dto/TipoEquipamentoDto";
+import {
+  AtualizarTipoEquipamentoDto,
+  CriarTipoEquipamentoDto,
+} from "../@types/dto/TipoEquipamentoDto";
 import { CriarParametroDto } from "../@types/dto/ParametroDto";
 import {
   AtualizarEquipamentoDto,
@@ -54,8 +57,15 @@ export const testandoEquipamento = async (connection: Connection) => {
     descricao: "sim",
   };
 
+  const atualizaTipoEquipamento: AtualizarTipoEquipamentoDto = {
+    id: 6,
+    descricao: "ttssse",
+    //parametro: { quantidadeCritica: 2, tempoMedioConsumo: 4 },
+  };
   // await tipoEquipamentoService.criarTipoEquipamento(tipoEquipamento, parametro);
   //await tipoEquipamentoService.criarTipoEquipamento(tipoEquipamento, parametro);
-  const a = await tipoEquipamentoService.criarTipoEquipamento(tipoEquipamento);
+  const a = await tipoEquipamentoService.atualizarTipoEquipamento(
+    atualizaTipoEquipamento
+  );
   console.log(a);
 };

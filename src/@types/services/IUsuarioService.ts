@@ -7,4 +7,4 @@ export interface IUsuarioService {
   criar(usuarioDto: UsuarioDto): Promise<Usuario>;
   atualizar(usuarioAtualizadoDto: AtualizarUsuarioDto): Promise<void>;
   remover(id: number): Promise<void>;
-};
+}

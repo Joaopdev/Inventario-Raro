@@ -60,10 +60,29 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
         throw new Error("tipo de equipamento nao existe para ser atualizado");
       }
 
-      const tipoEquipamentoAtualizado = {
-        ...tipoEquipamento,
+      const { id, descricao, modelo, quantidade, tipo } = {
         ...tipoEquipamentoDto,
       };
+
+      const tipoEquipamentoAtualizadoDto = {
+        id,
+        descricao,
+        modelo,
+        quantidade,
+        tipo,
+      };
+
+      const tipoEquipamentoAtualizado = {
+        ...tipoEquipamento,
+        ...tipoEquipamentoAtualizadoDto,
+      };
+
+      if (tipoEquipamentoDto.parametro) {
+        tipoEquipamentoAtualizado.parametro = {
+          ...tipoEquipamento.parametro,
+          ...tipoEquipamentoDto.parametro,
+        };
+      }
 
       return await this.tipoEquipamentoRepository.save(
         tipoEquipamentoAtualizado
@@ -79,6 +98,7 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
   async removerTipoEquipamento(id: number): Promise<void> {
     try {
       const tipoEquipamento = await this.tipoEquipamentoRepository.findOne(id);
+
       if (!tipoEquipamento) {
         throw new Error("tipo equipamento não existe");
       }

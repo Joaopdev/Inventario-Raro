@@ -79,9 +79,11 @@ export class EquipamentoService implements IEquipamentoService {
   async removerEquipamento(id: number): Promise<void> {
     try {
       const equipamento = await this.equipamentoRepository.findOne(id);
+
       if (!equipamento) {
         throw new Error("equipamento inexistente");
       }
+
       await this.equipamentoRepository.remove(equipamento);
     } catch (error) {
       if (error instanceof Error) {
