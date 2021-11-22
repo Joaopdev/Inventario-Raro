@@ -1,17 +1,27 @@
-import { EnderecoDto } from "./EnderecoDto";
+import { CadastrarEnderecoDto, RetornoEnderecoCriadoDto } from "./EnderecoDto";
 
 export type ColaboradorDto = {
+  id: number;
+  nome: string;
+  email: string;
+  telefone: string;
+  dataInicio: string;
+  endereco: CadastrarEnderecoDto;
+};
+export type CriarColaboradorDto = Omit<ColaboradorDto, "id">;
+
+export type RetornoColaboradorCriadoDto = {
   nome: string;
   email: string;
   telefone: string;
   dataInicio: Date;
-  endereco: EnderecoDto;
+  endereco: RetornoEnderecoCriadoDto;
 };
 
-export type AlteraColaboradorDto = {
+export type AlterarColaboradorDto = {
   nome?: string;
   email?: string;
   telefone?: string;
-  dataInicio?: Date;
-  endereco?: EnderecoDto;
+  dataInicio?: string;
+  endereco?: CadastrarEnderecoDto;
 };
