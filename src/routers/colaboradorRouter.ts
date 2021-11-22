@@ -17,7 +17,7 @@ const createRouter = (): Router => {
       await getController().buscar(req, res)) as RequestHandler
   );
   router.post(
-    "/sign-up",
+    "",
     (async (req, res) =>
       await getController().criar(req, res)) as RequestHandler
   );
@@ -32,7 +32,7 @@ const createRouter = (): Router => {
       await getController().remover(req, res)) as RequestHandler
   );
   router.get(
-    "/:id/equipamento",
+    "/:id/equipamentos",
     (async (req, res) =>
       await getController().buscaEquipamentoDoColaborador(
         req,
