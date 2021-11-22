@@ -4,6 +4,7 @@ import { TipoEquipamentoService } from "../services/TipoEquipamentoService";
 import { TipoEquipamento } from "../models/TipoEquipamentoEntity";
 import { Parametro } from "../models/ParametroEntity";
 import { Equipamento } from "../models/EquipamentoEntity";
+import createDatabaseConnection from "../config/database/connect";
 import {
   AtualizarTipoEquipamentoDto,
   CriarTipoEquipamentoDto,
@@ -58,14 +59,16 @@ export const testandoEquipamento = async (connection: Connection) => {
   };
 
   const atualizaTipoEquipamento: AtualizarTipoEquipamentoDto = {
-    id: 6,
     descricao: "ttssse",
     //parametro: { quantidadeCritica: 2, tempoMedioConsumo: 4 },
   };
   // await tipoEquipamentoService.criarTipoEquipamento(tipoEquipamento, parametro);
   //await tipoEquipamentoService.criarTipoEquipamento(tipoEquipamento, parametro);
-  const a = await tipoEquipamentoService.atualizarTipoEquipamento(
-    atualizaTipoEquipamento
-  );
+  const a = await tipoEquipamentoService.removerTipoEquipamento(7);
   console.log(a);
 };
+
+void (async function () {
+  const conn = await createDatabaseConnection();
+  await testandoEquipamento(conn);
+})();

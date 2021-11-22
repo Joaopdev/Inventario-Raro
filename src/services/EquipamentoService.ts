@@ -7,6 +7,10 @@ import { Equipamento } from "../models/EquipamentoEntity";
 import { Service, Inject } from "typedi";
 import { IEquipamentoRepository } from "../@types/repositories/IEquipamentoRepository";
 import { equipamentoFactory } from "../dataMappers/equipamentoFactory";
+import { QueryFailedError } from "typeorm";
+import { TypeOrmError } from "../@types/typesAuxiliares/TypeOrmError";
+import { EquipamentoJaExiste } from "../@types/errors/EquipamentoJaExiste";
+import { EquipamentoNaoExiste } from "../@types/errors/EquipamentoNaoExiste";
 @Service("EquipamentoService")
 export class EquipamentoService implements IEquipamentoService {
   public constructor(
@@ -21,75 +25,47 @@ export class EquipamentoService implements IEquipamentoService {
       const equipamento = equipamentoFactory(equipamentoDto);
       return await this.equipamentoRepository.save(equipamento);
     } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`erro no criar equipamento: ${error.message}`);
+      if (error instanceof QueryFailedError) {
+        const errorTypeOrm = error as TypeOrmError;
+        if (errorTypeOrm.driverError.code === EquipamentoJaExiste.CODE) {
+          throw new EquipamentoJaExiste();
+        }
       }
       throw error;
     }
   }
 
   async listarEquipamentos(): Promise<Equipamento[]> {
-    try {
-      return await this.equipamentoRepository.find();
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`Erro ao listar equipamentos: ${error.message}`);
-      }
-      throw error;
-    }
+    return await this.equipamentoRepository.find();
   }
 
   async atualizarEquipamento(
+    id: number,
     equipamentoDto: AtualizarEquipamentoDto
   ): Promise<Equipamento> {
-    try {
-      const equipamento = await this.equipamentoRepository.findOne(
-        equipamentoDto.id
-      );
-      if (!equipamento) {
-        throw new Error("equipamento nao existe para ser alterado");
-      }
-      const equipamentoAtualizado = { ...equipamento, ...equipamentoDto };
-      return await this.equipamentoRepository.save(equipamentoAtualizado);
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`erro no atualizar equipametno: ${error.message}`);
-      }
-      throw error;
+    const equipamento = await this.equipamentoRepository.findOne(id);
+    if (!equipamento) {
+      throw new EquipamentoNaoExiste();
     }
+    const equipamentoAtualizado = { ...equipamento, ...equipamentoDto };
+    return await this.equipamentoRepository.save(equipamentoAtualizado);
   }
 
   async buscarEquipamentoDoColaborador(
     idColaborador: number
   ): Promise<Equipamento[]> {
-    try {
-      return await this.equipamentoRepository.findEquipamentoDoColaborador(
-        idColaborador
-      );
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(
-          `erro no buscar equipamento colaborador: ${error.message}`
-        );
-      }
-      throw error;
-    }
+    return await this.equipamentoRepository.findEquipamentoDoColaborador(
+      idColaborador
+    );
   }
 
   async removerEquipamento(id: number): Promise<void> {
-    try {
-      const equipamento = await this.equipamentoRepository.findOne(id);
+    const equipamento = await this.equipamentoRepository.findOne(id);
 
-      if (!equipamento) {
-        throw new Error("equipamento inexistente");
-      }
-
-      await this.equipamentoRepository.remove(equipamento);
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`error no remover equipamento: ${error.message}`);
-      }
-      throw error;
+    if (!equipamento) {
+      throw new EquipamentoNaoExiste();
     }
+
+    await this.equipamentoRepository.remove(equipamento);
   }
 }

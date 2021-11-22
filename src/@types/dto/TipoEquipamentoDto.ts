@@ -12,7 +12,6 @@ export type TipoEquipamentoDto = {
 };
 
 export type AtualizarTipoEquipamentoDto = {
-  id: number;
   tipo?: string;
   modelo?: string;
   descricao?: string;

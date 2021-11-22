@@ -10,7 +10,6 @@ export type ParametroDto = {
 };
 
 export type AtualizarParametroDto = {
-  id: number;
   tempoMedioEnvio?: number;
   tempoMedioConsumo?: number;
   tempoMedioReposicao?: number;

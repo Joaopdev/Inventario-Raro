@@ -5,12 +5,14 @@ import { ColaboradorRepository } from "../../repositories/ColaboradorRepository"
 import { EquipamentoRepository } from "../../repositories/EquipamentoRepository";
 import { TipoEquipamentoRepository } from "../../repositories/TipoEquipamentoRepository";
 import { ParametroRepository } from "../../repositories/ParametroRepository";
+import { MovimentacaoRepository } from "../../repositories/MovimentacaoRepository";
 
 // inicializador de dependências:
 // inicializa controllers
 import "../../controllers/UsuarioController";
 import "../../controllers/EnderecoController";
 import "../../controllers/ColaboradorController";
+import "../../controllers/TipoEquipamentoController";
 
 // inicializa services
 import "../../services/UsuarioService";
@@ -24,13 +26,9 @@ import "../../services/MovimentacaoService";
 // inicializa clientes
 import "../../clients/CepClient";
 import "../../infra/http/AxiosHttpClient";
-import { MovimentacaoRepository } from "repositories/MovimentacaoRepository";
 
 const createDependencyInjector = (): void => {
-  Container.set(
-    "UsuarioRepository",
-    getCustomRepository(UsuarioRepository)
-    );
+  Container.set("UsuarioRepository", getCustomRepository(UsuarioRepository));
   Container.set(
     "ColaboradorRepository",
     getCustomRepository(ColaboradorRepository)
@@ -47,8 +45,9 @@ const createDependencyInjector = (): void => {
     "ParametroRepository",
     getCustomRepository(ParametroRepository)
   );
-  Container.set("MovimentacaoRepository",
-  getCustomRepository(MovimentacaoRepository)
+  Container.set(
+    "MovimentacaoRepository",
+    getCustomRepository(MovimentacaoRepository)
   );
 };
 
