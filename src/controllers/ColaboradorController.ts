@@ -36,7 +36,7 @@ export class ColaboradorController {
 
   async criar(request: Request, response: Response): Promise<void> {
     const colaborador = await this.colaboradorService.criar(request.body);
-    response.send(colaborador);
+    response.send(colaborador).status(201);
   }
 
   async atualizar(request: Request, response: Response): Promise<void> {
@@ -78,11 +78,11 @@ export class ColaboradorController {
         await this.equipamentoService.buscarEquipamentoDoColaborador(
           Number(request.params.id)
         );
-      response.send(equipamento);
+      response.send(equipamento).status(200);
       return;
     } catch (error) {
-      if (error) {
-        return;
+      if (error instanceof Error) {
+        throw new Error("falta um erro personalizado aqui");
       }
     }
   }
