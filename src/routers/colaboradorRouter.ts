@@ -1,5 +1,5 @@
 import { ColaboradorController } from "../controllers/ColaboradorController";
-import { Router } from "express";
+import { RequestHandler, Router } from "express";
 import Container from "typedi";
 const router = Router();
 
@@ -7,12 +7,38 @@ const getController = (): ColaboradorController => {
   return Container.get<ColaboradorController>("ColaboradorController");
 };
 
-const createRouter = () => {
-  router.get("", (req, res) => getController().list(req, res));
-  router.post("", (req, res) => getController().create(req, res));
-  router.get("", (req, res) => getController().get(req, res));
-  router.patch("", (req, res) => getController().update(req, res));
-  router.delete("", (req, res) => getController().remove(req, res));
+const createRouter = (): Router => {
+  router.get("", (async (req, res) => {
+    await getController().listar(req, res);
+  }) as RequestHandler);
+  router.get(
+    "/:id",
+    (async (req, res) =>
+      await getController().buscar(req, res)) as RequestHandler
+  );
+  router.post(
+    "/sign-up",
+    (async (req, res) =>
+      await getController().criar(req, res)) as RequestHandler
+  );
+  router.patch(
+    "/:id",
+    (async (req, res) =>
+      await getController().atualizar(req, res)) as RequestHandler
+  );
+  router.delete(
+    "/:id",
+    (async (req, res) =>
+      await getController().remover(req, res)) as RequestHandler
+  );
+  router.get(
+    "/:id/equipamento",
+    (async (req, res) =>
+      await getController().buscaEquipamentoDoColaborador(
+        req,
+        res
+      )) as RequestHandler
+  );
 
   return router;
 };

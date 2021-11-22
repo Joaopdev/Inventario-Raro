@@ -22,10 +22,7 @@ export class UserController {
   }
 
   async update(request: Request, response: Response): Promise<void> {
-    const user = await this.userService.atualizar(
-      Number(request.params.id),
-      request.body
-    );
+    const user = await this.userService.atualizar(request.body);
     response.send(user);
   }
 

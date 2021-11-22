@@ -35,6 +35,7 @@ export class TipoEquipamento {
 
   @OneToOne(() => Parametro, (parametro) => parametro.tipoEquipamento, {
     cascade: true,
+    onDelete: "CASCADE",
   })
   parametro: Parametro;
 }
