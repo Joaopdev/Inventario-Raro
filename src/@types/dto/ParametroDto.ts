@@ -16,5 +16,4 @@ export type AtualizarParametroDto = {
   quantidadeCritica?: number;
 };
 
-export type AtualizarParametroSemIdDto = Omit<AtualizarParametroDto, "id">;
 export type CriarParametroDto = Omit<ParametroDto, "id">;
