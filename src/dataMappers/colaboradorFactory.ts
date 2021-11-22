@@ -1,9 +1,9 @@
-import { CriaColaboradorDto } from "../@types/dto/ColaboradorDto";
+import { CriarColaboradorDto } from "../@types/dto/ColaboradorDto";
 import { Colaborador } from "../models/ColaboradorEntity";
 import { enderecoFactory } from "./enderecoFactory";
 
 export const colaboradorFactory = (
-  novoColaborador: CriaColaboradorDto
+  novoColaborador: CriarColaboradorDto
 ): Colaborador => {
   const colaborador = new Colaborador();
   colaborador.nome = novoColaborador.nome;

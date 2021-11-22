@@ -28,7 +28,7 @@ export class ColaboradorController {
       return;
     } catch (error) {
       if (error instanceof ColaboradorNaoExiste) {
-        response.status(204).send(new ColaboradorNaoExiste());
+        response.status(404);
         return;
       }
     }
@@ -49,7 +49,7 @@ export class ColaboradorController {
       return;
     } catch (error) {
       if (error instanceof ColaboradorNaoExiste) {
-        response.status(204).send(new ColaboradorNaoExiste());
+        response.status(404);
         return;
       }
     }
@@ -64,7 +64,7 @@ export class ColaboradorController {
       return;
     } catch (error) {
       if (error instanceof ColaboradorNaoExiste) {
-        response.status(204).send(new ColaboradorNaoExiste());
+        response.status(404);
         return;
       }
     }
@@ -82,7 +82,7 @@ export class ColaboradorController {
       return;
     } catch (error) {
       if (error instanceof Error) {
-        throw new Error("falta um erro personalizado aqui");
+        response.status(404);
       }
     }
   }

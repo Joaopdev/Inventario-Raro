@@ -1,7 +1,9 @@
-import { EnderecoDtoCadastro } from "../@types/dto/EnderecoDto";
+import { CadastrarEnderecoDto } from "../@types/dto/EnderecoDto";
 import { Endereco } from "../models/EnderecoEntity";
 
-export const enderecoFactory = (enderecoDto: EnderecoDtoCadastro): Endereco => {
+export const enderecoFactory = (
+  enderecoDto: CadastrarEnderecoDto
+): Endereco => {
   const endereco = new Endereco();
   endereco.cep = enderecoDto.cep;
   endereco.logradouro = enderecoDto.logradouro;

@@ -1,5 +1,4 @@
-import { Colaborador } from "../../models/ColaboradorEntity";
-import { EnderecoDtoCadastro, EnderecoTratado } from "./EnderecoDto";
+import { CadastrarEnderecoDto, RetornoEnderecoCriadoDto } from "./EnderecoDto";
 
 export type ColaboradorDto = {
   id: number;
@@ -7,16 +6,16 @@ export type ColaboradorDto = {
   email: string;
   telefone: string;
   dataInicio: string;
-  endereco: EnderecoDtoCadastro;
+  endereco: CadastrarEnderecoDto;
 };
-export type CriaColaboradorDto = Omit<ColaboradorDto, "id">;
+export type CriarColaboradorDto = Omit<ColaboradorDto, "id">;
 
 export type ColaboradorTratado = {
   nome: string;
   email: string;
   telefone: string;
   dataInicio: Date;
-  endereco: EnderecoTratado;
+  endereco: RetornoEnderecoCriadoDto;
 };
 
 export type AlteraColaboradorDto = {
@@ -24,5 +23,5 @@ export type AlteraColaboradorDto = {
   email?: string;
   telefone?: string;
   dataInicio?: string;
-  endereco?: EnderecoDtoCadastro;
+  endereco?: CadastrarEnderecoDto;
 };

@@ -13,7 +13,7 @@ export type EnderecoDto = {
   siafi: string;
 };
 
-export type EnderecoDtoCadastro = {
+export type CadastrarEnderecoDto = {
   cep: string;
   logradouro: string;
   complemento: string;
@@ -23,4 +23,4 @@ export type EnderecoDtoCadastro = {
   numero: number;
 };
 
-export type EnderecoTratado = Omit<Endereco, "id">;
+export type RetornoEnderecoCriadoDto = Omit<Endereco, "id">;

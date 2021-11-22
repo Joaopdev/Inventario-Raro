@@ -5,11 +5,11 @@ import { Colaborador } from "../models/ColaboradorEntity";
 import {
   AlteraColaboradorDto,
   ColaboradorTratado,
-  CriaColaboradorDto,
+  CriarColaboradorDto,
 } from "../@types/dto/ColaboradorDto";
 import { colaboradorFactory } from "../dataMappers/colaboradorFactory";
 import { ColaboradorNaoExiste } from "../@types/errors/ColaboradorNaoExiste";
-import { EnderecoTratado } from "../@types/dto/EnderecoDto";
+import { RetornoEnderecoCriadoDto } from "../@types/dto/EnderecoDto";
 import { Endereco } from "../models/EnderecoEntity";
 
 @Service("ColaboradorService")
@@ -30,7 +30,9 @@ export class ColaboradorService implements IColaboradorService {
     const colaboradorTratado = this.removeIds(colaborador);
     return colaboradorTratado;
   }
-  async criar(colaboradorDto: CriaColaboradorDto): Promise<ColaboradorTratado> {
+  async criar(
+    colaboradorDto: CriarColaboradorDto
+  ): Promise<ColaboradorTratado> {
     const novoColaborador = colaboradorFactory(colaboradorDto);
     await this.colaboradorRepository.save(novoColaborador);
     const colaboradorTratado = this.removeIds(novoColaborador);
@@ -74,7 +76,7 @@ export class ColaboradorService implements IColaboradorService {
     return novoColaborador;
   }
 
-  private removeEnderecoId(endereco: Endereco): EnderecoTratado {
+  private removeEnderecoId(endereco: Endereco): RetornoEnderecoCriadoDto {
     const { id, ...enderecoTratado } = endereco;
     return enderecoTratado;
   }
