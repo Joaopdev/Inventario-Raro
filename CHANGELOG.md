@@ -11,3 +11,4 @@
 - criado ColaboradorDto
 - criado Error para colaborador não encontrado
 - criada pasta dataMappers, adicionado ColaboradorFactory
+- criado o cliente de envio de e-mails via Sendgrid
