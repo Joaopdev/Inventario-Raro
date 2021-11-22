@@ -4,7 +4,7 @@ import { Inject, Service } from "typedi";
 import { Colaborador } from "../models/ColaboradorEntity";
 import {
   AlterarColaboradorDto,
-  ColaboradorTratado,
+  RetornoColaboradorCriadoDto,
   CriarColaboradorDto,
 } from "../@types/dto/ColaboradorDto";
 import { colaboradorFactory } from "../dataMappers/colaboradorFactory";
@@ -18,21 +18,21 @@ export class ColaboradorService implements IColaboradorService {
     @Inject("ColaboradorRepository")
     private colaboradorRepository: IColaboradorRepository
   ) {}
-  async listar(): Promise<ColaboradorTratado[]> {
+  async listar(): Promise<RetornoColaboradorCriadoDto[]> {
     const colaboradores = await this.colaboradorRepository.findAll();
     const colaboradoresTratados = colaboradores.map((colaborador) => {
       return this.removeIds(colaborador);
     });
     return colaboradoresTratados;
   }
-  async buscar(colaboradorId: number): Promise<ColaboradorTratado> {
+  async buscar(colaboradorId: number): Promise<RetornoColaboradorCriadoDto> {
     const colaborador = await this.checaColaborador(colaboradorId);
     const colaboradorTratado = this.removeIds(colaborador);
     return colaboradorTratado;
   }
   async criar(
     colaboradorDto: CriarColaboradorDto
-  ): Promise<ColaboradorTratado> {
+  ): Promise<RetornoColaboradorCriadoDto> {
     const novoColaborador = colaboradorFactory(colaboradorDto);
     await this.colaboradorRepository.save(novoColaborador);
     const colaboradorTratado = this.removeIds(novoColaborador);
@@ -41,7 +41,7 @@ export class ColaboradorService implements IColaboradorService {
   async atualizar(
     id: number,
     colaboradorDtoAtualizado: AlterarColaboradorDto
-  ): Promise<ColaboradorTratado> {
+  ): Promise<RetornoColaboradorCriadoDto> {
     const colaborador = await this.checaColaborador(id);
     const colaboradorAtualizado = this.atualizaColaborador(
       colaborador,
@@ -66,10 +66,10 @@ export class ColaboradorService implements IColaboradorService {
     return colaborador;
   }
 
-  private removeIds(colaborador: Colaborador): ColaboradorTratado {
+  private removeIds(colaborador: Colaborador): RetornoColaboradorCriadoDto {
     const { id, endereco, equipamentos, movimentacoes, ...colaboradorTratado } =
       colaborador;
-    const novoColaborador: ColaboradorTratado = {
+    const novoColaborador: RetornoColaboradorCriadoDto = {
       ...colaboradorTratado,
       ...{ endereco: this.removeEnderecoId(endereco) },
     };

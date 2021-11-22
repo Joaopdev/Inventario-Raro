@@ -10,7 +10,7 @@ export type ColaboradorDto = {
 };
 export type CriarColaboradorDto = Omit<ColaboradorDto, "id">;
 
-export type ColaboradorTratado = {
+export type RetornoColaboradorCriadoDto = {
   nome: string;
   email: string;
   telefone: string;

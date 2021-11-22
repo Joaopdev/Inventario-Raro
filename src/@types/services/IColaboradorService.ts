@@ -1,16 +1,16 @@
 import {
   AlterarColaboradorDto,
   ColaboradorDto,
-  ColaboradorTratado,
+  RetornoColaboradorCriadoDto,
 } from "../dto/ColaboradorDto";
 
 export interface IColaboradorService {
-  listar(): Promise<ColaboradorTratado[]>;
-  buscar(id: number): Promise<ColaboradorTratado>;
-  criar(colaboradorDto: ColaboradorDto): Promise<ColaboradorTratado>;
+  listar(): Promise<RetornoColaboradorCriadoDto[]>;
+  buscar(id: number): Promise<RetornoColaboradorCriadoDto>;
+  criar(colaboradorDto: ColaboradorDto): Promise<RetornoColaboradorCriadoDto>;
   atualizar(
     id: number,
     colaboradorDtoAtualizado: AlterarColaboradorDto
-  ): Promise<ColaboradorTratado>;
+  ): Promise<RetornoColaboradorCriadoDto>;
   remover(id: number): Promise<void>;
 }
