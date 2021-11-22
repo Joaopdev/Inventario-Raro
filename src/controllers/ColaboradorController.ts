@@ -28,7 +28,7 @@ export class ColaboradorController {
       return;
     } catch (error) {
       if (error instanceof ColaboradorNaoExiste) {
-        response.status(404);
+        response.status(404).send();
         return;
       }
     }
@@ -49,7 +49,7 @@ export class ColaboradorController {
       return;
     } catch (error) {
       if (error instanceof ColaboradorNaoExiste) {
-        response.status(404);
+        response.status(404).send();
         return;
       }
     }
@@ -64,7 +64,7 @@ export class ColaboradorController {
       return;
     } catch (error) {
       if (error instanceof ColaboradorNaoExiste) {
-        response.status(404);
+        response.status(404).send();
         return;
       }
     }
@@ -82,7 +82,7 @@ export class ColaboradorController {
       return;
     } catch (error) {
       if (error instanceof Error) {
-        response.status(404);
+        response.status(404).send();
       }
     }
   }

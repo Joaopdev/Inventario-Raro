@@ -3,7 +3,7 @@ import { IColaboradorService } from "../@types/services/IColaboradorService";
 import { Inject, Service } from "typedi";
 import { Colaborador } from "../models/ColaboradorEntity";
 import {
-  AlteraColaboradorDto,
+  AlterarColaboradorDto,
   ColaboradorTratado,
   CriarColaboradorDto,
 } from "../@types/dto/ColaboradorDto";
@@ -40,7 +40,7 @@ export class ColaboradorService implements IColaboradorService {
   }
   async atualizar(
     id: number,
-    colaboradorDtoAtualizado: AlteraColaboradorDto
+    colaboradorDtoAtualizado: AlterarColaboradorDto
   ): Promise<ColaboradorTratado> {
     const colaborador = await this.checaColaborador(id);
     const colaboradorAtualizado = this.atualizaColaborador(
@@ -82,7 +82,7 @@ export class ColaboradorService implements IColaboradorService {
   }
   private atualizaColaborador(
     colaborador: Colaborador,
-    colaboradorAlterado: AlteraColaboradorDto
+    colaboradorAlterado: AlterarColaboradorDto
   ): Colaborador {
     const { email, endereco, nome, telefone, dataInicio } = {
       ...colaboradorAlterado,

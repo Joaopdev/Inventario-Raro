@@ -1,5 +1,5 @@
 import {
-  AlteraColaboradorDto,
+  AlterarColaboradorDto,
   ColaboradorDto,
   ColaboradorTratado,
 } from "../dto/ColaboradorDto";
@@ -10,7 +10,7 @@ export interface IColaboradorService {
   criar(colaboradorDto: ColaboradorDto): Promise<ColaboradorTratado>;
   atualizar(
     id: number,
-    colaboradorDtoAtualizado: AlteraColaboradorDto
+    colaboradorDtoAtualizado: AlterarColaboradorDto
   ): Promise<ColaboradorTratado>;
   remover(id: number): Promise<void>;
 }

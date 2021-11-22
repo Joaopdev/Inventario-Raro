@@ -18,7 +18,7 @@ export type ColaboradorTratado = {
   endereco: RetornoEnderecoCriadoDto;
 };
 
-export type AlteraColaboradorDto = {
+export type AlterarColaboradorDto = {
   nome?: string;
   email?: string;
   telefone?: string;
