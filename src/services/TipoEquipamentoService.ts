@@ -7,6 +7,10 @@ import { ITipoEquipamentoService } from "../@types/services/ITipoEquipamentoServ
 import { Inject, Service } from "typedi";
 import { ITipoEquipamentoRepository } from "../@types/repositories/ITipoEquipamentoRepository";
 import { tipoEquipamentoFactory } from "../dataMappers/tipoEquipamentoFactory";
+import { TipoEquipamentoNaoExiste } from "../@types/errors/TipoEquipamentoNaoExiste";
+import { QueryFailedError } from "typeorm";
+import { TipoEquipamentoJaExiste } from "../@types/errors/TipoEquipamentoJaExiste";
+import { TypeOrmError } from "../@types/typesAuxiliares/TypeOrmError";
 
 @Service("TipoEquipamentoService")
 export class TipoEquipamentoService implements ITipoEquipamentoService {
@@ -18,95 +22,82 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
   public async criarTipoEquipamento(
     tipoEquipamentoDto: CriarTipoEquipamentoDto
   ): Promise<TipoEquipamento> {
-    const tipoEquipamento = tipoEquipamentoFactory(tipoEquipamentoDto);
-
-    const resultado = await this.tipoEquipamentoRepository.save(
-      tipoEquipamento
-    );
-
-    return resultado;
-  }
-
-  async listarTipoEquipamento(): Promise<TipoEquipamento[]> {
     try {
-      return await this.tipoEquipamentoRepository.find();
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`erro no listar tipo equipamento: ${error.message}`);
-      }
-    }
-  }
+      const tipoEquipamento = tipoEquipamentoFactory(tipoEquipamentoDto);
 
-  async buscarTipoEquipamento(id: number): Promise<TipoEquipamento> {
-    try {
-      return await this.tipoEquipamentoRepository.findOne(id);
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`erro no buscar tipo equipamento: ${error.message}`);
-      }
-    }
-  }
-
-  async atualizarTipoEquipamento(
-    tipoEquipamentoDto: AtualizarTipoEquipamentoDto
-  ): Promise<TipoEquipamento> {
-    try {
-      const tipoEquipamento =
-        await this.tipoEquipamentoRepository.findTipoEquipamento(
-          tipoEquipamentoDto.id
-        );
-
-      if (!tipoEquipamento) {
-        throw new Error("tipo de equipamento nao existe para ser atualizado");
-      }
-
-      const { id, descricao, modelo, quantidade, tipo } = {
-        ...tipoEquipamentoDto,
-      };
-
-      const tipoEquipamentoAtualizadoDto = {
-        id,
-        descricao,
-        modelo,
-        quantidade,
-        tipo,
-      };
-
-      const tipoEquipamentoAtualizado = {
-        ...tipoEquipamento,
-        ...tipoEquipamentoAtualizadoDto,
-      };
-
-      if (tipoEquipamentoDto.parametro) {
-        tipoEquipamentoAtualizado.parametro = {
-          ...tipoEquipamento.parametro,
-          ...tipoEquipamentoDto.parametro,
-        };
-      }
-
-      return await this.tipoEquipamentoRepository.save(
-        tipoEquipamentoAtualizado
+      const resultado = await this.tipoEquipamentoRepository.save(
+        tipoEquipamento
       );
+
+      return resultado;
     } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`error no atualizarTipoEquipamento: ${error.message}`);
+      if (error instanceof QueryFailedError) {
+        const errorTypeOrm = error as TypeOrmError;
+        if (errorTypeOrm.driverError.code === TipoEquipamentoJaExiste.CODE) {
+          throw new TipoEquipamentoJaExiste();
+        }
       }
       throw error;
     }
   }
 
-  async removerTipoEquipamento(id: number): Promise<void> {
-    try {
-      const tipoEquipamento = await this.tipoEquipamentoRepository.findOne(id);
+  async listarTipoEquipamento(): Promise<TipoEquipamento[]> {
+    return await this.tipoEquipamentoRepository.find();
+  }
 
-      if (!tipoEquipamento) {
-        throw new Error("tipo equipamento não existe");
-      }
-      await this.tipoEquipamentoRepository.remove(tipoEquipamento);
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`erro no buscar tipo equipamento: ${error.message}`);
-      }
+  async buscarTipoEquipamento(id: number): Promise<TipoEquipamento> {
+    const tipoEquipamento = await this.tipoEquipamentoRepository.findOne(id);
+
+    if (!tipoEquipamento) {
+      throw new TipoEquipamentoNaoExiste();
     }
+
+    return tipoEquipamento;
+  }
+
+  async atualizarTipoEquipamento(
+    id: number,
+    tipoEquipamentoDto: AtualizarTipoEquipamentoDto
+  ): Promise<TipoEquipamento> {
+    const tipoEquipamento =
+      await this.tipoEquipamentoRepository.findTipoEquipamento(id);
+
+    if (!tipoEquipamento) {
+      throw new TipoEquipamentoNaoExiste();
+    }
+
+    const { descricao, modelo, quantidade, tipo } = {
+      ...tipoEquipamentoDto,
+    };
+
+    const tipoEquipamentoAtualizadoDto = {
+      descricao,
+      modelo,
+      quantidade,
+      tipo,
+    };
+
+    const tipoEquipamentoAtualizado = {
+      ...tipoEquipamento,
+      ...tipoEquipamentoAtualizadoDto,
+    };
+
+    if (tipoEquipamentoDto.parametro) {
+      tipoEquipamentoAtualizado.parametro = {
+        ...tipoEquipamento.parametro,
+        ...tipoEquipamentoDto.parametro,
+      };
+    }
+
+    return await this.tipoEquipamentoRepository.save(tipoEquipamentoAtualizado);
+  }
+
+  async removerTipoEquipamento(id: number): Promise<void> {
+    const tipoEquipamento = await this.tipoEquipamentoRepository.findOne(id);
+
+    if (!tipoEquipamento) {
+      throw new TipoEquipamentoNaoExiste();
+    }
+    await this.tipoEquipamentoRepository.remove(tipoEquipamento);
   }
 }

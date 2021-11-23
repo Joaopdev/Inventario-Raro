@@ -11,6 +11,7 @@ export interface ITipoEquipamentoService {
   listarTipoEquipamento(): Promise<TipoEquipamento[]>;
   buscarTipoEquipamento(id: number): Promise<TipoEquipamento>;
   atualizarTipoEquipamento(
+    id: number,
     tipoEquipamentoDto: AtualizarTipoEquipamentoDto
   ): Promise<TipoEquipamento>;
   removerTipoEquipamento(id: number): Promise<void>;

@@ -16,15 +16,8 @@ export class ParametroService implements IParametroService {
   ) {}
 
   async criarParametro(parametroDto: CriarParametroDto): Promise<Parametro> {
-    try {
-      const parametro = parametroFactory(parametroDto);
-      return await this.parametroRepository.save(parametro);
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`erro no criar parametro: ${error.message}`);
-      }
-      throw error;
-    }
+    const parametro = parametroFactory(parametroDto);
+    return await this.parametroRepository.save(parametro);
   }
 
   async listarParametro(): Promise<Parametro[]> {
@@ -32,39 +25,26 @@ export class ParametroService implements IParametroService {
   }
 
   async atualizarParametro(
+    id: number,
     parametroDto: AtualizarParametroDto
   ): Promise<Parametro> {
-    try {
-      const parametro = await this.parametroRepository.findOne(parametroDto.id);
+    const parametro = await this.parametroRepository.findOne(id);
 
-      if (!parametro) {
-        throw new Error("este parametro não existe para ser atualizado");
-      }
-
-      const parametroAtualizado = { ...parametro, ...parametroDto };
-      return await this.parametroRepository.save(parametroAtualizado);
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`error no atualizar parametro: ${error.message}`);
-      }
-      throw error;
+    if (!parametro) {
+      throw new Error("este parametro não existe para ser atualizado");
     }
+
+    const parametroAtualizado = { ...parametro, ...parametroDto };
+    return await this.parametroRepository.save(parametroAtualizado);
   }
 
   async removerParametro(id: number): Promise<void> {
-    try {
-      const parametro = await this.parametroRepository.findOne(id);
+    const parametro = await this.parametroRepository.findOne(id);
 
-      if (!parametro) {
-        throw new Error("parametro não existe");
-      }
-
-      await this.parametroRepository.remove(parametro);
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`erro no remover parametro: ${error.message}`);
-      }
-      throw error;
+    if (!parametro) {
+      throw new Error("parametro não existe");
     }
+
+    await this.parametroRepository.remove(parametro);
   }
 }

@@ -10,7 +10,6 @@ export type EquipamentoDto = {
 };
 
 export type AtualizarEquipamentoDto = {
-  id: number;
   lote?: string;
   descricao?: string;
   numeroDeSerie?: string;
