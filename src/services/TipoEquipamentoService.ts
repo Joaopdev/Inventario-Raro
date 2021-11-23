@@ -55,6 +55,21 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
     return tipoEquipamento;
   }
 
+  async buscarTipoEquipamentoComEquipamentos(
+    id: number
+  ): Promise<TipoEquipamento> {
+    const tipoEquipamento =
+      await this.tipoEquipamentoRepository.findTipoEquipamentoComEquipamentos(
+        id
+      );
+
+    if (!tipoEquipamento) {
+      throw new TipoEquipamentoNaoExiste();
+    }
+    console.log(tipoEquipamento);
+    return tipoEquipamento;
+  }
+
   async atualizarTipoEquipamento(
     id: number,
     tipoEquipamentoDto: AtualizarTipoEquipamentoDto

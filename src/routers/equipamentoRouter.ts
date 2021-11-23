@@ -1,10 +1,10 @@
-import { TipoEquipamentoController } from "../controllers/TipoEquipamentoController";
+import { EquipamentoController } from "../controllers/EquipamentoController";
 import { RequestHandler, Router } from "express";
 import Container from "typedi";
 const router = Router();
 
-const getController = (): TipoEquipamentoController => {
-  return Container.get<TipoEquipamentoController>("TipoEquipamentoController");
+const getController = (): EquipamentoController => {
+  return Container.get<EquipamentoController>("EquipamentoController");
 };
 
 const createRouter = (): Router => {
@@ -27,11 +27,6 @@ const createRouter = (): Router => {
   router.delete("/:id", (async (req, res) => {
     await getController().remover(req, res);
   }) as RequestHandler);
-
-  router.get("/:id/equipamentos", (async (req, res) => {
-    await getController().buscarTipoEquipamentoComEquipamentos(req, res);
-  }) as RequestHandler);
-
   return router;
 };
 

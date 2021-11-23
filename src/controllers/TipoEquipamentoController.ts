@@ -83,4 +83,23 @@ export class TipoEquipamentoController {
       res.status(500).send("erro interno do servidor");
     }
   }
+
+  async buscarTipoEquipamentoComEquipamentos(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tipoEquipamento =
+        await this.tipoEquipamentoService.buscarTipoEquipamentoComEquipamentos(
+          Number(req.params.id)
+        );
+      res.status(200).send(tipoEquipamento);
+    } catch (error) {
+      if (error instanceof TipoEquipamentoNaoExiste) {
+        res.status(404).send();
+        return;
+      }
+      res.status(500).send("erro interno do servidor");
+    }
+  }
 }

@@ -13,4 +13,11 @@ export class TipoEquipamentoRepository
       relations: ["parametro"],
     });
   }
+
+  findTipoEquipamentoComEquipamentos(id: number): Promise<TipoEquipamento> {
+    return this.findOne({
+      where: { id: id },
+      relations: ["equipamentos"],
+    });
+  }
 }

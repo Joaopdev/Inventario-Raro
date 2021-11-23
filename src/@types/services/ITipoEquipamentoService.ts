@@ -10,6 +10,7 @@ export interface ITipoEquipamentoService {
   ): Promise<TipoEquipamento>;
   listarTipoEquipamento(): Promise<TipoEquipamento[]>;
   buscarTipoEquipamento(id: number): Promise<TipoEquipamento>;
+  buscarTipoEquipamentoComEquipamentos(id: number): Promise<TipoEquipamento>;
   atualizarTipoEquipamento(
     id: number,
     tipoEquipamentoDto: AtualizarTipoEquipamentoDto

@@ -9,6 +9,7 @@ const createRouters = (app: express.Express): void => {
   app.use("/enderecos", createEnderecoRouter());
   app.use("/colaboradores", createColaboradorRouter());
   app.use("/tipo-equipamentos", createTipoEquipamentoRouter());
+  app.use("/equipamentos", createTipoEquipamentoRouter());
 };
 
 export default createRouters;
