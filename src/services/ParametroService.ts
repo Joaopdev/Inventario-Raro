@@ -6,7 +6,7 @@ import { Parametro } from "../models/ParametroEntity";
 import { IParametroService } from "../@types/services/IParametroService";
 import { Inject, Service } from "typedi";
 import { IParametroRepository } from "../@types/repositories/IParametroRepository";
-import { parametroFactory } from "../dataMappers/parametroFactory";
+import { parametroFactory } from "../dataMappers/parametro/parametroFactory";
 
 @Service("ParametroService")
 export class ParametroService implements IParametroService {

@@ -22,3 +22,8 @@ export type CriarEquipamentoDto = Omit<
 > & {
   tipoEquipamentoId: number;
 };
+
+export type RetornoEquipamentoDto = Omit<
+  EquipamentoDto,
+  "id" | "tipoEquipamento"
+>;

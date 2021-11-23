@@ -29,13 +29,12 @@ export class TipoEquipamentoController {
 
   async atualizar(req: Request, res: Response): Promise<void> {
     try {
-      const tipoEquipamento =
-        await this.tipoEquipamentoService.atualizarTipoEquipamento(
-          Number(req.params.id),
-          req.body
-        );
+      await this.tipoEquipamentoService.atualizarTipoEquipamento(
+        Number(req.params.id),
+        req.body
+      );
 
-      res.status(200).send(tipoEquipamento);
+      res.status(200).send();
     } catch (error) {
       if (error instanceof TipoEquipamentoNaoExiste) {
         res.status(404).send();

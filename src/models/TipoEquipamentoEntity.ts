@@ -17,7 +17,7 @@ export class TipoEquipamento {
   @Column()
   tipo: string;
 
-  @Column()
+  @Column({ unique: true })
   modelo: string;
 
   @Column({ nullable: true })
@@ -35,6 +35,7 @@ export class TipoEquipamento {
   @OneToOne(() => Parametro, (parametro) => parametro.tipoEquipamento, {
     cascade: true,
     onDelete: "CASCADE",
+    nullable: false,
   })
   parametro: Parametro;
 }

@@ -7,13 +7,13 @@ import {
 export interface ITipoEquipamentoService {
   criarTipoEquipamento(
     tipoEquipamentoDto: CriarTipoEquipamentoDto
-  ): Promise<TipoEquipamento>;
-  listarTipoEquipamento(): Promise<TipoEquipamento[]>;
-  buscarTipoEquipamento(id: number): Promise<TipoEquipamento>;
+  ): Promise<CriarTipoEquipamentoDto>;
+  listarTipoEquipamento(): Promise<CriarTipoEquipamentoDto[]>;
+  buscarTipoEquipamento(id: number): Promise<CriarTipoEquipamentoDto>;
   buscarTipoEquipamentoComEquipamentos(id: number): Promise<TipoEquipamento>;
   atualizarTipoEquipamento(
     id: number,
     tipoEquipamentoDto: AtualizarTipoEquipamentoDto
-  ): Promise<TipoEquipamento>;
+  ): Promise<void>;
   removerTipoEquipamento(id: number): Promise<void>;
 }
