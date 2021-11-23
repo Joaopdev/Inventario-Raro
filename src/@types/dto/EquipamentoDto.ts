@@ -1,5 +1,5 @@
 import {
-  RetornoTipoEquipamentoCriadoDto,
+  RetornoColaboradorTipoEquipamentoDto,
   TipoEquipamentoDto,
 } from "./TipoEquipamentoDto";
 
@@ -26,10 +26,10 @@ export type CriarEquipamentoDto = Omit<
   tipoEquipamentoId: number;
 };
 
-export type RetornoEquipamentoCriadoDto = {
+export type RetornoColaboradorEquipamentoDto = {
   lote: string;
   descricao?: string;
   numeroDeSerie: string;
   dataAquisicao: Date;
-  tipoEquipamento: RetornoTipoEquipamentoCriadoDto;
+  tipoEquipamento: RetornoColaboradorTipoEquipamentoDto;
 };

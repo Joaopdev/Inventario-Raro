@@ -1,5 +1,5 @@
-import { RetornoEquipamentoCriadoDto } from "../../@types/dto/EquipamentoDto";
-import { RetornoTipoEquipamentoCriadoDto } from "../../@types/dto/TipoEquipamentoDto";
+import { RetornoColaboradorEquipamentoDto } from "../../@types/dto/EquipamentoDto";
+import { RetornoColaboradorTipoEquipamentoDto } from "../../@types/dto/TipoEquipamentoDto";
 import { RetornoColaboradorEquipamentosCriadoDto } from "../../@types/dto/ColaboradorDto";
 import { Colaborador } from "../../models/ColaboradorEntity";
 import { Equipamento } from "../../models/EquipamentoEntity";
@@ -19,11 +19,11 @@ export const omitEquipamentosId = (
 
 const removeEquipamentoId = (
   equipamentos: Equipamento[]
-): RetornoEquipamentoCriadoDto[] => {
+): RetornoColaboradorEquipamentoDto[] => {
   const equipamentosTratados = equipamentos.map((equipamento) => {
     const { id, movimentacoes, tipoEquipamento, ...equipamentoTratado } =
       equipamento;
-    const novoEquipamento: RetornoEquipamentoCriadoDto = {
+    const novoEquipamento: RetornoColaboradorEquipamentoDto = {
       ...equipamentoTratado,
       ...{ tipoEquipamento: removeTipoEquipamentoId(tipoEquipamento) },
     };
@@ -35,7 +35,7 @@ const removeEquipamentoId = (
 
 const removeTipoEquipamentoId = (
   tipoEquipamento: TipoEquipamento
-): RetornoTipoEquipamentoCriadoDto => {
+): RetornoColaboradorTipoEquipamentoDto => {
   const {
     id,
     equipamentos,
@@ -43,7 +43,7 @@ const removeTipoEquipamentoId = (
     parametro,
     ...tipoEquipamentoTratado
   } = tipoEquipamento;
-  const novoTipoEquipamento: RetornoTipoEquipamentoCriadoDto =
+  const novoTipoEquipamento: RetornoColaboradorTipoEquipamentoDto =
     tipoEquipamentoTratado;
   return novoTipoEquipamento;
 };
