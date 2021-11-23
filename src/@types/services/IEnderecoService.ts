@@ -1,5 +1,5 @@
-import { EnderecoDto } from "../../@types/dto/EnderecoDto";
+import { CadastrarEnderecoDto } from "../../@types/dto/EnderecoDto";
 
 export interface IEnderecoService {
-  buscaPorCep(cep: string): Promise<EnderecoDto>;
+  buscaPorCep(cep: string): Promise<CadastrarEnderecoDto>;
 }

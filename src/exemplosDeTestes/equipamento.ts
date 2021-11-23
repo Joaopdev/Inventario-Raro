@@ -18,6 +18,9 @@ import { ParametroService } from "../services/ParametroService";
 import { ParametroRepository } from "../repositories/ParametroRepository";
 import { EquipamentoRepository } from "../repositories/EquipamentoRepository";
 import { EquipamentoService } from "../services/EquipamentoService";
+import { ColaboradorRepository } from "../repositories/ColaboradorRepository";
+import { ColaboradorService } from "../services/ColaboradorService";
+import { CriarColaboradorDto } from "../@types/dto/ColaboradorDto";
 
 export const testandoEquipamento = async (connection: Connection) => {
   const tipoEquipamentoRepo = connection.getCustomRepository(
@@ -36,7 +39,23 @@ export const testandoEquipamento = async (connection: Connection) => {
     tempoMedioEnvio: 5,
     tempoMedioReposicao: 2,
   };
-
+  const colaboradorRepo = connection.getCustomRepository(ColaboradorRepository);
+  const colaboradorService = new ColaboradorService(colaboradorRepo);
+  const colaborador1: CriarColaboradorDto = {
+    nome: "gabriel",
+    dataInicio: "10/10/2021",
+    telefone: "029302902",
+    email: "gabrielrarolabs@com",
+    endereco: {
+      cep: "209302903",
+      logradouro: "teste",
+      complemento: "teste",
+      bairro: "teste",
+      localidade: "teste",
+      uf: "string",
+      numero: "123456",
+    },
+  };
   const tipoEquipamento: CriarTipoEquipamentoDto = {
     tipo: "notebook",
     modelo: "dell g15",
@@ -50,25 +69,42 @@ export const testandoEquipamento = async (connection: Connection) => {
     descricao: "macbooks 2019",
     dataAquisicao: new Date(),
     numeroDeSerie: "we93",
-    tipoEquipamentoId: 6,
+    tipoEquipamentoId: 3,
   };
 
-  const atualizaEquipamento: AtualizarEquipamentoDto = {
-    id: 3,
-    descricao: "sim",
+  const equipamento2: CriarEquipamentoDto = {
+    lote: "1a3rT2325",
+    descricao: "macbooks 2019",
+    dataAquisicao: new Date(),
+    numeroDeSerie: "we94",
+    tipoEquipamentoId: 5,
   };
 
-  const atualizaTipoEquipamento: AtualizarTipoEquipamentoDto = {
-    descricao: "ttssse",
-    //parametro: { quantidadeCritica: 2, tempoMedioConsumo: 4 },
-  };
-  // await tipoEquipamentoService.criarTipoEquipamento(tipoEquipamento, parametro);
+  // const atualizaEquipamento: AtualizarEquipamentoDto = {
+  //   id: 3,
+  //   descricao: "sim",
+  // };
+
+  // const atualizaTipoEquipamento: AtualizarTipoEquipamentoDto = {
+  //   descricao: "ttssse",
+  //   //parametro: { quantidadeCritica: 2, tempoMedioConsumo: 4 },
+  // };
+  // const colaboradorCriado = await colaboradorService.criar(colaborador1);
+  // const tipoEquipamentoCriado =
+  //   await tipoEquipamentoService.criarTipoEquipamento(tipoEquipamento);
+  // const equipamentoCriado = await equipamentoService.criarEquipamento(
+  //   equipamento
+  // );
+  // const equipamentoCriado2 = await equipamentoService.criarEquipamento(
+  //   equipamento2
+  // );
+  // const colaboradorInteiro = await colaboradorRepo.findById(1);
+  // colaboradorInteiro.equipamentos = [equipamentoCriado, equipamentoCriado2];
+  // await colaboradorRepo.save(colaboradorInteiro);
   //await tipoEquipamentoService.criarTipoEquipamento(tipoEquipamento, parametro);
-  const a = await tipoEquipamentoService.removerTipoEquipamento(7);
-  console.log(a);
 };
 
-void (async function () {
-  const conn = await createDatabaseConnection();
-  await testandoEquipamento(conn);
-})();
+// void (async function () {
+//   const conn = await createDatabaseConnection();
+//   await testandoEquipamento(conn);
+// })();

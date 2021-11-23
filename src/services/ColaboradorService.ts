@@ -6,11 +6,13 @@ import {
   AlterarColaboradorDto,
   RetornoColaboradorCriadoDto,
   CriarColaboradorDto,
+  RetornoColaboradorEquipamentosCriadoDto,
 } from "../@types/dto/ColaboradorDto";
-import { colaboradorFactory } from "../dataMappers/colaboradorFactory";
+import { colaboradorFactory } from "../dataMappers/colaborador/colaboradorFactory";
 import { ColaboradorNaoExiste } from "../@types/errors/ColaboradorNaoExiste";
-import { RetornoEnderecoCriadoDto } from "../@types/dto/EnderecoDto";
-import { Endereco } from "../models/EnderecoEntity";
+import { omitEnderecoId } from "../dataMappers/colaborador/omitEnderecoId";
+import { atualizaColaborador } from "../dataMappers/colaborador/atualizaColaborador";
+import { omitEquipamentosId } from "../dataMappers/colaborador/omitEquipamentosId";
 
 @Service("ColaboradorService")
 export class ColaboradorService implements IColaboradorService {
@@ -21,13 +23,13 @@ export class ColaboradorService implements IColaboradorService {
   async listar(): Promise<RetornoColaboradorCriadoDto[]> {
     const colaboradores = await this.colaboradorRepository.findAll();
     const colaboradoresTratados = colaboradores.map((colaborador) => {
-      return this.removeIds(colaborador);
+      return omitEnderecoId(colaborador);
     });
     return colaboradoresTratados;
   }
   async buscar(colaboradorId: number): Promise<RetornoColaboradorCriadoDto> {
     const colaborador = await this.checaColaborador(colaboradorId);
-    const colaboradorTratado = this.removeIds(colaborador);
+    const colaboradorTratado = omitEnderecoId(colaborador);
     return colaboradorTratado;
   }
   async criar(
@@ -35,27 +37,35 @@ export class ColaboradorService implements IColaboradorService {
   ): Promise<RetornoColaboradorCriadoDto> {
     const novoColaborador = colaboradorFactory(colaboradorDto);
     await this.colaboradorRepository.save(novoColaborador);
-    const colaboradorTratado = this.removeIds(novoColaborador);
+    const colaboradorTratado = omitEnderecoId(novoColaborador);
     return colaboradorTratado;
   }
   async atualizar(
     id: number,
     colaboradorDtoAtualizado: AlterarColaboradorDto
-  ): Promise<RetornoColaboradorCriadoDto> {
+  ): Promise<void> {
     const colaborador = await this.checaColaborador(id);
-    const colaboradorAtualizado = this.atualizaColaborador(
+    const colaboradorAtualizado = atualizaColaborador(
       colaborador,
       colaboradorDtoAtualizado
     );
     const colaboradorSalvo = await this.colaboradorRepository.save(
       colaboradorAtualizado
     );
-    return this.removeIds(colaboradorSalvo);
+    return;
   }
   async remover(id: number): Promise<void> {
     const colaboradorPraRemover = await this.checaColaborador(id);
     await this.colaboradorRepository.remove(colaboradorPraRemover);
     return;
+  }
+  async buscarEquipamentoDoColaborador(
+    id: number
+  ): Promise<RetornoColaboradorEquipamentosCriadoDto> {
+    const colaboradorComEquipamento =
+      await this.colaboradorRepository.findEquipamentoByColaborador(id);
+    const colaboradorTratado = omitEquipamentosId(colaboradorComEquipamento);
+    return colaboradorTratado;
   }
 
   private async checaColaborador(id: number): Promise<Colaborador> {
@@ -64,37 +74,5 @@ export class ColaboradorService implements IColaboradorService {
       throw new ColaboradorNaoExiste();
     }
     return colaborador;
-  }
-
-  private removeIds(colaborador: Colaborador): RetornoColaboradorCriadoDto {
-    const { id, endereco, equipamentos, movimentacoes, ...colaboradorTratado } =
-      colaborador;
-    const novoColaborador: RetornoColaboradorCriadoDto = {
-      ...colaboradorTratado,
-      ...{ endereco: this.removeEnderecoId(endereco) },
-    };
-    return novoColaborador;
-  }
-
-  private removeEnderecoId(endereco: Endereco): RetornoEnderecoCriadoDto {
-    const { id, ...enderecoTratado } = endereco;
-    return enderecoTratado;
-  }
-  private atualizaColaborador(
-    colaborador: Colaborador,
-    colaboradorAlterado: AlterarColaboradorDto
-  ): Colaborador {
-    const { email, endereco, nome, telefone, dataInicio } = {
-      ...colaboradorAlterado,
-    };
-    if (dataInicio) {
-      colaborador.dataInicio = new Date(dataInicio);
-    }
-    colaborador.endereco = { ...colaborador.endereco, ...endereco };
-
-    const novasPropriedades = { email, nome, telefone };
-    const colaboradorAtualizado = { ...colaborador, ...novasPropriedades };
-
-    return colaboradorAtualizado;
   }
 }

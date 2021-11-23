@@ -51,13 +51,6 @@ export class EquipamentoService implements IEquipamentoService {
     return await this.equipamentoRepository.save(equipamentoAtualizado);
   }
 
-  async buscarEquipamentoDoColaborador(
-    idColaborador: number
-  ): Promise<Equipamento[]> {
-    return await this.equipamentoRepository.findEquipamentoDoColaborador(
-      idColaborador
-    );
-  }
 
   async removerEquipamento(id: number): Promise<void> {
     const equipamento = await this.equipamentoRepository.findOne(id);
