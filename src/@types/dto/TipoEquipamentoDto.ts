@@ -23,3 +23,10 @@ export type CriarTipoEquipamentoDto = Omit<
   TipoEquipamentoDto,
   "id" | "equipamentos"
 >;
+
+export type RetornoColaboradorTipoEquipamentoDto = {
+  tipo: string;
+  modelo: string;
+  descricao?: string;
+  quantidade: number;
+};

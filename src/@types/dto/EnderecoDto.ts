@@ -20,7 +20,7 @@ export type CadastrarEnderecoDto = {
   bairro: string;
   localidade: string;
   uf: string;
-  numero: number;
+  numero: string;
 };
 
 export type RetornoEnderecoCriadoDto = Omit<Endereco, "id">;
