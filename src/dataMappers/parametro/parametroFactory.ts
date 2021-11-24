@@ -1,5 +1,5 @@
-import { CriarParametroDto } from "../@types/dto/ParametroDto";
-import { Parametro } from "../models/ParametroEntity";
+import { CriarParametroDto } from "../../@types/dto/ParametroDto";
+import { Parametro } from "../../models/ParametroEntity";
 
 export function parametroFactory(parametroDto: CriarParametroDto): Parametro {
   const parametro = new Parametro();

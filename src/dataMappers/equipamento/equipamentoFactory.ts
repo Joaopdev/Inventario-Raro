@@ -1,6 +1,6 @@
-import { Equipamento } from "../models/EquipamentoEntity";
-import { CriarEquipamentoDto } from "../@types/dto/EquipamentoDto";
-import { TipoEquipamento } from "../models/TipoEquipamentoEntity";
+import { Equipamento } from "../../models/EquipamentoEntity";
+import { CriarEquipamentoDto } from "../../@types/dto/EquipamentoDto";
+import { TipoEquipamento } from "../../models/TipoEquipamentoEntity";
 
 export function equipamentoFactory(
   equipamentoDto: CriarEquipamentoDto
