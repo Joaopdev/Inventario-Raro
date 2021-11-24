@@ -33,9 +33,9 @@ export class TipoEquipamento {
   movimentacoes: Movimentacao[];
 
   @OneToOne(() => Parametro, (parametro) => parametro.tipoEquipamento, {
+    nullable: false,
     cascade: true,
     onDelete: "CASCADE",
-    nullable: false,
   })
   parametro: Parametro;
 }
