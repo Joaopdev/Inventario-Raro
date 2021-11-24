@@ -21,12 +21,10 @@ export class MovimentacaoService implements IMovimentacaoService {
     tipoMovimentacao: TipoMovimentacao
   ): Promise<Movimentacao[]> {
     if (tipoMovimentacao) {
-      console.log("caiu no if");
       return await this.movimentacaoRepository.findByTipoMovimentacao(
         tipoMovimentacao
       );
     }
-    console.log("nao caiu no if");
     return await this.movimentacaoRepository.findAll();
   }
   async buscar(id: number): Promise<Movimentacao> {

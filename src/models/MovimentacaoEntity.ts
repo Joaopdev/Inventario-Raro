@@ -37,8 +37,6 @@ export class Movimentacao {
   @ManyToOne(() => Usuario, (usuario) => usuario.movimentacoes)
   usuario: Usuario;
 
-  @ManyToOne(() => Colaborador, (colaborador) => colaborador.movimentacoes, {
-    nullable: true,
-  })
+  @ManyToOne(() => Colaborador, (colaborador) => colaborador.movimentacoes)
   colaborador: Colaborador;
 }

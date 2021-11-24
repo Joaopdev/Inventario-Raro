@@ -27,7 +27,7 @@ export class Parametro {
   @OneToOne(
     () => TipoEquipamento,
     (tipoEquipamento) => tipoEquipamento.parametro,
-    { onDelete: "CASCADE" }
+    { onDelete: "CASCADE", nullable: false }
   )
   @JoinColumn()
   tipoEquipamento: TipoEquipamento;
