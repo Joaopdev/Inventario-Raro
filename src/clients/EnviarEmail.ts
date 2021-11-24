@@ -12,23 +12,22 @@ export class Email {
   private EMAIL_FROM = process.env.SENDGRID_EMAIL_FROM;
 
   mensagem: Mensagem = {
-    to: "ajutram.adv@gmail.com", //usado para testar o recebimento
+    to: "ajutram.adv@gmail.com",
     from: this.EMAIL_FROM,
     subject: "Atualização do sistema de inventário da Raro Labs",
     html: TemplateEmail,
   }
 
-  async enviarEmail(mensagem: Mensagem): Promise<any> {
+  async enviarEmail(mensagem: Mensagem): Promise<void> {
     try {
-      await sgMail.send(mensagem)
-      console.log("E-mail enviado com sucesso");
+      await sgMail.send(mensagem);
     } catch (error) {
       console.error(error);
   
       if (error.response) {
-        throw new EmailNaoEnviado()
-      }
-    }
+        throw new EmailNaoEnviado();
+      };
+    };
   };
-}
+};
 
