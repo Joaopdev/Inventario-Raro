@@ -1,16 +1,17 @@
 import {
   AtualizarEquipamentoDto,
   CriarEquipamentoDto,
+  RetornoEquipamentoDto,
 } from "../dto/EquipamentoDto";
-import { Equipamento } from "../../models/EquipamentoEntity";
-
 export interface IEquipamentoService {
-  criarEquipamento(equipamentoDto: CriarEquipamentoDto): Promise<Equipamento>;
-  listarEquipamentos(): Promise<Equipamento[]>;
+  criarEquipamento(
+    equipamentoDto: CriarEquipamentoDto
+  ): Promise<RetornoEquipamentoDto>;
+  listarEquipamentos(): Promise<RetornoEquipamentoDto[]>;
   removerEquipamento(id: number): Promise<void>;
   atualizarEquipamento(
     id: number,
     equipamentoDto: AtualizarEquipamentoDto
-  ): Promise<Equipamento>;
-  buscarEquipamentoDoColaborador(idColaborador: number): Promise<Equipamento[]>;
+  ): Promise<void>;
+  buscarEquipamento(id: number): Promise<RetornoEquipamentoDto>;
 }

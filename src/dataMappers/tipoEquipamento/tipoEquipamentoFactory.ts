@@ -1,6 +1,6 @@
-import { TipoEquipamento } from "../models/TipoEquipamentoEntity";
-import { CriarTipoEquipamentoDto } from "../@types/dto/TipoEquipamentoDto";
-import { parametroFactory } from "./parametroFactory";
+import { TipoEquipamento } from "../../models/TipoEquipamentoEntity";
+import { CriarTipoEquipamentoDto } from "../../@types/dto/TipoEquipamentoDto";
+import { parametroFactory } from "../../dataMappers/parametro/parametroFactory";
 
 export function tipoEquipamentoFactory(
   tipoEquipamentoDto: CriarTipoEquipamentoDto

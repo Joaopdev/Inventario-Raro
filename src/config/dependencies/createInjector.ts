@@ -14,6 +14,7 @@ import "../../controllers/EnderecoController";
 import "../../controllers/ColaboradorController";
 import "../../controllers/TipoEquipamentoController";
 import "../../controllers/MovimentacaoController";
+import "../../controllers/EquipamentoController";
 
 // inicializa services
 import "../../services/UsuarioService";
