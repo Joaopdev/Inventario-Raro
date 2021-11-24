@@ -17,7 +17,7 @@ export class TipoEquipamento {
   @Column()
   tipo: string;
 
-  @Column()
+  @Column({ unique: true })
   modelo: string;
 
   @Column({ nullable: true })

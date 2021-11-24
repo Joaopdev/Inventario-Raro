@@ -17,7 +17,7 @@ export class Equipamento {
   @Column()
   lote: string;
 
-  @Column()
+  @Column({ nullable: true })
   descricao: string;
 
   @Column({ unique: true })
