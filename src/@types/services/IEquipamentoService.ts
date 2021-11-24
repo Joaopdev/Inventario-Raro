@@ -12,5 +12,4 @@ export interface IEquipamentoService {
     id: number,
     equipamentoDto: AtualizarEquipamentoDto
   ): Promise<Equipamento>;
-  buscarEquipamentoDoColaborador(idColaborador: number): Promise<Equipamento[]>;
 }

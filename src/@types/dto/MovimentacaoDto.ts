@@ -7,6 +7,6 @@ export type MovimentacaoDto = {
   dataInicio: Date;
   dataEntrega?: Date;
   descricao?: string;
-}
+};
 
 export type CriarMovimentacaoDto = Omit<MovimentacaoDto, "id">;

@@ -1,7 +1,9 @@
+import { Colaborador } from "models/ColaboradorEntity";
 import {
   AlterarColaboradorDto,
   ColaboradorDto,
   RetornoColaboradorCriadoDto,
+  RetornoColaboradorEquipamentosCriadoDto,
 } from "../dto/ColaboradorDto";
 
 export interface IColaboradorService {
@@ -11,6 +13,9 @@ export interface IColaboradorService {
   atualizar(
     id: number,
     colaboradorDtoAtualizado: AlterarColaboradorDto
-  ): Promise<RetornoColaboradorCriadoDto>;
+  ): Promise<void>;
   remover(id: number): Promise<void>;
+  buscarEquipamentoDoColaborador(
+    id: number
+  ): Promise<RetornoColaboradorEquipamentosCriadoDto>;
 }

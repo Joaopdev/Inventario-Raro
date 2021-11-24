@@ -6,6 +6,7 @@ import createApp from "./config/app";
 import createDatabaseConnection from "./config/database/connect";
 import createDependencyInjector from "./config/dependencies/createInjector";
 import createServer from "./infra/server/server";
+import { testandoEquipamento } from "./exemplosDeTestes/equipamento";
 
 export const start = async (): Promise<void> => {
   try {
