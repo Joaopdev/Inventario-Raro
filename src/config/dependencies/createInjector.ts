@@ -12,6 +12,7 @@ import { MovimentacaoRepository } from "../../repositories/MovimentacaoRepositor
 import "../../controllers/UsuarioController";
 import "../../controllers/EnderecoController";
 import "../../controllers/ColaboradorController";
+import "../../controllers/TipoEquipamentoController";
 
 // inicializa services
 import "../../services/UsuarioService";

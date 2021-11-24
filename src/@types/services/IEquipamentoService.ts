@@ -9,6 +9,7 @@ export interface IEquipamentoService {
   listarEquipamentos(): Promise<Equipamento[]>;
   removerEquipamento(id: number): Promise<void>;
   atualizarEquipamento(
+    id: number,
     equipamentoDto: AtualizarEquipamentoDto
   ): Promise<Equipamento>;
   buscarEquipamentoDoColaborador(idColaborador: number): Promise<Equipamento[]>;

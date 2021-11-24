@@ -1,13 +1,16 @@
-import { Colaborador } from "../../models/ColaboradorEntity";
-import { AlteraColaboradorDto, ColaboradorDto } from "../dto/ColaboradorDto";
+import {
+  AlterarColaboradorDto,
+  ColaboradorDto,
+  RetornoColaboradorCriadoDto,
+} from "../dto/ColaboradorDto";
 
 export interface IColaboradorService {
-  listar(): Promise<Colaborador[]>;
-  buscar(id: number): Promise<Colaborador>;
-  criar(colaboradorDto: ColaboradorDto): Promise<Colaborador>;
+  listar(): Promise<RetornoColaboradorCriadoDto[]>;
+  buscar(id: number): Promise<RetornoColaboradorCriadoDto>;
+  criar(colaboradorDto: ColaboradorDto): Promise<RetornoColaboradorCriadoDto>;
   atualizar(
     id: number,
-    colaboradorDtoAtualizado: AlteraColaboradorDto
-  ): Promise<void>;
+    colaboradorDtoAtualizado: AlterarColaboradorDto
+  ): Promise<RetornoColaboradorCriadoDto>;
   remover(id: number): Promise<void>;
 }

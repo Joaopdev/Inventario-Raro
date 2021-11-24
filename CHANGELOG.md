@@ -11,4 +11,24 @@
 - criado ColaboradorDto
 - criado Error para colaborador não encontrado
 - criada pasta dataMappers, adicionado ColaboradorFactory
+<<<<<<< HEAD
 - criado o cliente de envio de e-mails via Sendgrid
+=======
+
+
+
+ 
+Endereco 
+ * GET /enderecos/839283 <= consulta um endereco pelo cep
+
+Tipo Equipamentos
+ * GET /tipoEquipamentos
+ * POST /tipoEquipamentos
+ * PATCH /tipoEquipamentos/:id
+
+ Equipamentos
+ * GET /Equipamentos => lista
+ * GET colaboradores/id/equipamentos => busca os equipamnetos de um determinado colaborador
+ * POST /Equipamento => adiciona equipamento
+ * PATCH /Equipamento/id/ => atualiza
+>>>>>>> 3285a153fa53878f819fdcbfa31fd3922876d04b

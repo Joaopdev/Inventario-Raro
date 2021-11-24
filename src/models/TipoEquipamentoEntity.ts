@@ -1,7 +1,6 @@
 import {
   Column,
   Entity,
-  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -35,6 +34,7 @@ export class TipoEquipamento {
 
   @OneToOne(() => Parametro, (parametro) => parametro.tipoEquipamento, {
     cascade: true,
+    onDelete: "CASCADE",
   })
   parametro: Parametro;
 }

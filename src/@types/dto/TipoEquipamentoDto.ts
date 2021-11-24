@@ -1,5 +1,5 @@
 import { EquipamentoDto } from "./EquipamentoDto";
-import { AtualizarParametroSemIdDto, CriarParametroDto } from "./ParametroDto";
+import { AtualizarParametroDto, CriarParametroDto } from "./ParametroDto";
 
 export type TipoEquipamentoDto = {
   id: number;
@@ -12,12 +12,11 @@ export type TipoEquipamentoDto = {
 };
 
 export type AtualizarTipoEquipamentoDto = {
-  id: number;
   tipo?: string;
   modelo?: string;
   descricao?: string;
   quantidade?: number;
-  parametro?: AtualizarParametroSemIdDto;
+  parametro?: AtualizarParametroDto;
 };
 
 export type CriarTipoEquipamentoDto = Omit<
