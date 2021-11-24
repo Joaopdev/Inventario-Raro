@@ -8,7 +8,6 @@ import {
 import { Colaborador } from "./ColaboradorEntity";
 import { Movimentacao } from "./MovimentacaoEntity";
 import { TipoEquipamento } from "./TipoEquipamentoEntity";
-
 @Entity()
 export class Equipamento {
   @PrimaryGeneratedColumn()
@@ -28,7 +27,8 @@ export class Equipamento {
 
   @ManyToOne(
     () => TipoEquipamento,
-    (tipoEquipamento) => tipoEquipamento.equipamentos
+    (tipoEquipamento) => tipoEquipamento.equipamentos,
+    { nullable: false }
   )
   tipoEquipamento: TipoEquipamento;
 
