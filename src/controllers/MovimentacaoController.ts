@@ -11,14 +11,9 @@ export class MovimentacaoController {
   ) {}
 
   async listar(request: Request, response: Response): Promise<void> {
-    if (request.query.tipo) {
-      const tipo = request.query.tipo as TipoMovimentacao;
-      const movimentacoes =
-        await this.movimentacaoService.listarPorTipoMovimentacao(tipo);
-      response.send(movimentacoes).status(200);
-      return;
-    }
-    const movimentacoes = await this.movimentacaoService.listar();
+    const tipo = request.query.tipo as TipoMovimentacao;
+    const movimentacoes =
+      await this.movimentacaoService.listarPorTipoMovimentacao(tipo);
     response.send(movimentacoes).status(200);
     return;
   }

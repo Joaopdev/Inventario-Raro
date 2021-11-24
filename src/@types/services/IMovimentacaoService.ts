@@ -6,7 +6,6 @@ import { Movimentacao } from "../../models/MovimentacaoEntity";
 import { TipoMovimentacao } from "../../@types/enums/TipoMovimentacao";
 
 export interface IMovimentacaoService {
-  listar(): Promise<Movimentacao[]>;
   listarPorTipoMovimentacao(
     tipoMovimentacao: TipoMovimentacao
   ): Promise<Movimentacao[]>;

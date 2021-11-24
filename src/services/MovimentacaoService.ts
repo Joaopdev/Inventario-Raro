@@ -17,15 +17,17 @@ export class MovimentacaoService implements IMovimentacaoService {
     private movimentacaoRepository: IMovimentacaoRepository
   ) {}
 
-  async listar(): Promise<Movimentacao[]> {
-    return await this.movimentacaoRepository.findAll();
-  }
   async listarPorTipoMovimentacao(
     tipoMovimentacao: TipoMovimentacao
   ): Promise<Movimentacao[]> {
-    return await this.movimentacaoRepository.findByTipoMovimentacao(
-      tipoMovimentacao
-    );
+    if (tipoMovimentacao) {
+      console.log("caiu no if");
+      return await this.movimentacaoRepository.findByTipoMovimentacao(
+        tipoMovimentacao
+      );
+    }
+    console.log("nao caiu no if");
+    return await this.movimentacaoRepository.findAll();
   }
   async buscar(id: number): Promise<Movimentacao> {
     return await this.movimentacaoRepository.findOneMovimentacao(id);
