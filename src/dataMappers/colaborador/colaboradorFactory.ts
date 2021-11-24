@@ -1,6 +1,6 @@
-import { CriarColaboradorDto } from "../@types/dto/ColaboradorDto";
-import { Colaborador } from "../models/ColaboradorEntity";
-import { enderecoFactory } from "./enderecoFactory";
+import { CriarColaboradorDto } from "../../@types/dto/ColaboradorDto";
+import { Colaborador } from "../../models/ColaboradorEntity";
+import { enderecoFactory } from "../enderecoFactory";
 
 export const colaboradorFactory = (
   novoColaborador: CriarColaboradorDto

@@ -17,7 +17,7 @@ export class Equipamento {
   @Column()
   lote: string;
 
-  @Column()
+  @Column({ nullable: true })
   descricao: string;
 
   @Column({ unique: true })
@@ -28,7 +28,8 @@ export class Equipamento {
 
   @ManyToOne(
     () => TipoEquipamento,
-    (tipoEquipamento) => tipoEquipamento.equipamentos
+    (tipoEquipamento) => tipoEquipamento.equipamentos,
+    { nullable: false }
   )
   tipoEquipamento: TipoEquipamento;
 

@@ -17,13 +17,13 @@ export class TipoEquipamento {
   @Column()
   tipo: string;
 
-  @Column()
+  @Column({ unique: true })
   modelo: string;
 
   @Column({ nullable: true })
   descricao: string;
 
-  @Column()
+  @Column({ nullable: true })
   quantidade: number;
 
   @OneToMany(() => Equipamento, (equipamento) => equipamento.tipoEquipamento)
@@ -33,6 +33,7 @@ export class TipoEquipamento {
   movimentacoes: Movimentacao[];
 
   @OneToOne(() => Parametro, (parametro) => parametro.tipoEquipamento, {
+    nullable: false,
     cascade: true,
     onDelete: "CASCADE",
   })

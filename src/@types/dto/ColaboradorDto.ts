@@ -1,5 +1,5 @@
 import { CadastrarEnderecoDto, RetornoEnderecoCriadoDto } from "./EnderecoDto";
-
+import { RetornoColaboradorEquipamentoDto } from "./EquipamentoDto";
 export type ColaboradorDto = {
   id: number;
   nome: string;
@@ -16,6 +16,14 @@ export type RetornoColaboradorCriadoDto = {
   telefone: string;
   dataInicio: Date;
   endereco: RetornoEnderecoCriadoDto;
+};
+
+export type RetornoColaboradorEquipamentosCriadoDto = {
+  nome: string;
+  email: string;
+  telefone: string;
+  dataInicio: Date;
+  equipamentos: RetornoColaboradorEquipamentoDto[];
 };
 
 export type AlterarColaboradorDto = {

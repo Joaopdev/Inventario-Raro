@@ -22,7 +22,7 @@ export class Endereco {
   complemento: string;
 
   @Column()
-  numero: number;
+  numero: string;
 
   @Column()
   bairro: string;

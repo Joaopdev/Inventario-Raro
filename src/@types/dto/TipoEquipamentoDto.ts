@@ -5,10 +5,10 @@ export type TipoEquipamentoDto = {
   id: number;
   tipo: string;
   modelo: string;
-  descricao?: string;
   quantidade: number;
+  descricao?: string;
   equipamentos?: EquipamentoDto[];
-  parametro?: CriarParametroDto;
+  parametro: CriarParametroDto;
 };
 
 export type AtualizarTipoEquipamentoDto = {
@@ -23,3 +23,10 @@ export type CriarTipoEquipamentoDto = Omit<
   TipoEquipamentoDto,
   "id" | "equipamentos"
 >;
+
+export type RetornoColaboradorTipoEquipamentoDto = {
+  tipo: string;
+  modelo: string;
+  descricao?: string;
+  quantidade: number;
+};

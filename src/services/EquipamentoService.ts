@@ -1,16 +1,18 @@
 import {
   AtualizarEquipamentoDto,
   CriarEquipamentoDto,
+  RetornoEquipamentoDto,
 } from "../@types/dto/EquipamentoDto";
 import { IEquipamentoService } from "../@types/services/IEquipamentoService";
-import { Equipamento } from "../models/EquipamentoEntity";
 import { Service, Inject } from "typedi";
 import { IEquipamentoRepository } from "../@types/repositories/IEquipamentoRepository";
-import { equipamentoFactory } from "../dataMappers/equipamentoFactory";
+import { equipamentoFactory } from "../dataMappers/equipamento/equipamentoFactory";
 import { QueryFailedError } from "typeorm";
 import { TypeOrmError } from "../@types/typesAuxiliares/TypeOrmError";
 import { EquipamentoJaExiste } from "../@types/errors/EquipamentoJaExiste";
 import { EquipamentoNaoExiste } from "../@types/errors/EquipamentoNaoExiste";
+import { omitTipoEquipamentoEIdEquipamento } from "../dataMappers/equipamento/omitTipoEquipamentoEIdEquipamento";
+import { atualizaEquipamento } from "../dataMappers/equipamento/atualizaEquipamento";
 @Service("EquipamentoService")
 export class EquipamentoService implements IEquipamentoService {
   public constructor(
@@ -20,10 +22,13 @@ export class EquipamentoService implements IEquipamentoService {
 
   async criarEquipamento(
     equipamentoDto: CriarEquipamentoDto
-  ): Promise<Equipamento> {
+  ): Promise<RetornoEquipamentoDto> {
     try {
       const equipamento = equipamentoFactory(equipamentoDto);
-      return await this.equipamentoRepository.save(equipamento);
+
+      await this.equipamentoRepository.save(equipamento);
+
+      return omitTipoEquipamentoEIdEquipamento(equipamento);
     } catch (error) {
       if (error instanceof QueryFailedError) {
         const errorTypeOrm = error as TypeOrmError;
@@ -35,28 +40,36 @@ export class EquipamentoService implements IEquipamentoService {
     }
   }
 
-  async listarEquipamentos(): Promise<Equipamento[]> {
-    return await this.equipamentoRepository.find();
+  async listarEquipamentos(): Promise<RetornoEquipamentoDto[]> {
+    const equipamentos = await this.equipamentoRepository.find();
+    return equipamentos.map(omitTipoEquipamentoEIdEquipamento);
   }
 
   async atualizarEquipamento(
     id: number,
     equipamentoDto: AtualizarEquipamentoDto
-  ): Promise<Equipamento> {
+  ): Promise<void> {
     const equipamento = await this.equipamentoRepository.findOne(id);
     if (!equipamento) {
       throw new EquipamentoNaoExiste();
     }
-    const equipamentoAtualizado = { ...equipamento, ...equipamentoDto };
-    return await this.equipamentoRepository.save(equipamentoAtualizado);
+    const equipamentoAtualizado = atualizaEquipamento(
+      equipamento,
+      equipamentoDto
+    );
+
+    await this.equipamentoRepository.save(equipamentoAtualizado);
+    return;
   }
 
-  async buscarEquipamentoDoColaborador(
-    idColaborador: number
-  ): Promise<Equipamento[]> {
-    return await this.equipamentoRepository.findEquipamentoDoColaborador(
-      idColaborador
-    );
+  async buscarEquipamento(id: number): Promise<RetornoEquipamentoDto> {
+    const equipamento = await this.equipamentoRepository.findOne(id);
+
+    if (!equipamento) {
+      throw new EquipamentoNaoExiste();
+    }
+
+    return omitTipoEquipamentoEIdEquipamento(equipamento);
   }
 
   async removerEquipamento(id: number): Promise<void> {
