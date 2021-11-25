@@ -29,7 +29,7 @@ const createRouter = (): Router => {
       await getController().buscarPeloColaborador(req, res)) as RequestHandler
   );
   router.post(
-    "/colaborador",
+    "",
     (async (req: RequestWithUserData, res) =>
       await getController().criar(req, res)) as RequestHandler
   );
