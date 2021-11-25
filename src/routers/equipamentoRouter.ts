@@ -1,6 +1,7 @@
 import { EquipamentoController } from "../controllers/EquipamentoController";
 import { RequestHandler, Router } from "express";
 import Container from "typedi";
+import RequestWithUserData from "../@types/controllers/RequestWithUserData";
 const router = Router();
 
 const getController = (): EquipamentoController => {
@@ -12,7 +13,7 @@ const createRouter = (): Router => {
     await getController().listar(req, res);
   }) as RequestHandler);
 
-  router.post("", (async (req, res) => {
+  router.post("", (async (req: RequestWithUserData, res) => {
     await getController().criar(req, res);
   }) as RequestHandler);
 
@@ -26,6 +27,10 @@ const createRouter = (): Router => {
 
   router.delete("/:id", (async (req, res) => {
     await getController().remover(req, res);
+  }) as RequestHandler);
+
+  router.post("/calloff/:id", (async (req: RequestWithUserData, res) => {
+    await getController().suspendeEquipamento(req, res);
   }) as RequestHandler);
   return router;
 };

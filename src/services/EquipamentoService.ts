@@ -5,7 +5,6 @@ import {
 } from "../@types/dto/EquipamentoDto";
 import { IEquipamentoService } from "../@types/services/IEquipamentoService";
 import { Service, Inject } from "typedi";
-import { IEquipamentoRepository } from "../@types/repositories/IEquipamentoRepository";
 import { equipamentoFactory } from "../dataMappers/equipamento/equipamentoFactory";
 import { QueryFailedError } from "typeorm";
 import { TypeOrmError } from "../@types/typesAuxiliares/TypeOrmError";
@@ -13,20 +12,48 @@ import { EquipamentoJaExiste } from "../@types/errors/EquipamentoJaExiste";
 import { EquipamentoNaoExiste } from "../@types/errors/EquipamentoNaoExiste";
 import { omitTipoEquipamentoEIdEquipamento } from "../dataMappers/equipamento/omitTipoEquipamentoEIdEquipamento";
 import { atualizaEquipamento } from "../dataMappers/equipamento/atualizaEquipamento";
+import { ITipoEquipamentoService } from "../@types/services/ITipoEquipamentoService";
+import { Operacao } from "../@types/enums/Operacao";
+import { IEnviarEmail } from "../@types/clients/IEnviarEmail";
+import { TipoMovimentacao } from "../@types/enums/TipoMovimentacao";
+import { decode } from "jsonwebtoken";
+import { TokenPayload } from "../@types/controllers/TokenPayload";
+import { IMovimentacaoService } from "../@types/services/IMovimentacaoService";
+import { IEquipamentoRepository } from "../@types/repositories/IEquipamentoRepository";
 @Service("EquipamentoService")
 export class EquipamentoService implements IEquipamentoService {
   public constructor(
     @Inject("EquipamentoRepository")
-    private equipamentoRepository: IEquipamentoRepository
+    private equipamentoRepository: IEquipamentoRepository,
+    @Inject("TipoEquipamentoService")
+    private tipoEquipamentoService: ITipoEquipamentoService,
+    @Inject("EnviarEmail")
+    private enviarEmail: IEnviarEmail,
+    @Inject("MovimentacaoService")
+    private movimentacaoService: IMovimentacaoService
   ) {}
 
   async criarEquipamento(
+    authorization: string,
     equipamentoDto: CriarEquipamentoDto
   ): Promise<RetornoEquipamentoDto> {
     try {
       const equipamento = equipamentoFactory(equipamentoDto);
+      const usuario = decode(authorization) as TokenPayload;
+      const equipamentoSalvo = await this.equipamentoRepository.save(
+        equipamento
+      );
 
-      await this.equipamentoRepository.save(equipamento);
+      await this.movimentacaoService.geraMovimentacaoEquipamento(
+        usuario.id,
+        equipamentoSalvo,
+        TipoMovimentacao.Entrada
+      );
+
+      await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
+        equipamento.tipoEquipamento.id,
+        Operacao.soma
+      );
 
       return omitTipoEquipamentoEIdEquipamento(equipamento);
     } catch (error) {
@@ -50,6 +77,7 @@ export class EquipamentoService implements IEquipamentoService {
     equipamentoDto: AtualizarEquipamentoDto
   ): Promise<void> {
     const equipamento = await this.equipamentoRepository.findOne(id);
+
     if (!equipamento) {
       throw new EquipamentoNaoExiste();
     }
@@ -72,13 +100,36 @@ export class EquipamentoService implements IEquipamentoService {
     return omitTipoEquipamentoEIdEquipamento(equipamento);
   }
 
-  async removerEquipamento(id: number): Promise<void> {
+  async suspenderEquipamento(authorization: string, id: number): Promise<void> {
     const equipamento = await this.equipamentoRepository.findOne(id);
+    const usuario = decode(authorization) as TokenPayload;
+    await this.movimentacaoService.geraMovimentacaoEquipamento(
+      usuario.id,
+      equipamento,
+      TipoMovimentacao.Saida
+    );
+    if (!equipamento) {
+      throw new EquipamentoNaoExiste();
+    }
+  }
+  async removerEquipamento(id: number): Promise<void> {
+    const equipamento = await this.equipamentoRepository.findEquipamento(id);
+    const tipoEquipamento =
+      await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
+        equipamento.tipoEquipamento.id,
+        Operacao.subtracao
+      );
+    if (
+      tipoEquipamento.quantidade ===
+      equipamento.tipoEquipamento.parametro.quantidadeCritica
+    ) {
+      await this.enviarEmail.enviarEmail(tipoEquipamento.modelo);
+    }
 
     if (!equipamento) {
       throw new EquipamentoNaoExiste();
     }
-
     await this.equipamentoRepository.remove(equipamento);
+    return;
   }
 }

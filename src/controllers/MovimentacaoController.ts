@@ -76,7 +76,6 @@ export class MovimentacaoController {
     response.send(movimentacao).status(201);
     return;
   }
-
   async atualizar(request: Request, response: Response): Promise<void> {
     try {
       const movimentacao = await this.movimentacaoService.atualizar(

@@ -1,6 +1,7 @@
 import { TipoEquipamentoController } from "../controllers/TipoEquipamentoController";
 import { RequestHandler, Router } from "express";
 import Container from "typedi";
+import RequestWithUserData from "../@types/controllers/RequestWithUserData";
 const router = Router();
 
 const getController = (): TipoEquipamentoController => {
@@ -12,7 +13,7 @@ const createRouter = (): Router => {
     await getController().listar(req, res);
   }) as RequestHandler);
 
-  router.post("", (async (req, res) => {
+  router.post("", (async (req: RequestWithUserData, res) => {
     await getController().criar(req, res);
   }) as RequestHandler);
 

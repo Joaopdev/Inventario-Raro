@@ -13,21 +13,37 @@ import { QueryFailedError } from "typeorm";
 import { TipoEquipamentoJaExiste } from "../@types/errors/TipoEquipamentoJaExiste";
 import { TypeOrmError } from "../@types/typesAuxiliares/TypeOrmError";
 import { atualizaTipoEquipamento } from "../dataMappers/tipoEquipamento/atualizaTipoEquipamento";
+import { Operacao } from "../@types/enums/Operacao";
+import { IMovimentacaoService } from "../@types/services/IMovimentacaoService";
+import { TokenPayload } from "../@types/controllers/TokenPayload";
+import { decode } from "jsonwebtoken";
+import { TipoMovimentacao } from "../@types/enums/TipoMovimentacao";
 
 @Service("TipoEquipamentoService")
 export class TipoEquipamentoService implements ITipoEquipamentoService {
   public constructor(
     @Inject("TipoEquipamentoRepository")
-    private tipoEquipamentoRepository: ITipoEquipamentoRepository
+    private tipoEquipamentoRepository: ITipoEquipamentoRepository,
+    @Inject("MovimentacaoService")
+    private movimentacaoService: IMovimentacaoService
   ) {}
 
   public async criarTipoEquipamento(
+    token: string,
     tipoEquipamentoDto: CriarTipoEquipamentoDto
   ): Promise<CriarTipoEquipamentoDto> {
     try {
       const tipoEquipamento = tipoEquipamentoFactory(tipoEquipamentoDto);
+      const usuario = decode(token) as TokenPayload;
+      const tipoEquipamentoSalvo = await this.tipoEquipamentoRepository.save(
+        tipoEquipamento
+      );
 
-      await this.tipoEquipamentoRepository.save(tipoEquipamento);
+      await this.movimentacaoService.geraMovimentacaoTipoEquipamento(
+        usuario.id,
+        tipoEquipamentoSalvo,
+        TipoMovimentacao.Entrada
+      );
 
       return omitIdTipoEquipamento(tipoEquipamento);
     } catch (error) {
@@ -48,7 +64,7 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
     return listaTipoEquipamento.map(omitIdTipoEquipamento);
   }
 
-  async buscarTipoEquipamento(id: number): Promise<CriarTipoEquipamentoDto> {
+  async buscarTipoEquipamento(id: number): Promise<TipoEquipamento> {
     const tipoEquipamento =
       await this.tipoEquipamentoRepository.findTipoEquipamento(id);
 
@@ -56,7 +72,7 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
       throw new TipoEquipamentoNaoExiste();
     }
 
-    return omitIdTipoEquipamento(tipoEquipamento);
+    return tipoEquipamento;
   }
 
   async buscarTipoEquipamentoComEquipamentos(
@@ -98,5 +114,20 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
       throw new TipoEquipamentoNaoExiste();
     }
     await this.tipoEquipamentoRepository.remove(tipoEquipamento);
+  }
+
+  async atualizaQuantidadeTipoEquipamento(
+    id: number,
+    operacao: Operacao
+  ): Promise<TipoEquipamento> {
+    const tipoEquipamento = await this.tipoEquipamentoRepository.findOne(id);
+
+    if (operacao === Operacao.soma) {
+      tipoEquipamento.quantidade += 1;
+    } else {
+      tipoEquipamento.quantidade -= 1;
+    }
+
+    return await this.tipoEquipamentoRepository.save(tipoEquipamento);
   }
 }

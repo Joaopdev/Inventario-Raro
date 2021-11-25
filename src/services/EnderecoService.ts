@@ -1,6 +1,6 @@
 import { Inject, Service } from "typedi";
 import { IEnderecoService } from "../@types/services/IEnderecoService";
-import { CadastrarEnderecoDto, EnderecoDto } from "../@types/dto/EnderecoDto";
+import { CadastrarEnderecoDto } from "../@types/dto/EnderecoDto";
 import { ICepClient } from "../@types/clients/ICepClient";
 
 @Service("EnderecoService")

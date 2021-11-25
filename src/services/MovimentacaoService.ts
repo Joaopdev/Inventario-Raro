@@ -12,6 +12,9 @@ import { atualizaMovimentacao } from "../dataMappers/movimentacao/atualizaMovime
 import { TokenPayload } from "../@types/controllers/TokenPayload";
 import { decode } from "jsonwebtoken";
 import { IColaboradorService } from "../@types/services/IColaboradorService";
+import { Equipamento } from "../models/EquipamentoEntity";
+import { Usuario } from "../models/UsuarioEntity";
+import { TipoEquipamento } from "../models/TipoEquipamentoEntity";
 
 @Service("MovimentacaoService")
 export class MovimentacaoService implements IMovimentacaoService {
@@ -75,6 +78,38 @@ export class MovimentacaoService implements IMovimentacaoService {
       id
     );
     await this.movimentacaoRepository.remove(movimentacao);
+    return;
+  }
+  async geraMovimentacaoEquipamento(
+    usuarioId: number,
+    equipamento: Equipamento,
+    tipoMovimentacao: TipoMovimentacao
+  ): Promise<void> {
+    const usuarioResposanvel = new Usuario();
+    usuarioResposanvel.id = usuarioId;
+    const movimentacao = new Movimentacao();
+    movimentacao.usuario = usuarioResposanvel;
+    movimentacao.tipoEquipamento = equipamento.tipoEquipamento;
+    movimentacao.equipamento = equipamento;
+    movimentacao.dataMovimentacao = new Date();
+    movimentacao.tipoMovimentacao = tipoMovimentacao;
+    await this.movimentacaoRepository.save(movimentacao);
+    return;
+  }
+
+  async geraMovimentacaoTipoEquipamento(
+    usuarioId: number,
+    tipoEquipamento: TipoEquipamento,
+    tipoMovimentacao: TipoMovimentacao
+  ): Promise<void> {
+    const usuarioResponsavel = new Usuario();
+    usuarioResponsavel.id = usuarioId;
+    const movimentacao = new Movimentacao();
+    movimentacao.usuario = usuarioResponsavel;
+    movimentacao.tipoEquipamento = tipoEquipamento;
+    movimentacao.dataMovimentacao = new Date();
+    movimentacao.tipoMovimentacao = tipoMovimentacao;
+    await this.movimentacaoRepository.save(movimentacao);
     return;
   }
 }
