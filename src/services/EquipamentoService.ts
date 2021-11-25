@@ -13,20 +13,36 @@ import { EquipamentoJaExiste } from "../@types/errors/EquipamentoJaExiste";
 import { EquipamentoNaoExiste } from "../@types/errors/EquipamentoNaoExiste";
 import { omitTipoEquipamentoEIdEquipamento } from "../dataMappers/equipamento/omitTipoEquipamentoEIdEquipamento";
 import { atualizaEquipamento } from "../dataMappers/equipamento/atualizaEquipamento";
+import { TipoMovimentacao } from "../@types/enums/TipoMovimentacao";
+import { decode } from "jsonwebtoken";
+import { TokenPayload } from "../@types/controllers/TokenPayload";
+import { IMovimentacaoService } from "../@types/services/IMovimentacaoService";
 @Service("EquipamentoService")
 export class EquipamentoService implements IEquipamentoService {
   public constructor(
     @Inject("EquipamentoRepository")
-    private equipamentoRepository: IEquipamentoRepository
+    private equipamentoRepository: IEquipamentoRepository,
+    @Inject("MovimentacaoService")
+    private movimentacaoService: IMovimentacaoService
   ) {}
 
   async criarEquipamento(
+    authorization: string,
     equipamentoDto: CriarEquipamentoDto
   ): Promise<RetornoEquipamentoDto> {
     try {
+      console.log(equipamentoDto);
       const equipamento = equipamentoFactory(equipamentoDto);
+      const usuario = decode(authorization) as TokenPayload;
+      const equipamentoSalvo = await this.equipamentoRepository.save(
+        equipamento
+      );
 
-      await this.equipamentoRepository.save(equipamento);
+      await this.movimentacaoService.geraMovimentacaoEquipamento(
+        usuario.id,
+        equipamentoSalvo,
+        TipoMovimentacao.Entrada
+      );
 
       return omitTipoEquipamentoEIdEquipamento(equipamento);
     } catch (error) {
@@ -72,13 +88,24 @@ export class EquipamentoService implements IEquipamentoService {
     return omitTipoEquipamentoEIdEquipamento(equipamento);
   }
 
-  async removerEquipamento(id: number): Promise<void> {
+  async suspenderEquipamento(authorization: string, id: number): Promise<void> {
     const equipamento = await this.equipamentoRepository.findOne(id);
-
+    const usuario = decode(authorization) as TokenPayload;
+    await this.movimentacaoService.geraMovimentacaoEquipamento(
+      usuario.id,
+      equipamento,
+      TipoMovimentacao.Saida
+    );
     if (!equipamento) {
       throw new EquipamentoNaoExiste();
     }
-
+  }
+  async removerEquipamento(id: number): Promise<void> {
+    const equipamento = await this.equipamentoRepository.findOne(id);
+    if (!equipamento) {
+      throw new EquipamentoNaoExiste();
+    }
     await this.equipamentoRepository.remove(equipamento);
+    return;
   }
 }
