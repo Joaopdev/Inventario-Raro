@@ -48,7 +48,7 @@ export class EquipamentoController {
   async remover(req: Request, res: Response): Promise<void> {
     try {
       await this.equipamentoService.removerEquipamento(Number(req.params.id));
-      console.log("entrou");
+
       res.status(200).send();
       return;
     } catch (error) {

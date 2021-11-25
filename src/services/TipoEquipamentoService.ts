@@ -85,7 +85,6 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
     if (!tipoEquipamento) {
       throw new TipoEquipamentoNaoExiste();
     }
-    console.log(tipoEquipamento);
 
     await this.tipoEquipamentoRepository.save(
       atualizaTipoEquipamento(tipoEquipamento, tipoEquipamentoDto)

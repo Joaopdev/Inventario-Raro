@@ -35,12 +35,11 @@ export class EquipamentoService implements IEquipamentoService {
 
       await this.equipamentoRepository.save(equipamento);
 
-      const a =
-        await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
-          equipamento.tipoEquipamento.id,
-          Operacao.soma
-        );
-      console.log(a);
+      await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
+        equipamento.tipoEquipamento.id,
+        Operacao.soma
+      );
+
       return omitTipoEquipamentoEIdEquipamento(equipamento);
     } catch (error) {
       if (error instanceof QueryFailedError) {
@@ -103,7 +102,6 @@ export class EquipamentoService implements IEquipamentoService {
     if (!equipamento) {
       throw new EquipamentoNaoExiste();
     }
-    console.log("3");
 
     await this.equipamentoRepository.remove(equipamento);
   }
