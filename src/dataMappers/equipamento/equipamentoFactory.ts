@@ -7,6 +7,7 @@ export function equipamentoFactory(
 ): Equipamento {
   const equipamento = new Equipamento();
   equipamento.lote = equipamentoDto.lote;
+  equipamento.movimentacoes = [];
   equipamento.descricao = equipamentoDto.descricao;
   equipamento.dataAquisicao = new Date(equipamentoDto.dataAquisicao);
   equipamento.numeroDeSerie = equipamentoDto.numeroDeSerie;

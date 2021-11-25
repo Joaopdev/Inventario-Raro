@@ -29,7 +29,13 @@ export class TipoEquipamento {
   @OneToMany(() => Equipamento, (equipamento) => equipamento.tipoEquipamento)
   equipamentos: Equipamento[];
 
-  @OneToMany(() => Movimentacao, (movimentacao) => movimentacao.tipoEquipamento)
+  @OneToMany(
+    () => Movimentacao,
+    (movimentacao) => movimentacao.tipoEquipamento,
+    {
+      cascade: true,
+    }
+  )
   movimentacoes: Movimentacao[];
 
   @OneToOne(() => Parametro, (parametro) => parametro.tipoEquipamento, {

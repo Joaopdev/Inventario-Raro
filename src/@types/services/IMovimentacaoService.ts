@@ -22,11 +22,11 @@ export interface IMovimentacaoService {
     usuarioId: number,
     equipamento: Equipamento,
     tipoMovimentacao: TipoMovimentacao
-  ): Promise<void>;
+  ): Promise<Movimentacao>;
   geraMovimentacaoTipoEquipamento(
     usuarioId: number,
     tipoEquipamento: TipoEquipamento,
     tipoMovimentacao: TipoMovimentacao
-  ): Promise<void>;
+  ): Promise<Movimentacao>;
   remover(id: number): Promise<void>;
 }

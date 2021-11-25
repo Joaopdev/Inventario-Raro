@@ -4,6 +4,7 @@ import { IEquipamentoService } from "../@types/services/IEquipamentoService";
 import { EquipamentoNaoExiste } from "../@types/errors/EquipamentoNaoExiste";
 import { EquipamentoJaExiste } from "../@types/errors/EquipamentoJaExiste";
 import RequestWithUserData from "../@types/controllers/RequestWithUserData";
+import { TipoEquipamentoNaoExiste } from "../@types/errors/TipoEquipamentoNaoExiste";
 
 @Service("EquipamentoController")
 export class EquipamentoController {
@@ -24,8 +25,12 @@ export class EquipamentoController {
       return;
     } catch (error) {
       if (error instanceof EquipamentoJaExiste) {
-        res.status(422).send();
+        res.status(422).send({ error });
         return;
+      }
+
+      if (error instanceof TipoEquipamentoNaoExiste) {
+        res.status(400).send({ error });
       }
       res.status(500).send("erro interno do servidor");
     }
@@ -71,8 +76,12 @@ export class EquipamentoController {
   }
 
   async listar(req: Request, res: Response): Promise<void> {
-    const equipamentos = await this.equipamentoService.listarEquipamentos();
-    res.send(equipamentos).status(200);
+    try {
+      const equipamentos = await this.equipamentoService.listarEquipamentos();
+      res.send(equipamentos).status(200);
+    } catch {
+      res.status(500).send("erro interno do servidor");
+    }
   }
 
   async buscar(req: Request, res: Response): Promise<void> {
