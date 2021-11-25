@@ -119,6 +119,9 @@ export class EquipamentoService implements IEquipamentoService {
   }
   async removerEquipamento(id: number): Promise<void> {
     const equipamento = await this.equipamentoRepository.findEquipamento(id);
+    if (!equipamento) {
+      throw new EquipamentoNaoExiste();
+    }
     const tipoEquipamento =
       await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
         equipamento.tipoEquipamento.id,
@@ -131,9 +134,6 @@ export class EquipamentoService implements IEquipamentoService {
       await this.enviarEmail.enviarEmail(tipoEquipamento.modelo);
     }
 
-    if (!equipamento) {
-      throw new EquipamentoNaoExiste();
-    }
     await this.equipamentoRepository.remove(equipamento);
     return;
   }

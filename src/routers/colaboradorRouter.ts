@@ -1,7 +1,7 @@
 import { ColaboradorController } from "../controllers/ColaboradorController";
 import { RequestHandler, Router } from "express";
 import Container from "typedi";
-import { authorizationMiddleware } from "middlewares/authorizationMiddleware";
+import { authorizationMiddleware } from "../middlewares/authorizationMiddleware";
 const router = Router();
 
 const getController = (): ColaboradorController => {
