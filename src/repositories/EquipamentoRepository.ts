@@ -5,4 +5,12 @@ import { EntityRepository, Repository } from "typeorm";
 @EntityRepository(Equipamento)
 export class EquipamentoRepository
   extends Repository<Equipamento>
-  implements IEquipamentoRepository {}
+  implements IEquipamentoRepository
+{
+  findEquipamento(id: number): Promise<Equipamento> {
+    return this.findOne({
+      relations: ["tipoEquipamento", "tipoEquipamento.parametro"],
+      where: { id: id },
+    });
+  }
+}

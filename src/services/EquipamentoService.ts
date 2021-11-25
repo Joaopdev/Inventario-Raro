@@ -13,11 +13,18 @@ import { EquipamentoJaExiste } from "../@types/errors/EquipamentoJaExiste";
 import { EquipamentoNaoExiste } from "../@types/errors/EquipamentoNaoExiste";
 import { omitTipoEquipamentoEIdEquipamento } from "../dataMappers/equipamento/omitTipoEquipamentoEIdEquipamento";
 import { atualizaEquipamento } from "../dataMappers/equipamento/atualizaEquipamento";
+import { ITipoEquipamentoService } from "../@types/services/ITipoEquipamentoService";
+import { Operacao } from "../@types/enums/Operacao";
+import { IEnviarEmail } from "../@types/clients/IEnviarEmail";
 @Service("EquipamentoService")
 export class EquipamentoService implements IEquipamentoService {
   public constructor(
     @Inject("EquipamentoRepository")
-    private equipamentoRepository: IEquipamentoRepository
+    private equipamentoRepository: IEquipamentoRepository,
+    @Inject("TipoEquipamentoService")
+    private tipoEquipamentoService: ITipoEquipamentoService,
+    @Inject("EnviarEmail")
+    private enviarEmail: IEnviarEmail
   ) {}
 
   async criarEquipamento(
@@ -28,6 +35,12 @@ export class EquipamentoService implements IEquipamentoService {
 
       await this.equipamentoRepository.save(equipamento);
 
+      const a =
+        await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
+          equipamento.tipoEquipamento.id,
+          Operacao.soma
+        );
+      console.log(a);
       return omitTipoEquipamentoEIdEquipamento(equipamento);
     } catch (error) {
       if (error instanceof QueryFailedError) {
@@ -50,6 +63,7 @@ export class EquipamentoService implements IEquipamentoService {
     equipamentoDto: AtualizarEquipamentoDto
   ): Promise<void> {
     const equipamento = await this.equipamentoRepository.findOne(id);
+
     if (!equipamento) {
       throw new EquipamentoNaoExiste();
     }
@@ -73,11 +87,23 @@ export class EquipamentoService implements IEquipamentoService {
   }
 
   async removerEquipamento(id: number): Promise<void> {
-    const equipamento = await this.equipamentoRepository.findOne(id);
+    const equipamento = await this.equipamentoRepository.findEquipamento(id);
+    const tipoEquipamento =
+      await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
+        equipamento.tipoEquipamento.id,
+        Operacao.subtracao
+      );
+    if (
+      tipoEquipamento.quantidade ===
+      equipamento.tipoEquipamento.parametro.quantidadeCritica
+    ) {
+      await this.enviarEmail.enviarEmail(tipoEquipamento.modelo);
+    }
 
     if (!equipamento) {
       throw new EquipamentoNaoExiste();
     }
+    console.log("3");
 
     await this.equipamentoRepository.remove(equipamento);
   }

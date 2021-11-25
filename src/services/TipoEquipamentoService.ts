@@ -13,6 +13,7 @@ import { QueryFailedError } from "typeorm";
 import { TipoEquipamentoJaExiste } from "../@types/errors/TipoEquipamentoJaExiste";
 import { TypeOrmError } from "../@types/typesAuxiliares/TypeOrmError";
 import { atualizaTipoEquipamento } from "../dataMappers/tipoEquipamento/atualizaTipoEquipamento";
+import { Operacao } from "../@types/enums/Operacao";
 
 @Service("TipoEquipamentoService")
 export class TipoEquipamentoService implements ITipoEquipamentoService {
@@ -48,7 +49,7 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
     return listaTipoEquipamento.map(omitIdTipoEquipamento);
   }
 
-  async buscarTipoEquipamento(id: number): Promise<CriarTipoEquipamentoDto> {
+  async buscarTipoEquipamento(id: number): Promise<TipoEquipamento> {
     const tipoEquipamento =
       await this.tipoEquipamentoRepository.findTipoEquipamento(id);
 
@@ -56,7 +57,7 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
       throw new TipoEquipamentoNaoExiste();
     }
 
-    return omitIdTipoEquipamento(tipoEquipamento);
+    return tipoEquipamento;
   }
 
   async buscarTipoEquipamentoComEquipamentos(
@@ -84,6 +85,7 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
     if (!tipoEquipamento) {
       throw new TipoEquipamentoNaoExiste();
     }
+    console.log(tipoEquipamento);
 
     await this.tipoEquipamentoRepository.save(
       atualizaTipoEquipamento(tipoEquipamento, tipoEquipamentoDto)
@@ -98,5 +100,20 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
       throw new TipoEquipamentoNaoExiste();
     }
     await this.tipoEquipamentoRepository.remove(tipoEquipamento);
+  }
+
+  async atualizaQuantidadeTipoEquipamento(
+    id: number,
+    operacao: Operacao
+  ): Promise<TipoEquipamento> {
+    const tipoEquipamento = await this.tipoEquipamentoRepository.findOne(id);
+
+    if (operacao === Operacao.soma) {
+      tipoEquipamento.quantidade += 1;
+    } else {
+      tipoEquipamento.quantidade -= 1;
+    }
+
+    return await this.tipoEquipamentoRepository.save(tipoEquipamento);
   }
 }

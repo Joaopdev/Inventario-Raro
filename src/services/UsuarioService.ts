@@ -18,7 +18,7 @@ export class UsuarioService implements IUsuarioService {
 
   async buscar(id: number): Promise<Usuario> {
     const usuario = await this.usuarioRepository.findOne(id);
-    if(!usuario) {
+    if (!usuario) {
       throw new Error("Usuário não encontrado");
     }
     return usuario;
