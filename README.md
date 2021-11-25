@@ -93,7 +93,7 @@ As seguintes ferramentas foram usadas na construção do projeto:
 
 
 
-#### [](https://github.com/tgmarinho/Ecoleta#server-nodejs--typescript)**Server**  ([NodeJS](https://nodejs.org/en/)  +  [TypeScript](https://www.typescriptlang.org/))
+#### [](https://github.com/Joaopdev/Inventario-Raro)**Server**  ([NodeJS](https://nodejs.org/en/)  +  [TypeScript](https://www.typescriptlang.org/))
 
 -   **[Axios](https://axios-http.com/docs/intro)**
 -   **[CORS](https://expressjs.com/en/resources/middleware/cors.html)**
@@ -111,11 +111,11 @@ As seguintes ferramentas foram usadas na construção do projeto:
 -   **[TypeDi](https://docs.typestack.community/typedi/v/develop/01-getting-started)**
 -   **[TypeOrm](https://typeorm.io/)**
 
-> Veja o arquivo  [package.json](https://github.com/tgmarinho/README-ecoleta/blob/master/server/package.json)
+> Veja o arquivo  [package.json](hhttps://github.com/Joaopdev/Inventario-Raro/blob/refinamento_README/package.json)
 
 
 
-#### [](https://github.com/tgmarinho/Ecoleta#utilit%C3%A1rios)**Utilitários**
+#### [](https://github.com/Joaopdev/Inventario-Raro)**Utilitários**
 
 -   API:  **[VIA CEP API](viacep.com.br/ws/01001000/json/)**
 
