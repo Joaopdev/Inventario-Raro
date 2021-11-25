@@ -20,6 +20,7 @@ import { TipoMovimentacao } from "../@types/enums/TipoMovimentacao";
 import { decode } from "jsonwebtoken";
 import { TokenPayload } from "../@types/controllers/TokenPayload";
 import { IMovimentacaoService } from "../@types/services/IMovimentacaoService";
+import { TipoEquipamentoNaoExiste } from "../@types/errors/TipoEquipamentoNaoExiste";
 @Service("EquipamentoService")
 export class EquipamentoService implements IEquipamentoService {
   public constructor(
@@ -40,15 +41,14 @@ export class EquipamentoService implements IEquipamentoService {
     try {
       const equipamento = equipamentoFactory(equipamentoDto);
       const usuario = decode(authorization) as TokenPayload;
-      const equipamentoSalvo = await this.equipamentoRepository.save(
-        equipamento
-      );
-
-      await this.movimentacaoService.geraMovimentacaoEquipamento(
-        usuario.id,
-        equipamentoSalvo,
-        TipoMovimentacao.Entrada
-      );
+      const movimentacao =
+        await this.movimentacaoService.geraMovimentacaoEquipamento(
+          usuario.id,
+          equipamento,
+          TipoMovimentacao.Entrada
+        );
+      equipamento.movimentacoes.push(movimentacao);
+      await this.equipamentoRepository.save(equipamento);
 
       await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
         equipamento.tipoEquipamento.id,
@@ -61,6 +61,10 @@ export class EquipamentoService implements IEquipamentoService {
         const errorTypeOrm = error as TypeOrmError;
         if (errorTypeOrm.driverError.code === EquipamentoJaExiste.CODE) {
           throw new EquipamentoJaExiste();
+        }
+
+        if (errorTypeOrm.driverError.code === "ER_NO_REFERENCED_ROW_2") {
+          throw new TipoEquipamentoNaoExiste();
         }
       }
       throw error;

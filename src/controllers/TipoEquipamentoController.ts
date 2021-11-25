@@ -67,9 +67,13 @@ export class TipoEquipamentoController {
   }
 
   async listar(req: Request, res: Response): Promise<void> {
-    const tipoEquipamentos =
-      await this.tipoEquipamentoService.listarTipoEquipamento();
-    res.send(tipoEquipamentos).status(200);
+    try {
+      const tipoEquipamentos =
+        await this.tipoEquipamentoService.listarTipoEquipamento();
+      res.send(tipoEquipamentos).status(200);
+    } catch (error) {
+      res.status(500).send("erro interno do servidor");
+    }
   }
 
   async buscar(req: Request, res: Response): Promise<void> {

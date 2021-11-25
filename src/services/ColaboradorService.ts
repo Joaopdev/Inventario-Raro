@@ -49,9 +49,7 @@ export class ColaboradorService implements IColaboradorService {
       colaborador,
       colaboradorDtoAtualizado
     );
-    const colaboradorSalvo = await this.colaboradorRepository.save(
-      colaboradorAtualizado
-    );
+    await this.colaboradorRepository.save(colaboradorAtualizado);
     return;
   }
   async remover(id: number): Promise<void> {
