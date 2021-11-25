@@ -66,12 +66,6 @@ export class MovimentacaoController {
     }
   }
 
-  async criar(request: Request, response: Response): Promise<void> {
-    const colaborador = await this.movimentacaoService.criar(request.body);
-    response.send(colaborador).status(201);
-    return;
-  }
-
   async atualizar(request: Request, response: Response): Promise<void> {
     try {
       const movimentacao = await this.movimentacaoService.atualizar(

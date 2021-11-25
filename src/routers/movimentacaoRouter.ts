@@ -27,11 +27,6 @@ const createRouter = (): Router => {
     (async (req, res) =>
       await getController().buscarPeloColaborador(req, res)) as RequestHandler
   );
-  router.post(
-    "",
-    (async (req, res) =>
-      await getController().criar(req, res)) as RequestHandler
-  );
   router.patch(
     "/:id",
     (async (req, res) =>

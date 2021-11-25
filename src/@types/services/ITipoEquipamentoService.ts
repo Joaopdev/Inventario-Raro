@@ -7,6 +7,7 @@ import {
 
 export interface ITipoEquipamentoService {
   criarTipoEquipamento(
+    token: string,
     tipoEquipamentoDto: CriarTipoEquipamentoDto
   ): Promise<CriarTipoEquipamentoDto>;
   listarTipoEquipamento(): Promise<CriarTipoEquipamentoDto[]>;
