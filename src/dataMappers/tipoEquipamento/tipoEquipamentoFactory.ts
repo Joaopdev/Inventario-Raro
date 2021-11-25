@@ -10,6 +10,7 @@ export function tipoEquipamentoFactory(
   tipoEquipamento.modelo = tipoEquipamentoDto.modelo;
   tipoEquipamento.quantidade = tipoEquipamentoDto.quantidade;
   tipoEquipamento.descricao = tipoEquipamentoDto.descricao;
+  tipoEquipamento.movimentacoes = [];
   tipoEquipamento.parametro = parametroFactory(tipoEquipamentoDto.parametro);
   return tipoEquipamento;
 }

@@ -33,17 +33,16 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
     tipoEquipamentoDto: CriarTipoEquipamentoDto
   ): Promise<CriarTipoEquipamentoDto> {
     try {
-      const tipoEquipamento = tipoEquipamentoFactory(tipoEquipamentoDto);
       const usuario = decode(token) as TokenPayload;
-      const tipoEquipamentoSalvo = await this.tipoEquipamentoRepository.save(
-        tipoEquipamento
-      );
-
-      await this.movimentacaoService.geraMovimentacaoTipoEquipamento(
-        usuario.id,
-        tipoEquipamentoSalvo,
-        TipoMovimentacao.Entrada
-      );
+      const tipoEquipamento = tipoEquipamentoFactory(tipoEquipamentoDto);
+      const movimentacao =
+        await this.movimentacaoService.geraMovimentacaoTipoEquipamento(
+          usuario.id,
+          tipoEquipamento,
+          TipoMovimentacao.Entrada
+        );
+      tipoEquipamento.movimentacoes.push(movimentacao);
+      await this.tipoEquipamentoRepository.save(tipoEquipamento);
 
       return omitIdTipoEquipamento(tipoEquipamento);
     } catch (error) {

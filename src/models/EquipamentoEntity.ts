@@ -38,6 +38,7 @@ export class Equipamento {
 
   @OneToMany(() => Movimentacao, (movimentacao) => movimentacao.equipamento, {
     onDelete: "CASCADE",
+    cascade: true,
   })
   movimentacoes: Movimentacao[];
 }
