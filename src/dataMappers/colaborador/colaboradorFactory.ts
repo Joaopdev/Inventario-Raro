@@ -5,6 +5,7 @@ import { enderecoFactory } from "../enderecoFactory";
 export const colaboradorFactory = (
   novoColaborador: CriarColaboradorDto
 ): Colaborador => {
+  console.log(novoColaborador);
   const colaborador = new Colaborador();
   colaborador.nome = novoColaborador.nome;
   colaborador.email = novoColaborador.email;

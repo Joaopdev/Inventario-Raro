@@ -16,9 +16,6 @@ export class Movimentacao {
   @Column()
   dataMovimentacao: Date;
 
-  @Column()
-  dataInicio: Date;
-
   @Column({ nullable: true })
   dataEntrega?: Date;
 

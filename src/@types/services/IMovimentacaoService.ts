@@ -12,7 +12,10 @@ export interface IMovimentacaoService {
   buscar(id: number): Promise<Movimentacao>;
   buscarPeloEquipamento(id: number): Promise<Movimentacao | Movimentacao[]>;
   buscarPeloColaborador(id: number): Promise<Movimentacao | Movimentacao[]>;
-  criar(movimentacaoDto: CriarMovimentacaoDto): Promise<Movimentacao>;
+  criar(
+    authorization: string,
+    movimentacaoDto: CriarMovimentacaoDto
+  ): Promise<Movimentacao>;
   atualizar(
     id: number,
     movimentacaoAlterada: AlteraMovimentacaoDto

@@ -2,6 +2,7 @@ import { Inject, Service } from "typedi";
 import { Request, Response } from "express";
 import { IMovimentacaoService } from "../@types/services/IMovimentacaoService";
 import { TipoMovimentacao } from "../@types/enums/TipoMovimentacao";
+import RequestWithUserData from "../@types/controllers/RequestWithUserData";
 
 @Service("MovimentacaoController")
 export class MovimentacaoController {
@@ -66,9 +67,13 @@ export class MovimentacaoController {
     }
   }
 
-  async criar(request: Request, response: Response): Promise<void> {
-    const colaborador = await this.movimentacaoService.criar(request.body);
-    response.send(colaborador).status(201);
+  async criar(request: RequestWithUserData, response: Response): Promise<void> {
+    const authorization = request.headers.authorization;
+    const movimentacao = await this.movimentacaoService.criar(
+      authorization,
+      request.body
+    );
+    response.send(movimentacao).status(201);
     return;
   }
 
@@ -87,7 +92,6 @@ export class MovimentacaoController {
       }
     }
   }
-
   async remover(request: Request, response: Response): Promise<void> {
     try {
       const movimentacao = await this.movimentacaoService.remover(

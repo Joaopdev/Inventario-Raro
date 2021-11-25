@@ -29,7 +29,9 @@ export class Colaborador {
   @Column({ nullable: true })
   dataRecisao: Date;
 
-  @OneToMany(() => Equipamento, (equipamento) => equipamento.colaborador)
+  @OneToMany(() => Equipamento, (equipamento) => equipamento.colaborador, {
+    cascade: true,
+  })
   equipamentos: Equipamento[];
 
   @OneToMany(() => Movimentacao, (movimentaçao) => movimentaçao.colaborador)

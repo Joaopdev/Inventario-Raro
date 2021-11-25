@@ -14,6 +14,10 @@ export interface IColaboradorService {
     id: number,
     colaboradorDtoAtualizado: AlterarColaboradorDto
   ): Promise<void>;
+  atualizaEquipamentoDoColaborador(
+    colaboradorId: number,
+    equipamentoId: number
+  ): Promise<void>;
   remover(id: number): Promise<void>;
   buscarEquipamentoDoColaborador(
     id: number

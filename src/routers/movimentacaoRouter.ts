@@ -1,3 +1,4 @@
+import RequestWithUserData from "../@types/controllers/RequestWithUserData";
 import { RequestHandler, Router } from "express";
 import Container from "typedi";
 import { MovimentacaoController } from "../controllers/MovimentacaoController";
@@ -28,8 +29,8 @@ const createRouter = (): Router => {
       await getController().buscarPeloColaborador(req, res)) as RequestHandler
   );
   router.post(
-    "",
-    (async (req, res) =>
+    "/colaborador",
+    (async (req: RequestWithUserData, res) =>
       await getController().criar(req, res)) as RequestHandler
   );
   router.patch(

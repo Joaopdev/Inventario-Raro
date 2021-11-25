@@ -17,19 +17,14 @@ export type MovimentacaoDto = {
 export type AlteraMovimentacaoDto = {
   tipoMovimentacao?: TipoMovimentacao;
   dataMovimentacao?: string;
-  dataInicio?: string;
   descricao?: string;
   dataEntrega?: string;
 };
 
 export type CriarMovimentacaoDto = {
   tipoMovimentacao: TipoMovimentacao;
-  dataMovimentacao: Date;
-  dataInicio: Date;
   dataEntrega?: Date;
   descricao?: string;
-  tipoEquipamento: TipoEquipamento;
-  equipamento: Equipamento;
-  usuario: Usuario;
-  colaborador?: Colaborador;
+  colaboradorId: number;
+  equipamento: { id: number; tipoEquipamentoId: number };
 };

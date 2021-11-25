@@ -13,6 +13,7 @@ import { ColaboradorNaoExiste } from "../@types/errors/ColaboradorNaoExiste";
 import { omitEnderecoId } from "../dataMappers/colaborador/omitEnderecoId";
 import { atualizaColaborador } from "../dataMappers/colaborador/atualizaColaborador";
 import { omitEquipamentosId } from "../dataMappers/colaborador/omitEquipamentosId";
+import { Equipamento } from "../models/EquipamentoEntity";
 
 @Service("ColaboradorService")
 export class ColaboradorService implements IColaboradorService {
@@ -66,6 +67,20 @@ export class ColaboradorService implements IColaboradorService {
       await this.colaboradorRepository.findEquipamentoByColaborador(id);
     const colaboradorTratado = omitEquipamentosId(colaboradorComEquipamento);
     return colaboradorTratado;
+  }
+  async atualizaEquipamentoDoColaborador(
+    colaboradorId: number,
+    equipamentoId: number
+  ): Promise<void> {
+    const colaboradorComEquipamento =
+      await this.colaboradorRepository.findEquipamentoByColaborador(
+        colaboradorId
+      );
+    const equipamentoAdicoionavel = new Equipamento();
+    equipamentoAdicoionavel.id = equipamentoId;
+    colaboradorComEquipamento.equipamentos.push(equipamentoAdicoionavel);
+    await this.colaboradorRepository.save(colaboradorComEquipamento);
+    return;
   }
 
   private async checaColaborador(id: number): Promise<Colaborador> {
