@@ -18,6 +18,7 @@ import { IMovimentacaoService } from "../@types/services/IMovimentacaoService";
 import { TokenPayload } from "../@types/controllers/TokenPayload";
 import { decode } from "jsonwebtoken";
 import { TipoMovimentacao } from "../@types/enums/TipoMovimentacao";
+import { ExitemEquipamentosCadastradosComEsteTipoEquipamento } from "../@types/errors/ExistemEquipamentosCadastradosComEsteTipoEquipamento";
 
 @Service("TipoEquipamentoService")
 export class TipoEquipamentoService implements ITipoEquipamentoService {
@@ -107,12 +108,22 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
   }
 
   async removerTipoEquipamento(id: number): Promise<void> {
-    const tipoEquipamento = await this.tipoEquipamentoRepository.findOne(id);
+    try {
+      const tipoEquipamento = await this.tipoEquipamentoRepository.findOne(id);
 
-    if (!tipoEquipamento) {
-      throw new TipoEquipamentoNaoExiste();
+      if (!tipoEquipamento) {
+        throw new TipoEquipamentoNaoExiste();
+      }
+      await this.tipoEquipamentoRepository.remove(tipoEquipamento);
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        const errorTypeOrm = error as TypeOrmError;
+        if (errorTypeOrm.driverError.code === "ER_ROW_IS_REFERENCED_2") {
+          throw new ExitemEquipamentosCadastradosComEsteTipoEquipamento();
+        }
+      }
+      throw error;
     }
-    await this.tipoEquipamentoRepository.remove(tipoEquipamento);
   }
 
   async atualizaQuantidadeTipoEquipamento(

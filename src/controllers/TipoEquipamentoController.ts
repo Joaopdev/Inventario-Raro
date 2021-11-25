@@ -4,6 +4,7 @@ import { ITipoEquipamentoService } from "../@types/services/ITipoEquipamentoServ
 import { TipoEquipamentoNaoExiste } from "../@types/errors/TipoEquipamentoNaoExiste";
 import { TipoEquipamentoJaExiste } from "../@types/errors/TipoEquipamentoJaExiste";
 import RequestWithUserData from "../@types/controllers/RequestWithUserData";
+import { ExitemEquipamentosCadastradosComEsteTipoEquipamento } from "../@types/errors/ExistemEquipamentosCadastradosComEsteTipoEquipamento";
 
 @Service("TipoEquipamentoController")
 export class TipoEquipamentoController {
@@ -60,6 +61,13 @@ export class TipoEquipamentoController {
     } catch (error) {
       if (error instanceof TipoEquipamentoNaoExiste) {
         res.status(404).send();
+        return;
+      }
+
+      if (
+        error instanceof ExitemEquipamentosCadastradosComEsteTipoEquipamento
+      ) {
+        res.status(422).send({ error });
         return;
       }
       res.status(500).send("erro interno do servidor");
