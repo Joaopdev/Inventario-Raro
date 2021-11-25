@@ -36,6 +36,8 @@ export class Equipamento {
   @ManyToOne(() => Colaborador, (colaborador) => colaborador.equipamentos)
   colaborador: Colaborador;
 
-  @OneToMany(() => Movimentacao, (movimentacao) => movimentacao.equipamento)
+  @OneToMany(() => Movimentacao, (movimentacao) => movimentacao.equipamento, {
+    onDelete: "CASCADE",
+  })
   movimentacoes: Movimentacao[];
 }

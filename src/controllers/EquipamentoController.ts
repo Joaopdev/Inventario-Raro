@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { IEquipamentoService } from "../@types/services/IEquipamentoService";
 import { EquipamentoNaoExiste } from "../@types/errors/EquipamentoNaoExiste";
 import { EquipamentoJaExiste } from "../@types/errors/EquipamentoJaExiste";
+import RequestWithUserData from "../@types/controllers/RequestWithUserData";
 
 @Service("EquipamentoController")
 export class EquipamentoController {
@@ -11,9 +12,11 @@ export class EquipamentoController {
     private equipamentoService: IEquipamentoService
   ) {}
 
-  async criar(req: Request, res: Response): Promise<void> {
+  async criar(req: RequestWithUserData, res: Response): Promise<void> {
     try {
+      const authorization = req.headers.authorization;
       const equipamento = await this.equipamentoService.criarEquipamento(
+        authorization,
         req.body
       );
 
@@ -45,9 +48,16 @@ export class EquipamentoController {
     }
   }
 
-  async remover(req: Request, res: Response): Promise<void> {
+  async suspendeEquipamento(
+    req: RequestWithUserData,
+    res: Response
+  ): Promise<void> {
     try {
-      await this.equipamentoService.removerEquipamento(Number(req.params.id));
+      const authorization = req.headers.authorization;
+      await this.equipamentoService.suspenderEquipamento(
+        authorization,
+        Number(req.params.id)
+      );
 
       res.status(200).send();
       return;
@@ -77,6 +87,20 @@ export class EquipamentoController {
         return;
       }
       res.status(500).send("erro interno do servidor");
+    }
+  }
+  async remover(request: Request, response: Response): Promise<void> {
+    try {
+      const colaborador = await this.equipamentoService.removerEquipamento(
+        Number(request.params.id)
+      );
+      response.send().status(200);
+      return;
+    } catch (error) {
+      if (error instanceof EquipamentoNaoExiste) {
+        response.status(404).send();
+        return;
+      }
     }
   }
 }

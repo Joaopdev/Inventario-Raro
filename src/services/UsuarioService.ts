@@ -4,7 +4,9 @@ import { IUsuarioService } from "../@types/services/IUsuarioService";
 import { IUsuarioRepository } from "../@types/repositories/IUsuarioRepository";
 import { Usuario } from "../models/UsuarioEntity";
 import { usuarioFactory } from "../dataMappers/usuarioFactory";
-
+import { TokenPayload } from "../@types/controllers/TokenPayload";
+import { getHashSenha } from "../utils/hashSenha";
+import { sign } from "jsonwebtoken";
 @Service("UsuarioService")
 export class UsuarioService implements IUsuarioService {
   constructor(
@@ -14,6 +16,24 @@ export class UsuarioService implements IUsuarioService {
 
   async listar(): Promise<Usuario[]> {
     return await this.usuarioRepository.find();
+  }
+  async autenticar(
+    usuarioEmail: string,
+    usuarioSenha: string
+  ): Promise<string> {
+    const usuario = await this.usuarioRepository.findByEmail(usuarioEmail);
+    if (usuario.hashSenha === getHashSenha(usuarioSenha)) {
+      const { id, nome, email, role } = usuario;
+      const payload: TokenPayload = {
+        role,
+        nome,
+        id,
+        email,
+      };
+
+      return sign(payload, process.env.AUTH_SECRET);
+    }
+    throw new Error("usuario ou senha incorretos");
   }
 
   async buscar(id: number): Promise<Usuario> {

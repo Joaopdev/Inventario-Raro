@@ -1,6 +1,7 @@
 import { RequestHandler, Router } from "express";
 import Container from "typedi";
-import { MovimentacaoController } from "controllers/MovimentacaoController";
+import { MovimentacaoController } from "../controllers/MovimentacaoController";
+import { authorizationMiddleware } from "../middlewares/authorizationMiddleware";
 const router = Router();
 
 const getController = (): MovimentacaoController => {
@@ -38,6 +39,7 @@ const createRouter = (): Router => {
   );
   router.delete(
     "/:id",
+    authorizationMiddleware,
     (async (req, res) =>
       await getController().remover(req, res)) as RequestHandler
   );

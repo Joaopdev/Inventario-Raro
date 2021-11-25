@@ -16,6 +16,10 @@ import { atualizaEquipamento } from "../dataMappers/equipamento/atualizaEquipame
 import { ITipoEquipamentoService } from "../@types/services/ITipoEquipamentoService";
 import { Operacao } from "../@types/enums/Operacao";
 import { IEnviarEmail } from "../@types/clients/IEnviarEmail";
+import { TipoMovimentacao } from "../@types/enums/TipoMovimentacao";
+import { decode } from "jsonwebtoken";
+import { TokenPayload } from "../@types/controllers/TokenPayload";
+import { IMovimentacaoService } from "../@types/services/IMovimentacaoService";
 @Service("EquipamentoService")
 export class EquipamentoService implements IEquipamentoService {
   public constructor(
@@ -24,16 +28,28 @@ export class EquipamentoService implements IEquipamentoService {
     @Inject("TipoEquipamentoService")
     private tipoEquipamentoService: ITipoEquipamentoService,
     @Inject("EnviarEmail")
-    private enviarEmail: IEnviarEmail
+    private enviarEmail: IEnviarEmail,
+    @Inject("MovimentacaoService")
+    private movimentacaoService: IMovimentacaoService
   ) {}
 
   async criarEquipamento(
+    authorization: string,
     equipamentoDto: CriarEquipamentoDto
   ): Promise<RetornoEquipamentoDto> {
     try {
+      console.log(equipamentoDto);
       const equipamento = equipamentoFactory(equipamentoDto);
+      const usuario = decode(authorization) as TokenPayload;
+      const equipamentoSalvo = await this.equipamentoRepository.save(
+        equipamento
+      );
 
-      await this.equipamentoRepository.save(equipamento);
+      await this.movimentacaoService.geraMovimentacaoEquipamento(
+        usuario.id,
+        equipamentoSalvo,
+        TipoMovimentacao.Entrada
+      );
 
       await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
         equipamento.tipoEquipamento.id,
@@ -85,6 +101,18 @@ export class EquipamentoService implements IEquipamentoService {
     return omitTipoEquipamentoEIdEquipamento(equipamento);
   }
 
+  async suspenderEquipamento(authorization: string, id: number): Promise<void> {
+    const equipamento = await this.equipamentoRepository.findOne(id);
+    const usuario = decode(authorization) as TokenPayload;
+    await this.movimentacaoService.geraMovimentacaoEquipamento(
+      usuario.id,
+      equipamento,
+      TipoMovimentacao.Saida
+    );
+    if (!equipamento) {
+      throw new EquipamentoNaoExiste();
+    }
+  }
   async removerEquipamento(id: number): Promise<void> {
     const equipamento = await this.equipamentoRepository.findEquipamento(id);
     const tipoEquipamento =
@@ -102,7 +130,7 @@ export class EquipamentoService implements IEquipamentoService {
     if (!equipamento) {
       throw new EquipamentoNaoExiste();
     }
-
     await this.equipamentoRepository.remove(equipamento);
+    return;
   }
 }

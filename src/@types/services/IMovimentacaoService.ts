@@ -4,6 +4,7 @@ import {
 } from "../dto/MovimentacaoDto";
 import { Movimentacao } from "../../models/MovimentacaoEntity";
 import { TipoMovimentacao } from "../../@types/enums/TipoMovimentacao";
+import { Equipamento } from "../../models/EquipamentoEntity";
 
 export interface IMovimentacaoService {
   listarPorTipoMovimentacao(
@@ -16,6 +17,11 @@ export interface IMovimentacaoService {
   atualizar(
     id: number,
     movimentacaoAlterada: AlteraMovimentacaoDto
+  ): Promise<void>;
+  geraMovimentacaoEquipamento(
+    usuarioId: number,
+    equipamento: Equipamento,
+    tipoMovimentacao: TipoMovimentacao
   ): Promise<void>;
   remover(id: number): Promise<void>;
 }
