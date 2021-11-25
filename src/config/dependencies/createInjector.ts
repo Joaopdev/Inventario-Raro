@@ -28,6 +28,7 @@ import "../../services/MovimentacaoService";
 // inicializa clientes
 import "../../clients/CepClient";
 import "../../infra/http/AxiosHttpClient";
+import "../../clients/EnviarEmail";
 
 const createDependencyInjector = (): void => {
   Container.set("UsuarioRepository", getCustomRepository(UsuarioRepository));

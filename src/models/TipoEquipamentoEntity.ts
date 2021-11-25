@@ -23,7 +23,7 @@ export class TipoEquipamento {
   @Column({ nullable: true })
   descricao: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: 0 })
   quantidade: number;
 
   @OneToMany(() => Equipamento, (equipamento) => equipamento.tipoEquipamento)
