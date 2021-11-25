@@ -93,6 +93,7 @@ export class MovimentacaoService implements IMovimentacaoService {
     movimentacao.dataMovimentacao = new Date();
     movimentacao.tipoMovimentacao = tipoMovimentacao;
     await this.movimentacaoRepository.save(movimentacao);
+    console.log("teste");
     return;
   }
 }
