@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { ITipoEquipamentoService } from "../@types/services/ITipoEquipamentoService";
 import { TipoEquipamentoNaoExiste } from "../@types/errors/TipoEquipamentoNaoExiste";
 import { TipoEquipamentoJaExiste } from "../@types/errors/TipoEquipamentoJaExiste";
+import RequestWithUserData from "../@types/controllers/RequestWithUserData";
 
 @Service("TipoEquipamentoController")
 export class TipoEquipamentoController {
@@ -11,10 +12,14 @@ export class TipoEquipamentoController {
     private tipoEquipamentoService: ITipoEquipamentoService
   ) {}
 
-  async criar(req: Request, res: Response): Promise<void> {
+  async criar(req: RequestWithUserData, res: Response): Promise<void> {
     try {
+      const authorization = req.headers.authorization;
       const tipoEquipamento =
-        await this.tipoEquipamentoService.criarTipoEquipamento(req.body);
+        await this.tipoEquipamentoService.criarTipoEquipamento(
+          authorization,
+          req.body
+        );
 
       res.status(201).send(tipoEquipamento);
       return;

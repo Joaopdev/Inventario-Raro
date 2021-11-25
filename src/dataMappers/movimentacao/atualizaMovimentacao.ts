@@ -11,9 +11,6 @@ export const atualizaMovimentacao = (
   movimentacao.dataMovimentacao = alteraMovimentacao.dataMovimentacao
     ? new Date(alteraMovimentacao.dataMovimentacao)
     : movimentacao.dataMovimentacao;
-  movimentacao.dataInicio = alteraMovimentacao.dataInicio
-    ? new Date(alteraMovimentacao.dataInicio)
-    : movimentacao.dataInicio;
   movimentacao.dataEntrega = alteraMovimentacao.dataEntrega
     ? new Date(alteraMovimentacao.dataEntrega)
     : movimentacao.dataEntrega;

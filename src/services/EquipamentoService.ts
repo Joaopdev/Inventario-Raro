@@ -38,7 +38,6 @@ export class EquipamentoService implements IEquipamentoService {
     equipamentoDto: CriarEquipamentoDto
   ): Promise<RetornoEquipamentoDto> {
     try {
-      console.log(equipamentoDto);
       const equipamento = equipamentoFactory(equipamentoDto);
       const usuario = decode(authorization) as TokenPayload;
       const equipamentoSalvo = await this.equipamentoRepository.save(

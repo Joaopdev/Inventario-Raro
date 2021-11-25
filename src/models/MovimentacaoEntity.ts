@@ -16,9 +16,6 @@ export class Movimentacao {
   @Column()
   dataMovimentacao: Date;
 
-  @Column()
-  dataInicio: Date;
-
   @Column({ nullable: true })
   dataEntrega?: Date;
 
@@ -31,7 +28,9 @@ export class Movimentacao {
   )
   tipoEquipamento: TipoEquipamento;
 
-  @ManyToOne(() => Equipamento, (Equipamento) => Equipamento.movimentacoes)
+  @ManyToOne(() => Equipamento, (Equipamento) => Equipamento.movimentacoes, {
+    onDelete: "CASCADE",
+  })
   equipamento: Equipamento;
 
   @ManyToOne(() => Usuario, (usuario) => usuario.movimentacoes, {
