@@ -2,7 +2,7 @@ import { EquipamentoController } from "../controllers/EquipamentoController";
 import { RequestHandler, Router } from "express";
 import Container from "typedi";
 import RequestWithUserData from "../@types/controllers/RequestWithUserData";
-import { authorizationMiddleware } from "middlewares/authorizationMiddleware";
+import { authorizationMiddleware } from "../middlewares/authorizationMiddleware";
 const router = Router();
 
 const getController = (): EquipamentoController => {

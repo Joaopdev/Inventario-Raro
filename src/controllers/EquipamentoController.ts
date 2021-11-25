@@ -15,7 +15,9 @@ export class EquipamentoController {
 
   async criar(req: RequestWithUserData, res: Response): Promise<void> {
     try {
+      console.log("aaaaaaaaaaaaaa");
       const authorization = req.headers.authorization;
+      console.log(authorization);
       const equipamento = await this.equipamentoService.criarEquipamento(
         authorization,
         req.body
@@ -100,7 +102,7 @@ export class EquipamentoController {
   }
   async remover(request: Request, response: Response): Promise<void> {
     try {
-      const colaborador = await this.equipamentoService.removerEquipamento(
+      await this.equipamentoService.removerEquipamento(
         Number(request.params.id)
       );
       response.send().status(200);
@@ -110,6 +112,7 @@ export class EquipamentoController {
         response.status(404).send();
         return;
       }
+      response.status(500).send("erro interno do servidor");
     }
   }
 }

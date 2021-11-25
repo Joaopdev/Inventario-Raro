@@ -21,7 +21,7 @@ export type AtualizarTipoEquipamentoDto = {
 
 export type CriarTipoEquipamentoDto = Omit<
   TipoEquipamentoDto,
-  "id" | "equipamentos"
+  "id" | "equipamentos" | "quantidade"
 >;
 
 export type RetornoColaboradorTipoEquipamentoDto = {
