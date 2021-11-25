@@ -22,7 +22,7 @@ const createRouter = (): Router => {
   router.get("/:id", (async (req, res) => {
     await getController().buscar(req, res);
   }) as RequestHandler);
-  router.patch("", (async (req, res) => {
+  router.patch("", authorizationMiddleware, (async (req, res) => {
     await getController().atualizar(req, res);
   }) as RequestHandler);
   router.delete("/:id", authorizationMiddleware, (async (req, res) => {

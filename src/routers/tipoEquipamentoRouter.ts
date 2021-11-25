@@ -2,6 +2,7 @@ import { TipoEquipamentoController } from "../controllers/TipoEquipamentoControl
 import { RequestHandler, Router } from "express";
 import Container from "typedi";
 import RequestWithUserData from "../@types/controllers/RequestWithUserData";
+import { authorizationMiddleware } from "middlewares/authorizationMiddleware";
 const router = Router();
 
 const getController = (): TipoEquipamentoController => {
@@ -25,7 +26,7 @@ const createRouter = (): Router => {
     await getController().atualizar(req, res);
   }) as RequestHandler);
 
-  router.delete("/:id", (async (req, res) => {
+  router.delete("/:id", authorizationMiddleware, (async (req, res) => {
     await getController().remover(req, res);
   }) as RequestHandler);
 
