@@ -5,6 +5,7 @@ export interface IUsuarioService {
   listar(): Promise<Usuario[]>;
   buscar(id: number): Promise<Usuario>;
   criar(usuarioDto: UsuarioDto): Promise<Usuario>;
+  autenticar(usuarioEmail: string, usuarioSenha: string): Promise<string>;
   atualizar(usuarioAtualizadoDto: AtualizarUsuarioDto): Promise<void>;
   remover(id: number): Promise<void>;
 }
