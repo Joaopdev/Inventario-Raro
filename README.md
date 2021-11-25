@@ -8,7 +8,7 @@
  
 </p>
 <h1 align="center">
-    <img alt="NextLevelWeek" title="#NextLevelWeek" src="./assets/images/logo-inventario-project.png">
+    <img style="width:290px;" alt="NextLevelWeek" title="#NextLevelWeek" src="./assets/images/logo-inventario-project.png">
 </h1>
 
 <h4 align="center"> 
