@@ -1,6 +1,7 @@
 import { ColaboradorController } from "../controllers/ColaboradorController";
 import { RequestHandler, Router } from "express";
 import Container from "typedi";
+import { authorizationMiddleware } from "middlewares/authorizationMiddleware";
 const router = Router();
 
 const getController = (): ColaboradorController => {
@@ -28,6 +29,7 @@ const createRouter = (): Router => {
   );
   router.delete(
     "/:id",
+    authorizationMiddleware,
     (async (req, res) =>
       await getController().remover(req, res)) as RequestHandler
   );

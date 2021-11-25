@@ -5,7 +5,6 @@ import {
 } from "../@types/dto/EquipamentoDto";
 import { IEquipamentoService } from "../@types/services/IEquipamentoService";
 import { Service, Inject } from "typedi";
-import { IEquipamentoRepository } from "../@types/repositories/IEquipamentoRepository";
 import { equipamentoFactory } from "../dataMappers/equipamento/equipamentoFactory";
 import { QueryFailedError } from "typeorm";
 import { TypeOrmError } from "../@types/typesAuxiliares/TypeOrmError";
@@ -20,7 +19,9 @@ import { TipoMovimentacao } from "../@types/enums/TipoMovimentacao";
 import { decode } from "jsonwebtoken";
 import { TokenPayload } from "../@types/controllers/TokenPayload";
 import { IMovimentacaoService } from "../@types/services/IMovimentacaoService";
+import { IEquipamentoRepository } from "../@types/repositories/IEquipamentoRepository";
 import { TipoEquipamentoNaoExiste } from "../@types/errors/TipoEquipamentoNaoExiste";
+
 @Service("EquipamentoService")
 export class EquipamentoService implements IEquipamentoService {
   public constructor(

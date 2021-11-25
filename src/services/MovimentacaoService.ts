@@ -9,6 +9,9 @@ import { Inject, Service } from "typedi";
 import { TipoMovimentacao } from "../@types/enums/TipoMovimentacao";
 import { movimentacaoFactory } from "../dataMappers/movimentacao/movimentacaoFactory";
 import { atualizaMovimentacao } from "../dataMappers/movimentacao/atualizaMovimentacao";
+import { TokenPayload } from "../@types/controllers/TokenPayload";
+import { decode } from "jsonwebtoken";
+import { IColaboradorService } from "../@types/services/IColaboradorService";
 import { Equipamento } from "../models/EquipamentoEntity";
 import { Usuario } from "../models/UsuarioEntity";
 import { TipoEquipamento } from "../models/TipoEquipamentoEntity";
@@ -17,7 +20,9 @@ import { TipoEquipamento } from "../models/TipoEquipamentoEntity";
 export class MovimentacaoService implements IMovimentacaoService {
   constructor(
     @Inject("MovimentacaoRepository")
-    private movimentacaoRepository: IMovimentacaoRepository
+    private movimentacaoRepository: IMovimentacaoRepository,
+    @Inject("ColaboradorService")
+    private colaboradorService: IColaboradorService
   ) {}
 
   async listarPorTipoMovimentacao(
@@ -42,6 +47,18 @@ export class MovimentacaoService implements IMovimentacaoService {
     colaboradorId: number
   ): Promise<Movimentacao | Movimentacao[]> {
     return await this.movimentacaoRepository.findByColaborador(colaboradorId);
+  }
+  async criar(
+    authorization: string,
+    movimentacaoDto: CriarMovimentacaoDto
+  ): Promise<Movimentacao> {
+    const usuario = decode(authorization) as TokenPayload;
+    await this.colaboradorService.atualizaEquipamentoDoColaborador(
+      movimentacaoDto.colaboradorId,
+      movimentacaoDto.equipamento.id
+    );
+    const novaMovimentacao = movimentacaoFactory(usuario.id, movimentacaoDto);
+    return await this.movimentacaoRepository.save(novaMovimentacao);
   }
   async atualizar(
     id: number,

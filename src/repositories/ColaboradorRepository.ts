@@ -20,11 +20,11 @@ export class ColaboradorRepository
       relations: ["endereco"],
     });
   }
-  findEquipamentoByColaborador(usuarioId: number): Promise<Colaborador> {
+  findEquipamentoByColaborador(colaboradorId: number): Promise<Colaborador> {
     return this.findOne({
       relations: ["equipamentos", "equipamentos.tipoEquipamento"],
       where: {
-        id: usuarioId,
+        id: colaboradorId,
       },
     });
   }
