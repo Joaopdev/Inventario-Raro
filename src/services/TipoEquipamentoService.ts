@@ -135,7 +135,6 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
   ): Promise<TipoEquipamento> {
     const tipoEquipamento =
       await this.tipoEquipamentoRepository.findTipoEquipamento(id);
-    console.log("DENTRO DO ATUALIZA QUANTIDADE", tipoEquipamento);
     if (operacao === Operacao.soma) {
       tipoEquipamento.quantidade += 1;
     } else {

@@ -32,7 +32,6 @@ export class EquipamentoController {
       if (error instanceof TipoEquipamentoNaoExiste) {
         res.status(400).send({ error });
       }
-      console.log(error, error.message);
       res.status(500).send("erro interno do servidor");
     }
   }
