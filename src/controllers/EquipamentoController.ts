@@ -110,7 +110,6 @@ export class EquipamentoController {
         response.status(404).send();
         return;
       }
-      console.log(error,error.message)
       response.status(500).send("erro interno do servidor");
     }
   }
