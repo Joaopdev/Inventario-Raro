@@ -4,6 +4,7 @@ import { IUsuarioService } from "../@types/services/IUsuarioService";
 import { InformacoesIncorretas } from "../@types/errors/InformacoesIncorretas";
 import { DadosParaLogin } from "../@types/controllers/DadosParaLogin";
 import RequestWithUserData from "../@types/controllers/RequestWithUserData";
+import { EmailInvalido } from "../@types/errors/EmailInvalido";
 
 @Service("UsuarioController")
 export class UsuarioController {
@@ -60,8 +61,13 @@ export class UsuarioController {
       const usuario = await this.usuarioService.criar(request.body);
       response.send(usuario).status(201);
     } catch (error) {
+      if (error instanceof EmailInvalido) {
+        response.status(400).send({ error });
+        return;
+      }
       if (error instanceof Error) {
-        response.status(400).send("CANALHA");
+        response.status(400).send();
+        return;
       }
     }
   }
