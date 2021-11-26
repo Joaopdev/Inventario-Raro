@@ -11,7 +11,7 @@ import { authenticationMiddleware } from "../middlewares/authenticationMiddlewar
 
 const createRouters = (app: express.Express): void => {
   app.use("/usuarios/sign-in", createAuthenticationRouter());
-  app.use("/usuarios", authenticationMiddleware, createUsuarioRouter());
+  app.use("/usuarios", createUsuarioRouter());
   app.use("/enderecos", authenticationMiddleware, createEnderecoRouter());
   app.use("/colaboradores", authenticationMiddleware, createColaboradorRouter());
   app.use("/tipo-equipamentos", authenticationMiddleware, createTipoEquipamentoRouter());

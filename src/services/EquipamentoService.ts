@@ -10,7 +10,7 @@ import { QueryFailedError } from "typeorm";
 import { TypeOrmError } from "../@types/typesAuxiliares/TypeOrmError";
 import { EquipamentoJaExiste } from "../@types/errors/EquipamentoJaExiste";
 import { EquipamentoNaoExiste } from "../@types/errors/EquipamentoNaoExiste";
-import { omitTipoEquipamentoEIdEquipamento } from "../dataMappers/equipamento/omitTipoEquipamentoEIdEquipamento";
+import { omitTipoEquipamentoDoEquipamento } from "../dataMappers/equipamento/omitTipoEquipamentoDoEquipamento";
 import { atualizaEquipamento } from "../dataMappers/equipamento/atualizaEquipamento";
 import { ITipoEquipamentoService } from "../@types/services/ITipoEquipamentoService";
 import { Operacao } from "../@types/enums/Operacao";
@@ -56,7 +56,7 @@ export class EquipamentoService implements IEquipamentoService {
         Operacao.soma
       );
 
-      return omitTipoEquipamentoEIdEquipamento(equipamento);
+      return omitTipoEquipamentoDoEquipamento(equipamento);
     } catch (error) {
       if (error instanceof QueryFailedError) {
         const errorTypeOrm = error as TypeOrmError;
@@ -74,7 +74,7 @@ export class EquipamentoService implements IEquipamentoService {
 
   async listarEquipamentos(): Promise<RetornoEquipamentoDto[]> {
     const equipamentos = await this.equipamentoRepository.find();
-    return equipamentos.map(omitTipoEquipamentoEIdEquipamento);
+    return equipamentos.map(omitTipoEquipamentoDoEquipamento);
   }
 
   async atualizarEquipamento(
@@ -102,7 +102,7 @@ export class EquipamentoService implements IEquipamentoService {
       throw new EquipamentoNaoExiste();
     }
 
-    return omitTipoEquipamentoEIdEquipamento(equipamento);
+    return omitTipoEquipamentoDoEquipamento(equipamento);
   }
 
   async suspenderEquipamento(authorization: string, id: number): Promise<void> {

@@ -32,7 +32,6 @@ export class ColaboradorController {
   }
 
   async criar(request: Request, response: Response): Promise<void> {
-    console.log(request.body);
     const colaborador = await this.colaboradorService.criar(request.body);
     response.send(colaborador).status(201);
   }

@@ -1,11 +1,12 @@
 import { RetornoEquipamentoDto } from "../../@types/dto/EquipamentoDto";
 import { Equipamento } from "../../models/EquipamentoEntity";
 
-export function omitTipoEquipamentoEIdEquipamento(
+export function omitTipoEquipamentoDoEquipamento(
   equipamento: Equipamento
 ): RetornoEquipamentoDto {
-  const { lote, descricao, numeroDeSerie, dataAquisicao } = equipamento;
+  const { id, lote, descricao, numeroDeSerie, dataAquisicao } = equipamento;
   const equipamentoCriado = {
+    id,
     lote,
     descricao,
     numeroDeSerie,

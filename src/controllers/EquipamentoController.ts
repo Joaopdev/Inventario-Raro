@@ -15,9 +15,7 @@ export class EquipamentoController {
 
   async criar(req: RequestWithUserData, res: Response): Promise<void> {
     try {
-      console.log("aaaaaaaaaaaaaa");
       const authorization = req.headers.authorization;
-      console.log(authorization);
       const equipamento = await this.equipamentoService.criarEquipamento(
         authorization,
         req.body
@@ -34,6 +32,7 @@ export class EquipamentoController {
       if (error instanceof TipoEquipamentoNaoExiste) {
         res.status(400).send({ error });
       }
+      console.log(error, error.message);
       res.status(500).send("erro interno do servidor");
     }
   }
