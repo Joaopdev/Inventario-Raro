@@ -128,6 +128,7 @@ export class EquipamentoService implements IEquipamentoService {
         equipamento.tipoEquipamento.id,
         Operacao.subtracao
       );
+    console.log(tipoEquipamento);
     await this.emailService.alertarQuantidadeCritica(tipoEquipamento);
 
     await this.equipamentoRepository.remove(equipamento);

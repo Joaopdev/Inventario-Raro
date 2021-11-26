@@ -5,7 +5,7 @@ import { IEmailService } from "../@types/services/IEmailService";
 
 @Service("EmailService")
 export class EmailService implements IEmailService {
-  constructor(@Inject("EmailClient") private emailClient: IEnviarEmail) {}
+  constructor(@Inject("EnviarEmail") private emailClient: IEnviarEmail) {}
 
   async alertarQuantidadeCritica(
     tipoEquipamentoAtualizado: TipoEquipamento
