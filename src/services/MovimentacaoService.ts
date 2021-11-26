@@ -54,8 +54,7 @@ export class MovimentacaoService implements IMovimentacaoService {
   ): Promise<Movimentacao> {
     const usuario = decode(authorization) as TokenPayload;
     await this.colaboradorService.atualizaEquipamentoDoColaborador(
-      movimentacaoDto.colaboradorId,
-      movimentacaoDto.equipamento.id
+      movimentacaoDto.colaboradorId,movimentacaoDto.equipamento.id
     );
     const novaMovimentacao = movimentacaoFactory(usuario.id, movimentacaoDto);
     return await this.movimentacaoRepository.save(novaMovimentacao);
