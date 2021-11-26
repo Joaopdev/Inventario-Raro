@@ -1,10 +1,10 @@
-import { CriarTipoEquipamentoDto } from "../../@types/dto/TipoEquipamentoDto";
+import { RetornoCriarTipoEquipamentoDto } from "../../@types/dto/TipoEquipamentoDto";
 import { TipoEquipamento } from "../../models/TipoEquipamentoEntity";
 
-export function omitIdTipoEquipamento(
+export function omitEquipamentoEMovimentacoesDoTipoEquipamento(
   tipoEquipamento: TipoEquipamento
-): CriarTipoEquipamentoDto {
-  const { descricao, modelo, quantidade, tipo } = tipoEquipamento;
+): RetornoCriarTipoEquipamentoDto {
+  const { id, descricao, modelo, quantidade, tipo } = tipoEquipamento;
   const {
     quantidadeCritica,
     tempoMedioConsumo,
@@ -18,6 +18,7 @@ export function omitIdTipoEquipamento(
     tempoMedioReposicao,
   };
   const tipoEquipamentoCriado = {
+    id,
     tipo,
     modelo,
     quantidade,

@@ -1,13 +1,14 @@
 import {
   AtualizarTipoEquipamentoDto,
   CriarTipoEquipamentoDto,
+  RetornoCriarTipoEquipamentoDto,
 } from "../@types/dto/TipoEquipamentoDto";
 import { TipoEquipamento } from "../models/TipoEquipamentoEntity";
 import { ITipoEquipamentoService } from "../@types/services/ITipoEquipamentoService";
 import { Inject, Service } from "typedi";
 import { ITipoEquipamentoRepository } from "../@types/repositories/ITipoEquipamentoRepository";
 import { tipoEquipamentoFactory } from "../dataMappers/tipoEquipamento/tipoEquipamentoFactory";
-import { omitIdTipoEquipamento } from "../dataMappers/tipoEquipamento/omitIdTipoEquipamento";
+import { omitEquipamentoEMovimentacoesDoTipoEquipamento } from "../dataMappers/tipoEquipamento/omitEquipamentoEMovimentacoesDoTipoEquipamento";
 import { TipoEquipamentoNaoExiste } from "../@types/errors/TipoEquipamentoNaoExiste";
 import { QueryFailedError } from "typeorm";
 import { TipoEquipamentoJaExiste } from "../@types/errors/TipoEquipamentoJaExiste";
@@ -32,7 +33,7 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
   public async criarTipoEquipamento(
     token: string,
     tipoEquipamentoDto: CriarTipoEquipamentoDto
-  ): Promise<CriarTipoEquipamentoDto> {
+  ): Promise<RetornoCriarTipoEquipamentoDto> {
     try {
       const usuario = decode(token) as TokenPayload;
       const tipoEquipamento = tipoEquipamentoFactory(tipoEquipamentoDto);
@@ -45,7 +46,7 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
       tipoEquipamento.movimentacoes.push(movimentacao);
       await this.tipoEquipamentoRepository.save(tipoEquipamento);
 
-      return omitIdTipoEquipamento(tipoEquipamento);
+      return omitEquipamentoEMovimentacoesDoTipoEquipamento(tipoEquipamento);
     } catch (error) {
       if (error instanceof QueryFailedError) {
         const errorTypeOrm = error as TypeOrmError;
@@ -57,11 +58,13 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
     }
   }
 
-  async listarTipoEquipamento(): Promise<CriarTipoEquipamentoDto[]> {
+  async listarTipoEquipamento(): Promise<RetornoCriarTipoEquipamentoDto[]> {
     const listaTipoEquipamento =
       await this.tipoEquipamentoRepository.listarTipoEquipamento();
 
-    return listaTipoEquipamento.map(omitIdTipoEquipamento);
+    return listaTipoEquipamento.map(
+      omitEquipamentoEMovimentacoesDoTipoEquipamento
+    );
   }
 
   async buscarTipoEquipamento(id: number): Promise<TipoEquipamento> {
