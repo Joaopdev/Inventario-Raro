@@ -21,6 +21,7 @@ import { TokenPayload } from "../@types/controllers/TokenPayload";
 import { IMovimentacaoService } from "../@types/services/IMovimentacaoService";
 import { IEquipamentoRepository } from "../@types/repositories/IEquipamentoRepository";
 import { TipoEquipamentoNaoExiste } from "../@types/errors/TipoEquipamentoNaoExiste";
+import { IEmailService } from "../@types/services/IEmailService";
 
 @Service("EquipamentoService")
 export class EquipamentoService implements IEquipamentoService {
@@ -29,8 +30,8 @@ export class EquipamentoService implements IEquipamentoService {
     private equipamentoRepository: IEquipamentoRepository,
     @Inject("TipoEquipamentoService")
     private tipoEquipamentoService: ITipoEquipamentoService,
-    @Inject("EnviarEmail")
-    private enviarEmail: IEnviarEmail,
+    @Inject("EmailService")
+    private emailService: IEmailService,
     @Inject("MovimentacaoService")
     private movimentacaoService: IMovimentacaoService
   ) {}
@@ -127,12 +128,7 @@ export class EquipamentoService implements IEquipamentoService {
         equipamento.tipoEquipamento.id,
         Operacao.subtracao
       );
-    if (
-      tipoEquipamento.quantidade ===
-      equipamento.tipoEquipamento.parametro.quantidadeCritica
-    ) {
-      await this.enviarEmail.enviarEmail(tipoEquipamento.modelo);
-    }
+    await this.emailService.alertarQuantidadeCritica(tipoEquipamento);
 
     await this.equipamentoRepository.remove(equipamento);
     return;

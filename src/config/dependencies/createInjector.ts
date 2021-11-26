@@ -24,6 +24,7 @@ import "../../services/EquipamentoService";
 import "../../services/TipoEquipamentoService";
 import "../../services/ParametroService";
 import "../../services/MovimentacaoService";
+import "../../services/EmailService";
 
 // inicializa clientes
 import "../../clients/CepClient";
