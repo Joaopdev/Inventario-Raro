@@ -121,7 +121,10 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
     } catch (error) {
       if (error instanceof QueryFailedError) {
         const errorTypeOrm = error as TypeOrmError;
-        if (errorTypeOrm.driverError.code === "ER_ROW_IS_REFERENCED_2") {
+        if (
+          errorTypeOrm.driverError.code ===
+          ExitemEquipamentosCadastradosComEsteTipoEquipamento.CODE
+        ) {
           throw new ExitemEquipamentosCadastradosComEsteTipoEquipamento();
         }
       }
