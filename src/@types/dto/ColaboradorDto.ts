@@ -11,6 +11,7 @@ export type ColaboradorDto = {
 export type CriarColaboradorDto = Omit<ColaboradorDto, "id">;
 
 export type RetornoColaboradorCriadoDto = {
+  id: number;
   nome: string;
   email: string;
   telefone: string;

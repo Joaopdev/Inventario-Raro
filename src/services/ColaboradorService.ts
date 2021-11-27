@@ -86,13 +86,10 @@ export class ColaboradorService implements IColaboradorService {
     await this.colaboradorRepository.remove(colaboradorPraRemover);
     return;
   }
-  async buscarEquipamentoDoColaborador(
-    id: number
-  ): Promise<RetornoColaboradorEquipamentosCriadoDto> {
+  async buscarEquipamentoDoColaborador(id: number): Promise<Colaborador> {
     const colaboradorComEquipamento =
       await this.colaboradorRepository.findEquipamentoByColaborador(id);
-    const colaboradorTratado = omitEquipamentosId(colaboradorComEquipamento);
-    return colaboradorTratado;
+    return colaboradorComEquipamento;
   }
   async geraMovimentacaoColaborador(
     authorization: string,
