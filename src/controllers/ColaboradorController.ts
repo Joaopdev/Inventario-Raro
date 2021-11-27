@@ -114,6 +114,7 @@ export class ColaboradorController {
         response.status(422).send({ error });
         return;
       }
+      response.status(500).send("erro interno do servidor");
     }
   }
 }

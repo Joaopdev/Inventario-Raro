@@ -56,9 +56,10 @@ export class ColaboradorService implements IColaboradorService {
   ): Promise<RetornoColaboradorCriadoDto> {
     try {
       const novoColaborador = colaboradorFactory(colaboradorDto);
-      await this.colaboradorRepository.save(novoColaborador);
-      const colaboradorTratado = omitEnderecoId(novoColaborador);
-      return colaboradorTratado;
+      const colaboradorSalvo = await this.colaboradorRepository.save(
+        novoColaborador
+      );
+      return omitEnderecoId(colaboradorSalvo);
     } catch (error) {
       if (error instanceof QueryFailedError) {
         const errorTypeOrm = error as TypeOrmError;

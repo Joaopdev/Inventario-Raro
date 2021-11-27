@@ -6,8 +6,7 @@ import { Endereco } from "../../models/EnderecoEntity";
 export const omitEnderecoId = (
   colaborador: Colaborador
 ): RetornoColaboradorCriadoDto => {
-  const { endereco, equipamentos, movimentacoes, ...colaboradorTratado } =
-    colaborador;
+  const { endereco, ...colaboradorTratado } = colaborador;
   const novoColaborador: RetornoColaboradorCriadoDto = {
     ...colaboradorTratado,
     ...{ endereco: removeEnderecoId(endereco) },
