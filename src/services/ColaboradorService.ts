@@ -14,7 +14,6 @@ import { omitEnderecoId } from "../dataMappers/colaborador/omitEnderecoId";
 import { atualizaColaborador } from "../dataMappers/colaborador/atualizaColaborador";
 import { omitEquipamentosId } from "../dataMappers/colaborador/omitEquipamentosId";
 import { Equipamento } from "../models/EquipamentoEntity";
-
 import { CriarMovimentacaoDto } from "../@types/dto/MovimentacaoDto";
 import { IMovimentacaoService } from "../@types/services/IMovimentacaoService";
 import { ITipoEquipamentoService } from "../@types/services/ITipoEquipamentoService";
@@ -22,6 +21,11 @@ import { IEmailService } from "../@types/services/IEmailService";
 import { Operacao } from "../@types/enums/Operacao";
 import { TipoEquipamento } from "../models/TipoEquipamentoEntity";
 import { TipoMovimentacao } from "../@types/enums/TipoMovimentacao";
+import { QueryFailedError } from "typeorm";
+import { ColaboradorJaExiste } from "../@types/errors/ColaboradorJaExiste";
+import { TypeOrmError } from "../@types/typesAuxiliares/TypeOrmError";
+import { TipoEquipamentoNaoExiste } from "../@types/errors/TipoEquipamentoNaoExiste";
+import { EnumMovimentacaoColaboradorIncorreta } from "../@types/errors/EnumMovimentacaoColaboradorIncorreta";
 
 @Service("ColaboradorService")
 export class ColaboradorService implements IColaboradorService {
@@ -50,10 +54,20 @@ export class ColaboradorService implements IColaboradorService {
   async criar(
     colaboradorDto: CriarColaboradorDto
   ): Promise<RetornoColaboradorCriadoDto> {
-    const novoColaborador = colaboradorFactory(colaboradorDto);
-    await this.colaboradorRepository.save(novoColaborador);
-    const colaboradorTratado = omitEnderecoId(novoColaborador);
-    return colaboradorTratado;
+    try {
+      const novoColaborador = colaboradorFactory(colaboradorDto);
+      await this.colaboradorRepository.save(novoColaborador);
+      const colaboradorTratado = omitEnderecoId(novoColaborador);
+      return colaboradorTratado;
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        const errorTypeOrm = error as TypeOrmError;
+        if (errorTypeOrm.driverError.code === ColaboradorJaExiste.CODE) {
+          throw new ColaboradorJaExiste();
+        }
+        throw error;
+      }
+    }
   }
   async atualizar(
     id: number,
@@ -84,12 +98,10 @@ export class ColaboradorService implements IColaboradorService {
     authorization: string,
     novaMovimentacao: CriarMovimentacaoDto
   ): Promise<void> {
-    const colaboradorCompleto = await this.atualizaEquipamentoDoColaborador(
+    const equipamentoMovimentado = await this.atualizaEquipamentoDoColaborador(
       novaMovimentacao.colaboradorId,
-      novaMovimentacao.equipamentoId
-    );
-    const equipamentoMovimentado = colaboradorCompleto.equipamentos.find(
-      (equipamento) => equipamento.id === novaMovimentacao.equipamentoId
+      novaMovimentacao.equipamentoId,
+      novaMovimentacao.tipoMovimentacao
     );
     const movimentacao =
       await this.movimentacaoService.geraMovimentacaoColaborador(
@@ -110,25 +122,53 @@ export class ColaboradorService implements IColaboradorService {
 
   async atualizaEquipamentoDoColaborador(
     colaboradorId: number,
-    equipamentoId: number
-  ): Promise<Colaborador> {
+    equipamentoId: number,
+    tipoMovimentacao: TipoMovimentacao
+  ): Promise<Equipamento> {
     const colaboradorComEquipamento =
       await this.colaboradorRepository.findEquipamentoByColaborador(
         colaboradorId
       );
-    const equipamentoAdicionado = new Equipamento();
-    equipamentoAdicionado.id = equipamentoId;
-    colaboradorComEquipamento.equipamentos.push(equipamentoAdicionado);
-    await this.colaboradorRepository.save(colaboradorComEquipamento);
-    return await this.colaboradorRepository.findEquipamentoByColaborador(
-      colaboradorId
-    );
+    if (!colaboradorComEquipamento) {
+      throw new ColaboradorNaoExiste();
+    }
+    if (tipoMovimentacao === TipoMovimentacao.Devolucao) {
+      const equipamentoRemovido = this.buscaEquipamentoNoColaborador(
+        colaboradorComEquipamento,
+        equipamentoId
+      );
+      const equipamentosAtualizados =
+        colaboradorComEquipamento.equipamentos.filter(
+          (equipamento) => equipamento.id !== equipamentoRemovido.id
+        );
+      colaboradorComEquipamento.equipamentos = equipamentosAtualizados;
+      await this.colaboradorRepository.save(colaboradorComEquipamento);
+      return equipamentoRemovido;
+    } else if (tipoMovimentacao === TipoMovimentacao.Envio) {
+      const equipamentoAdicionado = new Equipamento();
+      equipamentoAdicionado.id = equipamentoId;
+      colaboradorComEquipamento.equipamentos.push(equipamentoAdicionado);
+      await this.colaboradorRepository.save(colaboradorComEquipamento);
+      const colaboradorAtualizado =
+        await this.colaboradorRepository.findEquipamentoByColaborador(
+          colaboradorId
+        );
+      return this.buscaEquipamentoNoColaborador(
+        colaboradorAtualizado,
+        equipamentoId
+      );
+    } else {
+      throw new EnumMovimentacaoColaboradorIncorreta();
+    }
   }
   async atualizaQuantidadeDeEquipamentos(
     tipoMovimentacao: TipoMovimentacao,
     tipoEquipamento: TipoEquipamento
   ): Promise<TipoEquipamento> {
-    tipoMovimentacao === "envio"
+    if (!tipoEquipamento) {
+      throw new TipoEquipamentoNaoExiste();
+    }
+    tipoMovimentacao === TipoMovimentacao.Envio
       ? (tipoEquipamento =
           await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
             tipoEquipamento.id,
@@ -148,5 +188,14 @@ export class ColaboradorService implements IColaboradorService {
       throw new ColaboradorNaoExiste();
     }
     return colaborador;
+  }
+  private buscaEquipamentoNoColaborador(
+    colaborador: Colaborador,
+    equipamentoId: number
+  ): Equipamento {
+    const equipamentoEspecifico = colaborador.equipamentos.find(
+      (equipamento) => equipamento.id === equipamentoId
+    );
+    return equipamentoEspecifico;
   }
 }

@@ -44,10 +44,11 @@ export class UsuarioService implements IUsuarioService {
     return usuario;
   }
 
-  async criar(usuarioDto: UsuarioDto): Promise<Usuario> {
+  async criar(usuarioDto: UsuarioDto): Promise<TokenPayload> {
     const usuario = usuarioFactory(usuarioDto);
     const resultado = await this.usuarioRepository.save(usuario);
-    return resultado;
+    const { hashSenha, ...resultadoTratado } = resultado;
+    return resultadoTratado;
   }
 
   async atualizar(usuarioAtualizadoDto: AtualizarUsuarioDto): Promise<void> {

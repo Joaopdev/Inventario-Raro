@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { IColaboradorService } from "../@types/services/IColaboradorService";
 import { ColaboradorNaoExiste } from "../@types/errors/ColaboradorNaoExiste";
 import RequestWithUserData from "../@types/controllers/RequestWithUserData";
+import { ColaboradorJaExiste } from "../@types/errors/ColaboradorJaExiste";
 
 @Service("ColaboradorController")
 export class ColaboradorController {
@@ -29,17 +30,27 @@ export class ColaboradorController {
         response.status(404).send();
         return;
       }
+      response.status(500).send("erro interno do servidor");
     }
   }
 
   async criar(request: Request, response: Response): Promise<void> {
-    const colaborador = await this.colaboradorService.criar(request.body);
-    response.send(colaborador).status(201);
+    try {
+      const colaborador = await this.colaboradorService.criar(request.body);
+      response.send(colaborador).status(201);
+      return;
+    } catch (error) {
+      if (error instanceof ColaboradorJaExiste) {
+        response.status(422).send({ error });
+        return;
+      }
+      response.status(500).send("erro interno do servidor");
+    }
   }
 
   async atualizar(request: Request, response: Response): Promise<void> {
     try {
-      const colaborador = await this.colaboradorService.atualizar(
+      await this.colaboradorService.atualizar(
         Number(request.params.id),
         request.body
       );
@@ -50,14 +61,13 @@ export class ColaboradorController {
         response.status(404).send();
         return;
       }
+      response.status(500).send("erro interno do servidor");
     }
   }
 
   async remover(request: Request, response: Response): Promise<void> {
     try {
-      const colaborador = await this.colaboradorService.remover(
-        Number(request.params.id)
-      );
+      await this.colaboradorService.remover(Number(request.params.id));
       response.send().status(200);
       return;
     } catch (error) {
@@ -65,6 +75,7 @@ export class ColaboradorController {
         response.status(404).send();
         return;
       }
+      response.status(500).send("erro interno do servidor");
     }
   }
   async buscaEquipamentoDoColaborador(
@@ -79,22 +90,30 @@ export class ColaboradorController {
       response.send(colaboradorEquipamento).status(200);
       return;
     } catch (error) {
-      if (error instanceof Error) {
+      if (error instanceof ColaboradorNaoExiste) {
         response.status(404).send();
       }
+      response.status(500).send("erro interno do servidor");
     }
   }
   async gerarMovimentacao(
     request: RequestWithUserData,
     response: Response
   ): Promise<void> {
-    const authorization = request.headers.authorization;
-    const movimentacao =
-      await this.colaboradorService.geraMovimentacaoColaborador(
-        authorization,
-        request.body
-      );
-    response.send(movimentacao).status(201);
-    return;
+    try {
+      const authorization = request.headers.authorization;
+      const movimentacao =
+        await this.colaboradorService.geraMovimentacaoColaborador(
+          authorization,
+          request.body
+        );
+      response.send(movimentacao).status(201);
+      return;
+    } catch (error) {
+      if (error instanceof Error) {
+        response.status(422).send({ error });
+        return;
+      }
+    }
   }
 }
