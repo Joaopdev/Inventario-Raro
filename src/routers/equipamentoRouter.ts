@@ -30,7 +30,7 @@ const createRouter = (): Router => {
     await getController().remover(req, res);
   }) as RequestHandler);
 
-  router.post("/calloff/:id", (async (req: RequestWithUserData, res) => {
+  router.post("/inativar/:id", (async (req: RequestWithUserData, res) => {
     await getController().suspendeEquipamento(req, res);
   }) as RequestHandler);
   return router;
