@@ -1,4 +1,6 @@
 import { Colaborador } from "models/ColaboradorEntity";
+import { CriarMovimentacaoDto } from "../../@types/dto/MovimentacaoDto";
+import { Equipamento } from "../../models/EquipamentoEntity";
 import {
   AlterarColaboradorDto,
   ColaboradorDto,
@@ -17,6 +19,10 @@ export interface IColaboradorService {
   atualizaEquipamentoDoColaborador(
     colaboradorId: number,
     equipamentoId: number
+  ): Promise<Colaborador>;
+  geraMovimentacaoColaborador(
+    authorization: string,
+    novaMovimentacao: CriarMovimentacaoDto
   ): Promise<void>;
   remover(id: number): Promise<void>;
   buscarEquipamentoDoColaborador(

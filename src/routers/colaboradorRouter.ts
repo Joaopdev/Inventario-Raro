@@ -2,6 +2,7 @@ import { ColaboradorController } from "../controllers/ColaboradorController";
 import { RequestHandler, Router } from "express";
 import Container from "typedi";
 import { authorizationMiddleware } from "../middlewares/authorizationMiddleware";
+import RequestWithUserData from "../@types/controllers/RequestWithUserData";
 const router = Router();
 
 const getController = (): ColaboradorController => {
@@ -21,6 +22,11 @@ const createRouter = (): Router => {
     "",
     (async (req, res) =>
       await getController().criar(req, res)) as RequestHandler
+  );
+  router.post(
+    "/movimentacao",
+    (async (req: RequestWithUserData, res) =>
+      await getController().gerarMovimentacao(req, res)) as RequestHandler
   );
   router.patch(
     "/:id",
