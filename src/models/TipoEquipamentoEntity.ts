@@ -26,6 +26,9 @@ export class TipoEquipamento {
   @Column({ nullable: true, default: 0 })
   quantidade: number;
 
+  @Column({ default: true })
+  ativo: boolean;
+
   @OneToMany(() => Equipamento, (equipamento) => equipamento.tipoEquipamento)
   equipamentos: Equipamento[];
 
