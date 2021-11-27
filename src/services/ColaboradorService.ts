@@ -88,24 +88,20 @@ export class ColaboradorService implements IColaboradorService {
       novaMovimentacao.colaboradorId,
       novaMovimentacao.equipamentoId
     );
-    console.log("COLABORADOR COMPLETO", colaboradorCompleto);
     const equipamentoMovimentado = colaboradorCompleto.equipamentos.find(
       (equipamento) => equipamento.id === novaMovimentacao.equipamentoId
     );
-    console.log("EQUPAMENTO MOVIMENTADO", equipamentoMovimentado);
     const movimentacao =
       await this.movimentacaoService.geraMovimentacaoColaborador(
         authorization,
         novaMovimentacao,
         equipamentoMovimentado
       );
-    console.log("gerou movimentacao", movimentacao);
     equipamentoMovimentado.tipoEquipamento =
       await this.atualizaQuantidadeDeEquipamentos(
         movimentacao.tipoMovimentacao,
         equipamentoMovimentado.tipoEquipamento
       );
-    console.log(equipamentoMovimentado.tipoEquipamento);
     await this.emailService.alertarQuantidadeCritica(
       equipamentoMovimentado.tipoEquipamento
     );
