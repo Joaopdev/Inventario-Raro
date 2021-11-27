@@ -11,7 +11,6 @@ import { movimentacaoFactory } from "../dataMappers/movimentacao/movimentacaoFac
 import { atualizaMovimentacao } from "../dataMappers/movimentacao/atualizaMovimentacao";
 import { TokenPayload } from "../@types/controllers/TokenPayload";
 import { decode } from "jsonwebtoken";
-import { IColaboradorService } from "../@types/services/IColaboradorService";
 import { Equipamento } from "../models/EquipamentoEntity";
 import { Usuario } from "../models/UsuarioEntity";
 import { TipoEquipamento } from "../models/TipoEquipamentoEntity";
@@ -20,9 +19,7 @@ import { TipoEquipamento } from "../models/TipoEquipamentoEntity";
 export class MovimentacaoService implements IMovimentacaoService {
   constructor(
     @Inject("MovimentacaoRepository")
-    private movimentacaoRepository: IMovimentacaoRepository,
-    @Inject("ColaboradorService")
-    private colaboradorService: IColaboradorService
+    private movimentacaoRepository: IMovimentacaoRepository
   ) {}
 
   async listarPorTipoMovimentacao(
@@ -48,16 +45,32 @@ export class MovimentacaoService implements IMovimentacaoService {
   ): Promise<Movimentacao | Movimentacao[]> {
     return await this.movimentacaoRepository.findByColaborador(colaboradorId);
   }
+
   async criar(
     authorization: string,
     movimentacaoDto: CriarMovimentacaoDto
   ): Promise<Movimentacao> {
     const usuario = decode(authorization) as TokenPayload;
-    await this.colaboradorService.atualizaEquipamentoDoColaborador(
-      movimentacaoDto.colaboradorId,movimentacaoDto.equipamento.id
-    );
     const novaMovimentacao = movimentacaoFactory(usuario.id, movimentacaoDto);
     return await this.movimentacaoRepository.save(novaMovimentacao);
+  }
+
+  async geraMovimentacaoColaborador(
+    authorization: string,
+    movimentacaoDto: CriarMovimentacaoDto,
+    equipamento: Equipamento
+  ): Promise<Movimentacao> {
+    const usuario = decode(authorization) as TokenPayload;
+    const novaMovimentacao = movimentacaoFactory(
+      usuario.id,
+      movimentacaoDto,
+      null,
+      equipamento
+    );
+    const movimentacao = await this.movimentacaoRepository.save(
+      novaMovimentacao
+    );
+    return movimentacao;
   }
   async atualizar(
     id: number,

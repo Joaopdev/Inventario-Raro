@@ -15,11 +15,25 @@ import { atualizaColaborador } from "../dataMappers/colaborador/atualizaColabora
 import { omitEquipamentosId } from "../dataMappers/colaborador/omitEquipamentosId";
 import { Equipamento } from "../models/EquipamentoEntity";
 
+import { CriarMovimentacaoDto } from "../@types/dto/MovimentacaoDto";
+import { IMovimentacaoService } from "../@types/services/IMovimentacaoService";
+import { ITipoEquipamentoService } from "../@types/services/ITipoEquipamentoService";
+import { IEmailService } from "../@types/services/IEmailService";
+import { Operacao } from "../@types/enums/Operacao";
+import { TipoEquipamento } from "../models/TipoEquipamentoEntity";
+import { TipoMovimentacao } from "../@types/enums/TipoMovimentacao";
+
 @Service("ColaboradorService")
 export class ColaboradorService implements IColaboradorService {
   constructor(
     @Inject("ColaboradorRepository")
-    private colaboradorRepository: IColaboradorRepository
+    private colaboradorRepository: IColaboradorRepository,
+    @Inject("MovimentacaoService")
+    private movimentacaoService: IMovimentacaoService,
+    @Inject("TipoEquipamentoService")
+    private tipoEquipamentoService: ITipoEquipamentoService,
+    @Inject("EmailService")
+    private emailService: IEmailService
   ) {}
   async listar(): Promise<RetornoColaboradorCriadoDto[]> {
     const colaboradores = await this.colaboradorRepository.findAll();
@@ -66,19 +80,70 @@ export class ColaboradorService implements IColaboradorService {
     const colaboradorTratado = omitEquipamentosId(colaboradorComEquipamento);
     return colaboradorTratado;
   }
+  async geraMovimentacaoColaborador(
+    authorization: string,
+    novaMovimentacao: CriarMovimentacaoDto
+  ): Promise<void> {
+    const colaboradorCompleto = await this.atualizaEquipamentoDoColaborador(
+      novaMovimentacao.colaboradorId,
+      novaMovimentacao.equipamentoId
+    );
+    console.log("COLABORADOR COMPLETO", colaboradorCompleto);
+    const equipamentoMovimentado = colaboradorCompleto.equipamentos.find(
+      (equipamento) => equipamento.id === novaMovimentacao.equipamentoId
+    );
+    console.log("EQUPAMENTO MOVIMENTADO", equipamentoMovimentado);
+    const movimentacao =
+      await this.movimentacaoService.geraMovimentacaoColaborador(
+        authorization,
+        novaMovimentacao,
+        equipamentoMovimentado
+      );
+    console.log("gerou movimentacao", movimentacao);
+    equipamentoMovimentado.tipoEquipamento =
+      await this.atualizaQuantidadeDeEquipamentos(
+        movimentacao.tipoMovimentacao,
+        equipamentoMovimentado.tipoEquipamento
+      );
+    console.log(equipamentoMovimentado.tipoEquipamento);
+    await this.emailService.alertarQuantidadeCritica(
+      equipamentoMovimentado.tipoEquipamento
+    );
+    return;
+  }
+
   async atualizaEquipamentoDoColaborador(
     colaboradorId: number,
     equipamentoId: number
-  ): Promise<void> {
+  ): Promise<Colaborador> {
     const colaboradorComEquipamento =
       await this.colaboradorRepository.findEquipamentoByColaborador(
         colaboradorId
       );
-    const equipamentoAdicoionavel = new Equipamento();
-    equipamentoAdicoionavel.id = equipamentoId;
-    colaboradorComEquipamento.equipamentos.push(equipamentoAdicoionavel);
+    const equipamentoAdicionado = new Equipamento();
+    equipamentoAdicionado.id = equipamentoId;
+    colaboradorComEquipamento.equipamentos.push(equipamentoAdicionado);
     await this.colaboradorRepository.save(colaboradorComEquipamento);
-    return;
+    return await this.colaboradorRepository.findEquipamentoByColaborador(
+      colaboradorId
+    );
+  }
+  async atualizaQuantidadeDeEquipamentos(
+    tipoMovimentacao: TipoMovimentacao,
+    tipoEquipamento: TipoEquipamento
+  ): Promise<TipoEquipamento> {
+    tipoMovimentacao === "envio"
+      ? (tipoEquipamento =
+          await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
+            tipoEquipamento.id,
+            Operacao.subtracao
+          ))
+      : (tipoEquipamento =
+          await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
+            tipoEquipamento.id,
+            Operacao.soma
+          ));
+    return tipoEquipamento;
   }
 
   private async checaColaborador(id: number): Promise<Colaborador> {

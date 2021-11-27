@@ -2,6 +2,7 @@ import { Inject, Service } from "typedi";
 import { Request, Response } from "express";
 import { IColaboradorService } from "../@types/services/IColaboradorService";
 import { ColaboradorNaoExiste } from "../@types/errors/ColaboradorNaoExiste";
+import RequestWithUserData from "../@types/controllers/RequestWithUserData";
 
 @Service("ColaboradorController")
 export class ColaboradorController {
@@ -82,5 +83,18 @@ export class ColaboradorController {
         response.status(404).send();
       }
     }
+  }
+  async gerarMovimentacao(
+    request: RequestWithUserData,
+    response: Response
+  ): Promise<void> {
+    const authorization = request.headers.authorization;
+    const movimentacao =
+      await this.colaboradorService.geraMovimentacaoColaborador(
+        authorization,
+        request.body
+      );
+    response.send(movimentacao).status(201);
+    return;
   }
 }

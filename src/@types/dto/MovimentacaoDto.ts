@@ -1,3 +1,4 @@
+import { Equipamento } from "../../models/EquipamentoEntity";
 import { TipoMovimentacao } from "../enums/TipoMovimentacao";
 
 export type MovimentacaoDto = {
@@ -19,6 +20,6 @@ export type CriarMovimentacaoDto = {
   tipoMovimentacao: TipoMovimentacao;
   dataEntrega?: Date;
   descricao?: string;
-  colaboradorId: number;
-  equipamento: { id: number; tipoEquipamentoId: number };
+  colaboradorId?: number;
+  equipamentoId: number;
 };
