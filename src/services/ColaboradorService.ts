@@ -6,13 +6,11 @@ import {
   AlterarColaboradorDto,
   RetornoColaboradorCriadoDto,
   CriarColaboradorDto,
-  RetornoColaboradorEquipamentosCriadoDto,
 } from "../@types/dto/ColaboradorDto";
 import { colaboradorFactory } from "../dataMappers/colaborador/colaboradorFactory";
 import { ColaboradorNaoExiste } from "../@types/errors/ColaboradorNaoExiste";
 import { omitEnderecoId } from "../dataMappers/colaborador/omitEnderecoId";
 import { atualizaColaborador } from "../dataMappers/colaborador/atualizaColaborador";
-import { omitEquipamentosId } from "../dataMappers/colaborador/omitEquipamentosId";
 import { Equipamento } from "../models/EquipamentoEntity";
 import { CriarMovimentacaoDto } from "../@types/dto/MovimentacaoDto";
 import { IMovimentacaoService } from "../@types/services/IMovimentacaoService";
@@ -56,9 +54,11 @@ export class ColaboradorService implements IColaboradorService {
   ): Promise<RetornoColaboradorCriadoDto> {
     try {
       const novoColaborador = colaboradorFactory(colaboradorDto);
+      console.log(novoColaborador);
       const colaboradorSalvo = await this.colaboradorRepository.save(
         novoColaborador
       );
+      console.log(colaboradorSalvo);
       return omitEnderecoId(colaboradorSalvo);
     } catch (error) {
       if (error instanceof QueryFailedError) {
@@ -135,12 +135,15 @@ export class ColaboradorService implements IColaboradorService {
         colaboradorComEquipamento,
         equipamentoId
       );
+
       const equipamentosAtualizados =
         colaboradorComEquipamento.equipamentos.filter(
           (equipamento) => equipamento.id !== equipamentoRemovido.id
         );
+
       colaboradorComEquipamento.equipamentos = equipamentosAtualizados;
       await this.colaboradorRepository.save(colaboradorComEquipamento);
+
       return equipamentoRemovido;
     } else if (tipoMovimentacao === TipoMovimentacao.Envio) {
       const equipamentoAdicionado = new Equipamento();

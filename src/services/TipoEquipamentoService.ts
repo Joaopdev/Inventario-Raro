@@ -38,7 +38,7 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
       const usuario = decode(token) as TokenPayload;
       const tipoEquipamento = tipoEquipamentoFactory(tipoEquipamentoDto);
       const movimentacao =
-        await this.movimentacaoService.geraMovimentacaoTipoEquipamento(
+        this.movimentacaoService.geraMovimentacaoTipoEquipamento(
           usuario.id,
           tipoEquipamento,
           TipoMovimentacao.Entrada
@@ -140,10 +140,13 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
       await this.tipoEquipamentoRepository.findTipoEquipamento(id);
     if (operacao === Operacao.soma) {
       tipoEquipamento.quantidade += 1;
-    } else {
+      return await this.tipoEquipamentoRepository.save(tipoEquipamento);
+    }
+    if (operacao === Operacao.subtracao) {
       tipoEquipamento.quantidade -= 1;
+      return await this.tipoEquipamentoRepository.save(tipoEquipamento);
     }
 
-    return await this.tipoEquipamentoRepository.save(tipoEquipamento);
+    throw new Error("Operacao invalida");
   }
 }

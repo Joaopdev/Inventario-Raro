@@ -31,11 +31,11 @@ export interface IMovimentacaoService {
     usuarioId: number,
     equipamento: Equipamento,
     tipoMovimentacao: TipoMovimentacao
-  ): Promise<Movimentacao>;
+  ): Promise<void>;
   geraMovimentacaoTipoEquipamento(
     usuarioId: number,
     tipoEquipamento: TipoEquipamento,
     tipoMovimentacao: TipoMovimentacao
-  ): Promise<Movimentacao>;
+  ): Movimentacao;
   remover(id: number): Promise<void>;
 }
