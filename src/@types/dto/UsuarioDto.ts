@@ -14,7 +14,7 @@ export type AtualizarUsuarioDto = {
   email?: string;
   senha?: string;
   role?: Role;
-}
+};
 
 export type CriarUsuarioDto = Omit<UsuarioDto, "id">;
 export type AutenticarUsuarioDTO = Pick<UsuarioDto, "email" | "senha">;
