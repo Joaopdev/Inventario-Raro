@@ -24,6 +24,7 @@ import { ColaboradorJaExiste } from "../@types/errors/ColaboradorJaExiste";
 import { TypeOrmError } from "../@types/typesAuxiliares/TypeOrmError";
 import { TipoEquipamentoNaoExiste } from "../@types/errors/TipoEquipamentoNaoExiste";
 import { EnumMovimentacaoColaboradorIncorreta } from "../@types/errors/EnumMovimentacaoColaboradorIncorreta";
+import { EquipamentoNaoEstaEmPosseDoColaborador } from "../@types/errors/EquipamentoNaoEstaEmPosseDoColaborador";
 
 @Service("ColaboradorService")
 export class ColaboradorService implements IColaboradorService {
@@ -135,6 +136,10 @@ export class ColaboradorService implements IColaboradorService {
         colaboradorComEquipamento,
         equipamentoId
       );
+
+      if (!equipamentoRemovido) {
+        throw new EquipamentoNaoEstaEmPosseDoColaborador();
+      }
 
       const equipamentosAtualizados =
         colaboradorComEquipamento.equipamentos.filter(
