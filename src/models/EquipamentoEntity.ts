@@ -26,6 +26,9 @@ export class Equipamento {
   @Column()
   dataAquisicao: Date;
 
+  @Column({ default: true })
+  ativo: boolean;
+
   @ManyToOne(
     () => TipoEquipamento,
     (tipoEquipamento) => tipoEquipamento.equipamentos,
