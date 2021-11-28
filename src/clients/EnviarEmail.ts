@@ -14,10 +14,10 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 export class EnviarEmail implements IEnviarEmail {
   private EMAIL_FROM = process.env.SENDGRID_EMAIL_FROM;
 
-  async enviarEmail(preenchedor: string): Promise<void> {
+  async enviarEmail(emailTo: string, preenchedor: string): Promise<void> {
     try {
       const mensagem: Mensagem = {
-        to: process.env.SENDGRID_EMAIL_TO,
+        to: emailTo,
         from: this.EMAIL_FROM,
         subject: "Atualização do sistema de inventário da Raro Labs",
         html: TemplateEmail.replace("PLACEHOLDER", `${preenchedor}`),

@@ -7,5 +7,6 @@ export interface IUsuarioRepository {
   findOne(id: number): Promise<Usuario>;
   save(usuario: Usuario): Promise<Usuario>;
   findByEmail(usuarioEmail: string): Promise<Usuario>;
+  findAdmins(): Promise<Usuario[]>;
   remove(entities: Usuario | Usuario[]): Promise<Usuario[]>;
 }
