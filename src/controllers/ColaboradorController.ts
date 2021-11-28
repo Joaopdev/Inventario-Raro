@@ -65,14 +65,16 @@ export class ColaboradorController {
     }
   }
 
-  async remover(request: Request, response: Response): Promise<void> {
+  async inativar(request: Request, response: Response): Promise<void> {
     try {
-      await this.colaboradorService.remover(Number(request.params.id));
+      await this.colaboradorService.inativaColaborador(
+        Number(request.params.id)
+      );
       response.send().status(200);
       return;
     } catch (error) {
-      if (error instanceof ColaboradorNaoExiste) {
-        response.status(404).send();
+      if (error instanceof Error) {
+        response.status(422).send(error.message);
         return;
       }
       response.status(500).send("erro interno do servidor");
@@ -104,6 +106,7 @@ export class ColaboradorController {
       const authorization = request.headers.authorization;
       const movimentacao =
         await this.colaboradorService.geraMovimentacaoColaborador(
+          Number(request.params.id),
           authorization,
           request.body
         );

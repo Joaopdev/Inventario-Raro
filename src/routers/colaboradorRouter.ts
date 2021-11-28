@@ -1,7 +1,6 @@
 import { ColaboradorController } from "../controllers/ColaboradorController";
 import { RequestHandler, Router } from "express";
 import Container from "typedi";
-import { authorizationMiddleware } from "../middlewares/authorizationMiddleware";
 import RequestWithUserData from "../@types/controllers/RequestWithUserData";
 const router = Router();
 
@@ -24,7 +23,7 @@ const createRouter = (): Router => {
       await getController().criar(req, res)) as RequestHandler
   );
   router.post(
-    "/movimentacao",
+    "/:id/movimentacao",
     (async (req: RequestWithUserData, res) =>
       await getController().gerarMovimentacao(req, res)) as RequestHandler
   );
@@ -35,9 +34,8 @@ const createRouter = (): Router => {
   );
   router.delete(
     "/:id",
-    authorizationMiddleware,
     (async (req, res) =>
-      await getController().remover(req, res)) as RequestHandler
+      await getController().inativar(req, res)) as RequestHandler
   );
   router.get(
     "/:id/equipamentos",

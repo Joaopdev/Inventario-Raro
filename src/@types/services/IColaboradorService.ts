@@ -23,9 +23,11 @@ export interface IColaboradorService {
     tipoMovimentacao: TipoMovimentacao
   ): Promise<Equipamento>;
   geraMovimentacaoColaborador(
+    colaboradorId: number,
     authorization: string,
     novaMovimentacao: CriarMovimentacaoDto
   ): Promise<void>;
+  inativaColaborador(id: number): Promise<void>;
   remover(id: number): Promise<void>;
   buscarEquipamentoDoColaborador(
     id: number

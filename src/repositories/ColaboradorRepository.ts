@@ -7,17 +7,21 @@ export class ColaboradorRepository
   extends Repository<Colaborador>
   implements IColaboradorRepository
 {
-  findById(usuarioId: number): Promise<Colaborador> {
+  findById(colaboradorId: number): Promise<Colaborador> {
     return this.findOne({
       relations: ["endereco"],
       where: {
-        id: usuarioId,
+        id: colaboradorId,
+        dataRecisao: null,
       },
     });
   }
   findAll(): Promise<Colaborador[]> {
     return this.find({
       relations: ["endereco"],
+      where: {
+        dataRecisao: null,
+      },
     });
   }
   findEquipamentoByColaborador(colaboradorId: number): Promise<Colaborador> {
@@ -25,6 +29,7 @@ export class ColaboradorRepository
       relations: ["equipamentos", "equipamentos.tipoEquipamento"],
       where: {
         id: colaboradorId,
+        dataRecisao: null,
       },
     });
   }
