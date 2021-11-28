@@ -25,6 +25,7 @@ import { TypeOrmError } from "../@types/typesAuxiliares/TypeOrmError";
 import { TipoEquipamentoNaoExiste } from "../@types/errors/TipoEquipamentoNaoExiste";
 import { EnumMovimentacaoColaboradorIncorreta } from "../@types/errors/EnumMovimentacaoColaboradorIncorreta";
 import { EquipamentoNaoEstaEmPosseDoColaborador } from "../@types/errors/EquipamentoNaoEstaEmPosseDoColaborador";
+import { ColaboradorPossuiEquipamentos } from "../@types/errors/ColaboradorPossuiEquipamentos";
 
 @Service("ColaboradorService")
 export class ColaboradorService implements IColaboradorService {
@@ -55,11 +56,9 @@ export class ColaboradorService implements IColaboradorService {
   ): Promise<RetornoColaboradorCriadoDto> {
     try {
       const novoColaborador = colaboradorFactory(colaboradorDto);
-      console.log(novoColaborador);
       const colaboradorSalvo = await this.colaboradorRepository.save(
         novoColaborador
       );
-      console.log(colaboradorSalvo);
       return omitEnderecoId(colaboradorSalvo);
     } catch (error) {
       if (error instanceof QueryFailedError) {
@@ -94,9 +93,11 @@ export class ColaboradorService implements IColaboradorService {
     return colaboradorComEquipamento;
   }
   async geraMovimentacaoColaborador(
+    colaboradorId: number,
     authorization: string,
     novaMovimentacao: CriarMovimentacaoDto
   ): Promise<void> {
+    novaMovimentacao.colaboradorId = colaboradorId;
     const equipamentoMovimentado = await this.atualizaEquipamentoDoColaborador(
       novaMovimentacao.colaboradorId,
       novaMovimentacao.equipamentoId,
@@ -116,6 +117,16 @@ export class ColaboradorService implements IColaboradorService {
     await this.emailService.alertarQuantidadeCritica(
       equipamentoMovimentado.tipoEquipamento
     );
+    return;
+  }
+  async inativaColaborador(id: number): Promise<void> {
+    const colaboradorComEquipamentos =
+      await this.colaboradorRepository.findEquipamentoByColaborador(id);
+    if (colaboradorComEquipamentos.equipamentos.length > 0) {
+      throw new ColaboradorPossuiEquipamentos();
+    }
+    colaboradorComEquipamentos.dataRecisao = new Date();
+    await this.colaboradorRepository.save(colaboradorComEquipamentos);
     return;
   }
 
