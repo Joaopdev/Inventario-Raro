@@ -96,34 +96,30 @@ export class MovimentacaoService implements IMovimentacaoService {
     usuarioId: number,
     equipamento: Equipamento,
     tipoMovimentacao: TipoMovimentacao
-  ): Promise<Movimentacao> {
-    return new Promise((resolve) => {
-      const usuarioResponsavel = new Usuario();
-      usuarioResponsavel.id = usuarioId;
-      const movimentacao = new Movimentacao();
-      movimentacao.usuario = usuarioResponsavel;
-      movimentacao.equipamento = equipamento;
-      movimentacao.tipoEquipamento = equipamento.tipoEquipamento;
-      movimentacao.dataMovimentacao = new Date();
-      movimentacao.tipoMovimentacao = tipoMovimentacao;
-      resolve(movimentacao);
-    });
+  ): Promise<void> {
+    const usuarioResponsavel = new Usuario();
+    usuarioResponsavel.id = usuarioId;
+    const movimentacao = new Movimentacao();
+    movimentacao.usuario = usuarioResponsavel;
+    movimentacao.equipamento = equipamento;
+    movimentacao.tipoEquipamento = equipamento.tipoEquipamento;
+    movimentacao.dataMovimentacao = new Date();
+    movimentacao.tipoMovimentacao = tipoMovimentacao;
+    await this.movimentacaoRepository.save(movimentacao);
   }
 
-  async geraMovimentacaoTipoEquipamento(
+  geraMovimentacaoTipoEquipamento(
     usuarioId: number,
     tipoEquipamento: TipoEquipamento,
     tipoMovimentacao: TipoMovimentacao
-  ): Promise<Movimentacao> {
-    return new Promise((resolve) => {
-      const usuarioResponsavel = new Usuario();
-      usuarioResponsavel.id = usuarioId;
-      const movimentacao = new Movimentacao();
-      movimentacao.usuario = usuarioResponsavel;
-      movimentacao.tipoEquipamento = tipoEquipamento;
-      movimentacao.dataMovimentacao = new Date();
-      movimentacao.tipoMovimentacao = tipoMovimentacao;
-      resolve(movimentacao);
-    });
+  ): Movimentacao {
+    const usuarioResponsavel = new Usuario();
+    usuarioResponsavel.id = usuarioId;
+    const movimentacao = new Movimentacao();
+    movimentacao.usuario = usuarioResponsavel;
+    movimentacao.tipoEquipamento = tipoEquipamento;
+    movimentacao.dataMovimentacao = new Date();
+    movimentacao.tipoMovimentacao = tipoMovimentacao;
+    return movimentacao;
   }
 }

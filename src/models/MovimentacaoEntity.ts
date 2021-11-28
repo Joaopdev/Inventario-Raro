@@ -30,6 +30,7 @@ export class Movimentacao {
 
   @ManyToOne(() => Equipamento, (Equipamento) => Equipamento.movimentacoes, {
     onDelete: "CASCADE",
+    cascade: true,
   })
   equipamento: Equipamento;
 

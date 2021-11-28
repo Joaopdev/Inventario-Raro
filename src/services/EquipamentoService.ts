@@ -14,7 +14,6 @@ import { omitTipoEquipamentoDoEquipamento } from "../dataMappers/equipamento/omi
 import { atualizaEquipamento } from "../dataMappers/equipamento/atualizaEquipamento";
 import { ITipoEquipamentoService } from "../@types/services/ITipoEquipamentoService";
 import { Operacao } from "../@types/enums/Operacao";
-import { IEnviarEmail } from "../@types/clients/IEnviarEmail";
 import { TipoMovimentacao } from "../@types/enums/TipoMovimentacao";
 import { decode } from "jsonwebtoken";
 import { TokenPayload } from "../@types/controllers/TokenPayload";
@@ -43,14 +42,11 @@ export class EquipamentoService implements IEquipamentoService {
     try {
       const equipamento = equipamentoFactory(equipamentoDto);
       const usuario = decode(authorization) as TokenPayload;
-      const movimentacao =
-        await this.movimentacaoService.geraMovimentacaoEquipamento(
-          usuario.id,
-          equipamento,
-          TipoMovimentacao.Entrada
-        );
-      equipamento.movimentacoes.push(movimentacao);
-      await this.equipamentoRepository.save(equipamento);
+      await this.movimentacaoService.geraMovimentacaoEquipamento(
+        usuario.id,
+        equipamento,
+        TipoMovimentacao.Entrada
+      );
 
       await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
         equipamento.tipoEquipamento.id,
@@ -74,7 +70,7 @@ export class EquipamentoService implements IEquipamentoService {
   }
 
   async listarEquipamentos(): Promise<RetornoEquipamentoDto[]> {
-    const equipamentos = await this.equipamentoRepository.find();
+    const equipamentos = await this.equipamentoRepository.findAllEquipamentos();
     return equipamentos.map(omitTipoEquipamentoDoEquipamento);
   }
 
@@ -106,31 +102,32 @@ export class EquipamentoService implements IEquipamentoService {
     return omitTipoEquipamentoDoEquipamento(equipamento);
   }
 
-  async suspenderEquipamento(authorization: string, id: number): Promise<void> {
-    const equipamento = await this.equipamentoRepository.findOne(id);
+  async inativarEquipamento(authorization: string, id: number): Promise<void> {
     const usuario = decode(authorization) as TokenPayload;
+
+    const equipamento = await this.equipamentoRepository.findEquipamento(id);
+    if (!equipamento) {
+      throw new EquipamentoNaoExiste();
+    }
+
+    equipamento.ativo = false;
     await this.movimentacaoService.geraMovimentacaoEquipamento(
       usuario.id,
       equipamento,
       TipoMovimentacao.Saida
     );
-    if (!equipamento) {
-      throw new EquipamentoNaoExiste();
-    }
-  }
-  async removerEquipamento(id: number): Promise<void> {
-    const equipamento = await this.equipamentoRepository.findEquipamento(id);
-    if (!equipamento) {
-      throw new EquipamentoNaoExiste();
-    }
+
     const tipoEquipamento =
       await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
         equipamento.tipoEquipamento.id,
         Operacao.subtracao
       );
-    await this.emailService.alertarQuantidadeCritica(tipoEquipamento);
 
-    await this.equipamentoRepository.remove(equipamento);
-    return;
+    if (
+      tipoEquipamento.quantidade === tipoEquipamento.parametro.quantidadeCritica
+    ) {
+      await this.emailService.alertarQuantidadeCritica(tipoEquipamento);
+      return;
+    }
   }
 }

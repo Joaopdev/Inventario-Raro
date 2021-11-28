@@ -53,28 +53,6 @@ export class EquipamentoController {
     }
   }
 
-  async suspendeEquipamento(
-    req: RequestWithUserData,
-    res: Response
-  ): Promise<void> {
-    try {
-      const authorization = req.headers.authorization;
-      await this.equipamentoService.suspenderEquipamento(
-        authorization,
-        Number(req.params.id)
-      );
-
-      res.status(200).send();
-      return;
-    } catch (error) {
-      if (error instanceof EquipamentoNaoExiste) {
-        res.status(404).send();
-        return;
-      }
-      res.status(500).send("erro interno do servidor");
-    }
-  }
-
   async listar(req: Request, res: Response): Promise<void> {
     try {
       const equipamentos = await this.equipamentoService.listarEquipamentos();
@@ -98,19 +76,26 @@ export class EquipamentoController {
       res.status(500).send("erro interno do servidor");
     }
   }
-  async remover(request: Request, response: Response): Promise<void> {
+
+  async inativarEquipamento(
+    req: RequestWithUserData,
+    res: Response
+  ): Promise<void> {
     try {
-      await this.equipamentoService.removerEquipamento(
-        Number(request.params.id)
+      const authorization = req.headers.authorization;
+      await this.equipamentoService.inativarEquipamento(
+        authorization,
+        Number(req.params.id)
       );
-      response.send().status(200);
+
+      res.status(200).send();
       return;
     } catch (error) {
       if (error instanceof EquipamentoNaoExiste) {
-        response.status(404).send();
+        res.status(404).send();
         return;
       }
-      response.status(500).send("erro interno do servidor");
+      res.status(500).send("erro interno do servidor");
     }
   }
 }

@@ -78,7 +78,7 @@ export class MovimentacaoController {
   }
   async atualizar(request: Request, response: Response): Promise<void> {
     try {
-      const movimentacao = await this.movimentacaoService.atualizar(
+      await this.movimentacaoService.atualizar(
         Number(request.params.id),
         request.body
       );
@@ -93,9 +93,7 @@ export class MovimentacaoController {
   }
   async remover(request: Request, response: Response): Promise<void> {
     try {
-      const movimentacao = await this.movimentacaoService.remover(
-        Number(request.params.id)
-      );
+      await this.movimentacaoService.remover(Number(request.params.id));
       response.send().status(200);
       return;
     } catch (error) {
