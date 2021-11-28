@@ -26,6 +26,7 @@ import { TipoEquipamentoNaoExiste } from "../@types/errors/TipoEquipamentoNaoExi
 import { EnumMovimentacaoColaboradorIncorreta } from "../@types/errors/EnumMovimentacaoColaboradorIncorreta";
 import { EquipamentoNaoEstaEmPosseDoColaborador } from "../@types/errors/EquipamentoNaoEstaEmPosseDoColaborador";
 import { ColaboradorPossuiEquipamentos } from "../@types/errors/ColaboradorPossuiEquipamentos";
+import { IEquipamentoRepository } from "../@types/repositories/IEquipamentoRepository";
 
 @Service("ColaboradorService")
 export class ColaboradorService implements IColaboradorService {
@@ -37,7 +38,9 @@ export class ColaboradorService implements IColaboradorService {
     @Inject("TipoEquipamentoService")
     private tipoEquipamentoService: ITipoEquipamentoService,
     @Inject("EmailService")
-    private emailService: IEmailService
+    private emailService: IEmailService,
+    @Inject("EquipamentoRepository")
+    private eqipamentoRepository: IEquipamentoRepository
   ) {}
   async listar(): Promise<RetornoColaboradorCriadoDto[]> {
     const colaboradores = await this.colaboradorRepository.findAll();
@@ -97,6 +100,18 @@ export class ColaboradorService implements IColaboradorService {
     authorization: string,
     novaMovimentacao: CriarMovimentacaoDto
   ): Promise<void> {
+    const equipamento = await this.eqipamentoRepository.findEquipamento(
+      novaMovimentacao.equipamentoId
+    );
+    if (!equipamento) {
+      throw new Error("Equipamaneto não existe");
+    }
+
+    if (novaMovimentacao.tipoMovimentacao === TipoMovimentacao.Envio) {
+      if (equipamento.colaborador) {
+        throw new Error("Equipamento já está em uso no momento");
+      }
+    }
     novaMovimentacao.colaboradorId = colaboradorId;
     const equipamentoMovimentado = await this.atualizaEquipamentoDoColaborador(
       novaMovimentacao.colaboradorId,

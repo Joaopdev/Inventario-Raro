@@ -15,7 +15,7 @@ export class EquipamentoRepository
 
   findEquipamento(id: number): Promise<Equipamento> {
     return this.findOne({
-      relations: ["tipoEquipamento"],
+      relations: ["tipoEquipamento", "colaborador"],
       where: { id: id, ativo: true },
     });
   }
