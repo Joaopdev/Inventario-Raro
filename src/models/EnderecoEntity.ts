@@ -30,7 +30,9 @@ export class Endereco {
   @Column()
   estado: string;
 
-  @OneToOne(() => Colaborador)
+  @OneToOne(() => Colaborador, (colaborador) => colaborador.endereco, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn()
   colaborador: Colaborador;
 }

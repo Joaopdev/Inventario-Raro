@@ -7,7 +7,7 @@ import {
 } from "typeorm";
 import { Endereco } from "./EnderecoEntity";
 import { Equipamento } from "./EquipamentoEntity";
-import { Movimentacao } from "./MovimentaçaoEntity";
+import { Movimentacao } from "./MovimentacaoEntity";
 
 @Entity()
 export class Colaborador {
@@ -15,23 +15,30 @@ export class Colaborador {
   id: number;
 
   @Column()
-  name: string;
+  nome: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
+  @Column({ unique: true })
+  telefone: string;
+
   @Column()
-  dataInicio: string;
+  dataInicio: Date;
 
   @Column({ nullable: true })
-  dataRecisao: string;
+  dataRecisao: Date;
 
-  @OneToMany(() => Equipamento, (equipamento) => equipamento.colaborador)
+  @OneToMany(() => Equipamento, (equipamento) => equipamento.colaborador, {
+    cascade: true,
+  })
   equipamentos: Equipamento[];
 
   @OneToMany(() => Movimentacao, (movimentaçao) => movimentaçao.colaborador)
   movimentacoes: Movimentacao[];
 
-  @OneToOne(() => Endereco, { cascade: true })
-  endreco: Endereco;
+  @OneToOne(() => Endereco, (endereco) => endereco.colaborador, {
+    cascade: true,
+  })
+  endereco: Endereco;
 }

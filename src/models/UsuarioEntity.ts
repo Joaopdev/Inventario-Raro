@@ -1,6 +1,6 @@
 import { Role } from "../@types/enums/Role";
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { Movimentacao } from "./MovimentaçaoEntity";
+import { Movimentacao } from "./MovimentacaoEntity";
 
 @Entity()
 export class Usuario {
@@ -10,7 +10,7 @@ export class Usuario {
   @Column()
   nome: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()

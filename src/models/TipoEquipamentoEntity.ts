@@ -1,13 +1,12 @@
 import {
   Column,
   Entity,
-  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Equipamento } from "./EquipamentoEntity";
-import { Movimentacao } from "./MovimentaçaoEntity";
+import { Movimentacao } from "./MovimentacaoEntity";
 import { Parametro } from "./ParametroEntity";
 
 @Entity()
@@ -18,22 +17,34 @@ export class TipoEquipamento {
   @Column()
   tipo: string;
 
-  @Column()
+  @Column({ unique: true })
   modelo: string;
 
   @Column({ nullable: true })
   descricao: string;
 
-  @Column()
+  @Column({ nullable: true, default: 0 })
   quantidade: number;
+
+  @Column({ default: true })
+  ativo: boolean;
 
   @OneToMany(() => Equipamento, (equipamento) => equipamento.tipoEquipamento)
   equipamentos: Equipamento[];
 
-  @OneToMany(() => Movimentacao, (movimentacao) => movimentacao.tipoEquipamento)
+  @OneToMany(
+    () => Movimentacao,
+    (movimentacao) => movimentacao.tipoEquipamento,
+    {
+      cascade: true,
+    }
+  )
   movimentacoes: Movimentacao[];
 
-  @OneToOne(() => Parametro, (parametro) => parametro.tipoEquipamento)
-  @JoinColumn()
+  @OneToOne(() => Parametro, (parametro) => parametro.tipoEquipamento, {
+    nullable: false,
+    cascade: true,
+    onDelete: "CASCADE",
+  })
   parametro: Parametro;
 }

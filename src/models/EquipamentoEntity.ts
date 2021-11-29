@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Colaborador } from "./ColaboradorEntity";
-import { Movimentacao } from "./MovimentaçaoEntity";
+import { Movimentacao } from "./MovimentacaoEntity";
 import { TipoEquipamento } from "./TipoEquipamentoEntity";
 
 @Entity()
@@ -17,24 +17,30 @@ export class Equipamento {
   @Column()
   lote: string;
 
-  @Column()
+  @Column({ nullable: true })
   descricao: string;
 
-  @Column()
+  @Column({ unique: true })
   numeroDeSerie: string;
 
   @Column()
-  dataAquisicao: string;
+  dataAquisicao: Date;
+
+  @Column({ default: true })
+  ativo: boolean;
 
   @ManyToOne(
     () => TipoEquipamento,
-    (tipoEquipamento) => tipoEquipamento.equipamentos
+    (tipoEquipamento) => tipoEquipamento.equipamentos,
+    { nullable: false }
   )
   tipoEquipamento: TipoEquipamento;
 
   @ManyToOne(() => Colaborador, (colaborador) => colaborador.equipamentos)
   colaborador: Colaborador;
 
-  @OneToMany(() => Movimentacao, (movimentacao) => movimentacao.equipamento)
+  @OneToMany(() => Movimentacao, (movimentacao) => movimentacao.equipamento, {
+    onDelete: "CASCADE",
+  })
   movimentacoes: Movimentacao[];
 }

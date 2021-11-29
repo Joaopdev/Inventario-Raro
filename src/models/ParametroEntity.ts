@@ -1,4 +1,10 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { TipoEquipamento } from "./TipoEquipamentoEntity";
 
 @Entity()
@@ -20,7 +26,9 @@ export class Parametro {
 
   @OneToOne(
     () => TipoEquipamento,
-    (tipoEquipamento) => tipoEquipamento.parametro
+    (tipoEquipamento) => tipoEquipamento.parametro,
+    { onDelete: "CASCADE", nullable: false }
   )
+  @JoinColumn()
   tipoEquipamento: TipoEquipamento;
 }

@@ -14,13 +14,10 @@ export class Movimentacao {
   tipoMovimentacao: TipoMovimentacao;
 
   @Column()
-  dataMovimentacao: string;
-
-  @Column()
-  dataInicio: string;
+  dataMovimentacao: Date;
 
   @Column({ nullable: true })
-  dataEntrega?: string;
+  dataEntrega?: Date;
 
   @Column({ nullable: true })
   descricao?: string;
@@ -31,10 +28,15 @@ export class Movimentacao {
   )
   tipoEquipamento: TipoEquipamento;
 
-  @ManyToOne(() => Equipamento, (Equipamento) => Equipamento.movimentacoes)
+  @ManyToOne(() => Equipamento, (Equipamento) => Equipamento.movimentacoes, {
+    onDelete: "CASCADE",
+    cascade: true,
+  })
   equipamento: Equipamento;
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.movimentacoes)
+  @ManyToOne(() => Usuario, (usuario) => usuario.movimentacoes, {
+    nullable: false,
+  })
   usuario: Usuario;
 
   @ManyToOne(() => Colaborador, (colaborador) => colaborador.movimentacoes)
