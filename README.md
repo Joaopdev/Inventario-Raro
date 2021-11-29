@@ -44,21 +44,47 @@ A documentação da api pode ser encontrada no swagger neste [link](https://app.
 ## Funcionalidades
 
 - [x] O Administrador pode criar um usuário do sistema:
-- [x] O Usuário pode fazer login no sistema e se autenticar.
-- [x] O Usuário pode criar, editar e deletar um colaborador no banco de dados:
-  - [x] cadastra nome do colaborador, RG e CPF;
-  - [x] cadastra e-mail;
-  - [x] cadastra telefone;
+- [x] O Usuário faz login no sistema e se autenticar.
+- [x] O Usuário pode criar, editar, atualizar e deletar um colaborador no banco de dados:
+  - [x] cadastra nome do colaborador;
+  - [x] cadastra e-mail (único);
+  - [x] cadastra telefone (único);
   - [x] e o endereço que o colaborador deverá receber os equipamentos;
 	- [x] a aplicação buscará, via api externa, os dados do CEP informado e retornará o endreço completo do colaborador;
 
-- [x] O Usuário pode criar um novo tipo de equipamento
-  - [x] esse tipo de equipamento define os tipos de equipamento que a empresa utiliza
+- [x] O Usuário pode criar, atualizar um novo tipo de equipamento, que servirá como um rótulo e controle do equipamento:
+  - [x] cadastra o tipo do equipamento;
+  - [x] cadastra o seu modelo (único);
+  - [x] cadastra os parametros desse tipo:
+    - [x] cadastra o tempo medio de envio;
+    - [x] cadastra o tempo medio de consumo;
+    - [x] cadastra o tempo médio de resposição;
+    - [x] cadastra a quantidade critica;
+  - [x] um log automático de entrada é gerado na tabela de movimentação
+  - [x] a quantidade critica é comparada a quantidade que vem como 0 por default, essa é acrescida a medida que se cria Equipamentos. Um API externa, Sendgrid, é responsavel por enviar um email a todos adminstradores caso a quantidade chegue a ser critica.
 
-- [x] O Usuário pode criar um novo equipamento
-- [x] O Usuário pode atribuir um equipamento a um colaborador, o que irá gerar um log de movimentação;
-- [ ] O Usuário deverá poder importar uma lista de usuários em formatos como csv e json e incluídos no sistema;
-- [ ] Utilizar um novo client de cálculo de frete para maior exatidão do tempo de entrega e recebimento dos equipamentos;
+- [x] O Usuário pode criar, atualizar e deletar um novo equipamento:
+  - [x] cadastra o lote: string;
+  - [x] cadastra o descricao: string;
+  - [x] cadastra o numero de serie(único);
+  - [x] cadastra a data de aquisicao;
+  - [x] cadastra o id do tipo de equipamento;
+  - [x] um log automático de entrada é gerado na tabela de movimentação para esse equipamento e a quantidade do tipo Equipamento é acrescida em 1;
+
+- [x] O Usuário pode deletar o equipamento
+  - [x] um log automático de saida é gerado na tabela de movimentação para esse equipamento e a quantidade do tipo Equipamento é decrescida em 1;
+
+- [x] O Usuário pode atribuir um equipamento a um colaborador
+ - [x] cadastra uma movimentacao de envio do usuario para colaborador, a quantidade do tipo Equipamento é decrescida em 1;
+
+- [x] O Usuário pode receber um equipamento do colaborador
+ - [x] cadastra uma movimentacao de devolucao do usuario para colaborador, a quantidade do tipo Equipamento é acrescida em 1;
+
+- [x] O Usuário pode criar, atualizar e remover uma movimentação
+  - [x] filtra as movimentações por equipamento, por colaborador ou por tipo de movimentação
+  - [x] movimentação pode ser atualizada com a data de chegada do Equipamento em caso de envio e devolução
+
+
 ---
 
 ## Como executar o projeto
@@ -122,8 +148,8 @@ As seguintes ferramentas foram usadas na construção do projeto:
 
 
 #### [](https://github.com/Joaopdev/Inventario-Raro)**Utilitários**
-
 -   API:  **[VIA CEP API](viacep.com.br/ws/01001000/json/)**
+-   API: **[Sendgrid](https://sendgrid.api-docs.io/v3.0/mail-send/v3-mail-send)**
 
 -   Teste de API:  **[Insomnia](https://insomnia.rest/)**
 
