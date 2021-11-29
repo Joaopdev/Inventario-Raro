@@ -2,12 +2,6 @@
 
 ## [Unreleased]
 
-### Added 
-
-
-### Changed
-
-
 ## [1.0.0] - 2021-11-29
 
 ### Added
