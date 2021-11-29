@@ -24,7 +24,7 @@ const createRouter = (): Router => {
       await getController().buscarPeloEquipamento(req, res)) as RequestHandler
   );
   router.get(
-    "/colabador/:id",
+    "/colaborador/:id",
     (async (req, res) =>
       await getController().buscarPeloColaborador(req, res)) as RequestHandler
   );
