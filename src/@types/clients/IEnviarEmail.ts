@@ -1,3 +1,3 @@
 export interface IEnviarEmail {
-  enviarEmail(preenchedor: string): Promise<void>;
+  enviarEmail(emailTo: string, preenchedor: string): Promise<void>;
 }

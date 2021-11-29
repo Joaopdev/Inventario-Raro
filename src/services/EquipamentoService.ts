@@ -123,11 +123,7 @@ export class EquipamentoService implements IEquipamentoService {
         Operacao.subtracao
       );
 
-    if (
-      tipoEquipamento.quantidade === tipoEquipamento.parametro.quantidadeCritica
-    ) {
-      await this.emailService.alertarQuantidadeCritica(tipoEquipamento);
-      return;
-    }
+    await this.emailService.alertarQuantidadeCritica(tipoEquipamento);
+    return;
   }
 }
