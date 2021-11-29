@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - suspensão do método de remover tipoEquipamentos, por motivos de segurança e evitar deletar os demais equipamentos.
 - remoção da propriedade de ativo do tipoEquipamento, foi acordado que não há necessidade de desativa-lo
 
-## [1.1.0] - 2021-11-29
+## [1.0.0] - 2021-11-29
 
 ### Added
 - [swagger](https://app.swaggerhub.com/apis-docs/grupo_undefined/Projeto-Inventario-Raro-Academy/1.0.0)
@@ -49,9 +49,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Omissão da senha do usuario na hora de cria-lo.
 - Devolucao de equipamento só pode ser feita caso o colaborador o possua.
 - Envio de equipamento, só de pode ser feita se ele estiver disponivel para envio, isto é, não estar registrado a outro colaborador.
-
-## [1.0.0] - 2021-11-25 - First Release
-
-### Added
-
-- Primeira release utilizada para apresentação do projeto final, atendendo as demais regras de negócio.
