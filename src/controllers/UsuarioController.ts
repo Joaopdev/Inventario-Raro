@@ -63,11 +63,11 @@ export class UsuarioController {
       response.send(usuario).status(201);
     } catch (error) {
       if (error instanceof EmailInvalido) {
-        response.status(400).send({ error });
+        response.status(400).send({ error: error.message });
         return;
       }
       if (error instanceof RoleDeUsuarioInadequada) {
-        response.status(400).send({ error });
+        response.status(400).send({ error: error.message });
         return;
       }
       if (error instanceof Error) {

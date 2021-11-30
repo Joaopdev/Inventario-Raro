@@ -41,7 +41,7 @@ export class ColaboradorController {
       return;
     } catch (error) {
       if (error instanceof ColaboradorJaExiste) {
-        response.status(422).send({ error });
+        response.status(422).send({ error: error.message });
         return;
       }
       response.status(500).send("erro interno do servidor");
@@ -74,7 +74,7 @@ export class ColaboradorController {
       return;
     } catch (error) {
       if (error instanceof Error) {
-        response.status(422).send(error.message);
+        response.status(422).send({ error: error.message });
         return;
       }
       response.status(500).send("erro interno do servidor");
@@ -114,7 +114,7 @@ export class ColaboradorController {
       return;
     } catch (error) {
       if (error instanceof Error) {
-        response.status(422).send(error.message);
+        response.status(422).send({ error: error.message });
         return;
       }
       response.status(500).send("erro interno do servidor");
