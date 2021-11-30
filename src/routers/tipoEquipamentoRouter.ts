@@ -26,8 +26,11 @@ const createRouter = (): Router => {
     await getController().atualizar(req, res);
   }) as RequestHandler);
 
-  router.delete("/:id", authorizationMiddleware, (async (req, res) => {
-    await getController().remover(req, res);
+  router.delete("/:id", authorizationMiddleware, (async (
+    req: RequestWithUserData,
+    res
+  ) => {
+    await getController().inativar(req, res);
   }) as RequestHandler);
 
   router.get("/:id/equipamentos", (async (req, res) => {
