@@ -34,7 +34,9 @@ export class Colaborador {
   })
   equipamentos: Equipamento[];
 
-  @OneToMany(() => Movimentacao, (movimentaçao) => movimentaçao.colaborador)
+  @OneToMany(() => Movimentacao, (movimentaçao) => movimentaçao.colaborador, {
+    cascade: true,
+  })
   movimentacoes: Movimentacao[];
 
   @OneToOne(() => Endereco, (endereco) => endereco.colaborador, {

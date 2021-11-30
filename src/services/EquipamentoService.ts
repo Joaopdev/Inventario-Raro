@@ -121,7 +121,6 @@ export class EquipamentoService implements IEquipamentoService {
       equipamento,
       TipoMovimentacao.Saida
     );
-
     await this.emailService.alertarQuantidadeCritica(
       equipamento.tipoEquipamento
     );

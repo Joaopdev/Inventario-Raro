@@ -1,7 +1,5 @@
-import { TipoMovimentacao } from "../../@types/enums/TipoMovimentacao";
-import { Colaborador } from "models/ColaboradorEntity";
 import { CriarMovimentacaoDto } from "../../@types/dto/MovimentacaoDto";
-import { Equipamento } from "../../models/EquipamentoEntity";
+
 import {
   AlterarColaboradorDto,
   ColaboradorDto,
@@ -17,11 +15,6 @@ export interface IColaboradorService {
     id: number,
     colaboradorDtoAtualizado: AlterarColaboradorDto
   ): Promise<void>;
-  atualizaEquipamentoDoColaborador(
-    colaboradorId: number,
-    equipamentoId: number,
-    tipoMovimentacao: TipoMovimentacao
-  ): Promise<Equipamento>;
   geraMovimentacaoColaborador(
     colaboradorId: number,
     authorization: string,

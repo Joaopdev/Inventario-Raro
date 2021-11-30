@@ -38,12 +38,11 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
       const usuario = decode(token) as TokenPayload;
       const tipoEquipamento = tipoEquipamentoFactory(tipoEquipamentoDto);
       const movimentacao =
-        this.movimentacaoService.geraMovimentacaoTipoEquipamento(
+        await this.movimentacaoService.criarMovimentacaoTipoEquipamento(
           usuario.id,
           tipoEquipamento,
           TipoMovimentacao.Entrada
         );
-      tipoEquipamento.movimentacoes.push(movimentacao);
       await this.tipoEquipamentoRepository.save(tipoEquipamento);
 
       return omitEquipamentoEMovimentacoesDoTipoEquipamento(tipoEquipamento);

@@ -12,14 +12,24 @@ import { atualizaMovimentacao } from "../dataMappers/movimentacao/atualizaMovime
 import { TokenPayload } from "../@types/controllers/TokenPayload";
 import { decode } from "jsonwebtoken";
 import { Equipamento } from "../models/EquipamentoEntity";
-import { Usuario } from "../models/UsuarioEntity";
 import { TipoEquipamento } from "../models/TipoEquipamentoEntity";
+import { IEmailService } from "../@types/services/IEmailService";
+import { IEquipamentoRepository } from "../@types/repositories/IEquipamentoRepository";
+import { Colaborador } from "models/ColaboradorEntity";
+import { EquipamentoNaoEstaEmPosseDoColaborador } from "../@types/errors/EquipamentoNaoEstaEmPosseDoColaborador";
+import { TipoEquipamentoNaoExiste } from "../@types/errors/TipoEquipamentoNaoExiste";
+import { EquipamentoNaoExiste } from "../@types/errors/EquipamentoNaoExiste";
+import { EquipamentoJaEstaEmPosseDeUmColaborador } from "../@types/errors/EquipamentoJaEstaEmPosseDeUmColaborador";
 
 @Service("MovimentacaoService")
 export class MovimentacaoService implements IMovimentacaoService {
   constructor(
     @Inject("MovimentacaoRepository")
-    private movimentacaoRepository: IMovimentacaoRepository
+    private movimentacaoRepository: IMovimentacaoRepository,
+    @Inject("EmailService")
+    private emailService: IEmailService,
+    @Inject("EquipamentoRepository")
+    private equipamentoRepository: IEquipamentoRepository
   ) {}
 
   async listarPorTipoMovimentacao(
@@ -55,23 +65,20 @@ export class MovimentacaoService implements IMovimentacaoService {
     return await this.movimentacaoRepository.save(novaMovimentacao);
   }
 
-  async geraMovimentacaoColaborador(
-    authorization: string,
-    movimentacaoDto: CriarMovimentacaoDto,
-    equipamento: Equipamento
-  ): Promise<Movimentacao> {
-    const usuario = decode(authorization) as TokenPayload;
-    const novaMovimentacao = movimentacaoFactory(
-      usuario.id,
-      movimentacaoDto,
-      null,
-      equipamento
-    );
-    const movimentacao = await this.movimentacaoRepository.save(
-      novaMovimentacao
-    );
-    return movimentacao;
-  }
+  // criarMovimentacaoColaborador(
+  //   authorization: string,
+  //   movimentacaoDto: CriarMovimentacaoDto,
+  //   equipamento: Equipamento
+  // ): Movimentacao {
+  //   const usuario = decode(authorization) as TokenPayload;
+  //   const novaMovimentacao = movimentacaoFactory(
+  //     usuario.id,
+  //     movimentacaoDto,
+  //     null,
+  //     equipamento
+  //   );
+  //   return novaMovimentacao;
+  // }
   async atualizar(
     id: number,
     movimentacaoAlterada: AlteraMovimentacaoDto
@@ -97,29 +104,137 @@ export class MovimentacaoService implements IMovimentacaoService {
     equipamento: Equipamento,
     tipoMovimentacao: TipoMovimentacao
   ): Promise<void> {
-    const usuarioResponsavel = new Usuario();
-    usuarioResponsavel.id = usuarioId;
-    const movimentacao = new Movimentacao();
-    movimentacao.usuario = usuarioResponsavel;
-    movimentacao.equipamento = equipamento;
-    movimentacao.tipoEquipamento = equipamento.tipoEquipamento;
-    movimentacao.dataMovimentacao = new Date();
-    movimentacao.tipoMovimentacao = tipoMovimentacao;
+    const criaMovimentacao: CriarMovimentacaoDto = {
+      tipoMovimentacao: tipoMovimentacao,
+    };
+    const movimentacao = movimentacaoFactory(
+      usuarioId,
+      criaMovimentacao,
+      null,
+      equipamento
+    );
     await this.movimentacaoRepository.save(movimentacao);
+    return;
   }
-
-  geraMovimentacaoTipoEquipamento(
+  async criarMovimentacaoTipoEquipamento(
     usuarioId: number,
     tipoEquipamento: TipoEquipamento,
     tipoMovimentacao: TipoMovimentacao
-  ): Movimentacao {
-    const usuarioResponsavel = new Usuario();
-    usuarioResponsavel.id = usuarioId;
-    const movimentacao = new Movimentacao();
-    movimentacao.usuario = usuarioResponsavel;
-    movimentacao.tipoEquipamento = tipoEquipamento;
-    movimentacao.dataMovimentacao = new Date();
-    movimentacao.tipoMovimentacao = tipoMovimentacao;
-    return movimentacao;
+  ): Promise<void> {
+    const criaMovimentacao: CriarMovimentacaoDto = {
+      tipoMovimentacao: tipoMovimentacao,
+    };
+    const movimentacao = movimentacaoFactory(
+      usuarioId,
+      criaMovimentacao,
+      tipoEquipamento,
+      null
+    );
+    await this.movimentacaoRepository.save(movimentacao);
+    return;
+  }
+  criarMovimentacaoDevolucao(
+    usuarioId: number,
+    colaboradorComEquipamento: Colaborador,
+    novaMovimentacao: CriarMovimentacaoDto
+  ): void {
+    const equipamentoRemovido = this.buscaEquipamentoNoColaborador(
+      colaboradorComEquipamento,
+      novaMovimentacao.equipamentoId
+    );
+    const equipamentosAtualizados = this.removeEquipamentoDoColaborador(
+      colaboradorComEquipamento.equipamentos,
+      equipamentoRemovido
+    );
+    equipamentoRemovido.tipoEquipamento = this.atualizaQuantidadeDeEquipamentos(
+      novaMovimentacao.tipoMovimentacao,
+      equipamentoRemovido.tipoEquipamento
+    );
+
+    colaboradorComEquipamento.equipamentos = equipamentosAtualizados;
+    const movimentacao = movimentacaoFactory(
+      usuarioId,
+      novaMovimentacao,
+      null,
+      equipamentoRemovido
+    );
+    colaboradorComEquipamento.movimentacoes.push(movimentacao);
+    return;
+  }
+  async criarMovimentacaoEnvio(
+    usuarioId: number,
+    colaboradorComEquipamento: Colaborador,
+    novaMovimentacao: CriarMovimentacaoDto
+  ): Promise<void> {
+    const equipamentoAdcionado = await this.buscaEquipamentoNoRepo(
+      novaMovimentacao.equipamentoId
+    );
+    equipamentoAdcionado.tipoEquipamento =
+      this.atualizaQuantidadeDeEquipamentos(
+        novaMovimentacao.tipoMovimentacao,
+        equipamentoAdcionado.tipoEquipamento
+      );
+    await this.emailService.alertarQuantidadeCritica(
+      equipamentoAdcionado.tipoEquipamento
+    );
+    equipamentoAdcionado.colaborador = colaboradorComEquipamento;
+    colaboradorComEquipamento.equipamentos.push(equipamentoAdcionado);
+    const movimentacao = movimentacaoFactory(
+      usuarioId,
+      novaMovimentacao,
+      null,
+      equipamentoAdcionado
+    );
+    colaboradorComEquipamento.movimentacoes.push(movimentacao);
+    return;
+  }
+  private buscaEquipamentoNoColaborador(
+    colaborador: Colaborador,
+    equipamentoId: number
+  ): Equipamento {
+    const equipamentoEspecifico = colaborador.equipamentos.find(
+      (equipamento) => equipamento.id === equipamentoId
+    );
+    return equipamentoEspecifico;
+  }
+  private removeEquipamentoDoColaborador(
+    equipamentos: Equipamento[],
+    equipamentoRemovido: Equipamento
+  ): Equipamento[] {
+    if (!equipamentoRemovido) {
+      throw new EquipamentoNaoEstaEmPosseDoColaborador();
+    }
+    const equipamentosAtualizados = equipamentos.filter(
+      (equipamento) => equipamento.id !== equipamentoRemovido.id
+    );
+    return equipamentosAtualizados;
+  }
+  private atualizaQuantidadeDeEquipamentos(
+    tipoMovimentacao: TipoMovimentacao,
+    tipoEquipamento: TipoEquipamento
+  ): TipoEquipamento {
+    if (!tipoEquipamento) {
+      throw new TipoEquipamentoNaoExiste();
+    }
+    tipoMovimentacao === TipoMovimentacao.Envio
+      ? (tipoEquipamento.quantidade -= 1)
+      : (tipoEquipamento.quantidade += 1);
+
+    return tipoEquipamento;
+  }
+  private async buscaEquipamentoNoRepo(
+    equipamentoId: number
+  ): Promise<Equipamento> {
+    const equipamento =
+      await this.equipamentoRepository.findEquipamentoComParametro(
+        equipamentoId
+      );
+    if (!equipamento) {
+      throw new EquipamentoNaoExiste();
+    }
+    if (equipamento.colaborador) {
+      throw new EquipamentoJaEstaEmPosseDeUmColaborador();
+    }
+    return equipamento;
   }
 }

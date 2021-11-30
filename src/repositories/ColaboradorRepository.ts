@@ -24,9 +24,26 @@ export class ColaboradorRepository
       },
     });
   }
-  findEquipamentoByColaborador(colaboradorId: number): Promise<Colaborador> {
+  findColaboradorCompleto(colaboradorId: number): Promise<Colaborador> {
     return this.findOne({
-      relations: ["equipamentos", "equipamentos.tipoEquipamento"],
+      relations: [
+        "equipamentos",
+        "equipamentos.tipoEquipamento",
+        "movimentacoes",
+      ],
+      where: {
+        id: colaboradorId,
+        dataRecisao: null,
+      },
+    });
+  }
+  findColaboradorComEquipamento(colaboradorId: number): Promise<Colaborador> {
+    return this.findOne({
+      relations: [
+        "equipamentos",
+        "equipamentos.tipoEquipamento",
+        "movimentacoes",
+      ],
       where: {
         id: colaboradorId,
         dataRecisao: null,
