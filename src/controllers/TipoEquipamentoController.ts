@@ -69,7 +69,7 @@ export class TipoEquipamentoController {
       if (
         error instanceof ExitemEquipamentosCadastradosComEsteTipoEquipamento
       ) {
-        res.status(422).send({ error });
+        res.status(422).send({ error: error.message });
         return;
       }
       res.status(500).send("erro interno do servidor");
