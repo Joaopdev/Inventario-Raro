@@ -32,7 +32,7 @@ export class Equipamento {
   @ManyToOne(
     () => TipoEquipamento,
     (tipoEquipamento) => tipoEquipamento.equipamentos,
-    { nullable: false }
+    { nullable: false, cascade: true }
   )
   tipoEquipamento: TipoEquipamento;
 

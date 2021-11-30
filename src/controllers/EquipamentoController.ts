@@ -95,6 +95,7 @@ export class EquipamentoController {
         res.status(404).send();
         return;
       }
+      console.log(error, error.message);
       res.status(500).send("erro interno do servidor");
     }
   }

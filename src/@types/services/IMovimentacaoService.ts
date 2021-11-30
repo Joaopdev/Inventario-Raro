@@ -27,7 +27,7 @@ export interface IMovimentacaoService {
     id: number,
     movimentacaoAlterada: AlteraMovimentacaoDto
   ): Promise<void>;
-  geraMovimentacaoEquipamento(
+  criarMovimentacaoEquipamento(
     usuarioId: number,
     equipamento: Equipamento,
     tipoMovimentacao: TipoMovimentacao
