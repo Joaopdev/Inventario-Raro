@@ -32,10 +32,10 @@ export interface IMovimentacaoService {
     equipamento: Equipamento,
     tipoMovimentacao: TipoMovimentacao
   ): Promise<void>;
-  geraMovimentacaoTipoEquipamento(
+  criarMovimentacaoTipoEquipamento(
     usuarioId: number,
     tipoEquipamento: TipoEquipamento,
     tipoMovimentacao: TipoMovimentacao
-  ): Movimentacao;
+  ): Promise<void>;
   remover(id: number): Promise<void>;
 }

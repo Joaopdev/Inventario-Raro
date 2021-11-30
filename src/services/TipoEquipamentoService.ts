@@ -37,14 +37,12 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
     try {
       const usuario = decode(token) as TokenPayload;
       const tipoEquipamento = tipoEquipamentoFactory(tipoEquipamentoDto);
-      const movimentacao =
-        this.movimentacaoService.geraMovimentacaoTipoEquipamento(
-          usuario.id,
-          tipoEquipamento,
-          TipoMovimentacao.Entrada
-        );
-      tipoEquipamento.movimentacoes.push(movimentacao);
-      await this.tipoEquipamentoRepository.save(tipoEquipamento);
+
+      await this.movimentacaoService.criarMovimentacaoTipoEquipamento(
+        usuario.id,
+        tipoEquipamento,
+        TipoMovimentacao.Entrada
+      );
 
       return omitEquipamentoEMovimentacoesDoTipoEquipamento(tipoEquipamento);
     } catch (error) {
@@ -110,26 +108,35 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
     return;
   }
 
-  async removerTipoEquipamento(id: number): Promise<void> {
-    try {
-      const tipoEquipamento = await this.tipoEquipamentoRepository.findOne(id);
+  async inativarTipoEquipamento(
+    authorization: string,
+    id: number
+  ): Promise<void> {
+    const tipoEquipamento =
+      await this.tipoEquipamentoRepository.findTipoEquipamentoComEquipamentos(
+        id
+      );
 
-      if (!tipoEquipamento) {
-        throw new TipoEquipamentoNaoExiste();
-      }
-      await this.tipoEquipamentoRepository.remove(tipoEquipamento);
-    } catch (error) {
-      if (error instanceof QueryFailedError) {
-        const errorTypeOrm = error as TypeOrmError;
-        if (
-          errorTypeOrm.driverError.code ===
-          ExitemEquipamentosCadastradosComEsteTipoEquipamento.CODE
-        ) {
-          throw new ExitemEquipamentosCadastradosComEsteTipoEquipamento();
-        }
-      }
-      throw error;
+    if (!tipoEquipamento) {
+      throw new TipoEquipamentoNaoExiste();
     }
+
+    const equipamentoAtivo = tipoEquipamento.equipamentos.find(
+      (equipamento) => equipamento.ativo === true
+    );
+
+    if (equipamentoAtivo) {
+      throw new ExitemEquipamentosCadastradosComEsteTipoEquipamento();
+    }
+
+    const usuario = decode(authorization) as TokenPayload;
+    tipoEquipamento.ativo = false;
+
+    await this.movimentacaoService.criarMovimentacaoTipoEquipamento(
+      usuario.id,
+      tipoEquipamento,
+      TipoMovimentacao.Saida
+    );
   }
 
   async atualizaQuantidadeTipoEquipamento(
@@ -138,10 +145,16 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
   ): Promise<TipoEquipamento> {
     const tipoEquipamento =
       await this.tipoEquipamentoRepository.findTipoEquipamento(id);
+
+    if (!tipoEquipamento) {
+      throw new TipoEquipamentoNaoExiste();
+    }
+
     if (operacao === Operacao.soma) {
       tipoEquipamento.quantidade += 1;
       return tipoEquipamento;
     }
+
     if (operacao === Operacao.subtracao) {
       tipoEquipamento.quantidade -= 1;
       return tipoEquipamento;

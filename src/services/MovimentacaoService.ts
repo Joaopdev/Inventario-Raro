@@ -108,11 +108,11 @@ export class MovimentacaoService implements IMovimentacaoService {
     await this.movimentacaoRepository.save(movimentacao);
   }
 
-  geraMovimentacaoTipoEquipamento(
+  async criarMovimentacaoTipoEquipamento(
     usuarioId: number,
     tipoEquipamento: TipoEquipamento,
     tipoMovimentacao: TipoMovimentacao
-  ): Movimentacao {
+  ): Promise<void> {
     const usuarioResponsavel = new Usuario();
     usuarioResponsavel.id = usuarioId;
     const movimentacao = new Movimentacao();
@@ -120,6 +120,6 @@ export class MovimentacaoService implements IMovimentacaoService {
     movimentacao.tipoEquipamento = tipoEquipamento;
     movimentacao.dataMovimentacao = new Date();
     movimentacao.tipoMovimentacao = tipoMovimentacao;
-    return movimentacao;
+    await this.movimentacaoRepository.save(movimentacao);
   }
 }

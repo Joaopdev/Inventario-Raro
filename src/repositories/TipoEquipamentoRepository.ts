@@ -9,20 +9,21 @@ export class TipoEquipamentoRepository
 {
   listarTipoEquipamento(): Promise<TipoEquipamento[]> {
     return this.find({
+      where: { ativo: true },
       relations: ["parametro"],
     });
   }
 
   findTipoEquipamento(id: number): Promise<TipoEquipamento> {
     return this.findOne({
-      where: { id: id },
+      where: { id: id, ativo: true },
       relations: ["parametro"],
     });
   }
 
   findTipoEquipamentoComEquipamentos(id: number): Promise<TipoEquipamento> {
     return this.findOne({
-      where: { id: id },
+      where: { id: id, ativo: true },
       relations: ["equipamentos"],
     });
   }
