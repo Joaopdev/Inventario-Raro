@@ -140,11 +140,11 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
       await this.tipoEquipamentoRepository.findTipoEquipamento(id);
     if (operacao === Operacao.soma) {
       tipoEquipamento.quantidade += 1;
-      return await this.tipoEquipamentoRepository.save(tipoEquipamento);
+      return tipoEquipamento;
     }
     if (operacao === Operacao.subtracao) {
       tipoEquipamento.quantidade -= 1;
-      return await this.tipoEquipamentoRepository.save(tipoEquipamento);
+      return tipoEquipamento;
     }
 
     throw new Error("Operacao invalida");

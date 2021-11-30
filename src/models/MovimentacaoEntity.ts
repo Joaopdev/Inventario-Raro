@@ -24,7 +24,10 @@ export class Movimentacao {
 
   @ManyToOne(
     () => TipoEquipamento,
-    (tipoEquipamento) => tipoEquipamento.movimentacoes
+    (tipoEquipamento) => tipoEquipamento.movimentacoes,
+    {
+      cascade: true,
+    }
   )
   tipoEquipamento: TipoEquipamento;
 

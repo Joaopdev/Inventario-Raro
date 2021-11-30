@@ -129,6 +129,7 @@ export class ColaboradorService implements IColaboradorService {
         movimentacao.tipoMovimentacao,
         equipamentoMovimentado.tipoEquipamento
       );
+    await this.eqipamentoRepository.save(equipamentoMovimentado);
     await this.emailService.alertarQuantidadeCritica(
       equipamentoMovimentado.tipoEquipamento
     );

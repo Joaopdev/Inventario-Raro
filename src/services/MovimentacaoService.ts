@@ -92,7 +92,7 @@ export class MovimentacaoService implements IMovimentacaoService {
     await this.movimentacaoRepository.remove(movimentacao);
     return;
   }
-  async geraMovimentacaoEquipamento(
+  async criarMovimentacaoEquipamento(
     usuarioId: number,
     equipamento: Equipamento,
     tipoMovimentacao: TipoMovimentacao
