@@ -43,8 +43,8 @@ A documentação da api pode ser encontrada no swagger neste [link](https://app.
 
 ## Funcionalidades
 
-- [x] O Administrador pode criar um usuário do sistema:
-- [x] O Usuário faz login no sistema e se autenticar.
+- [x] O Administrador pode criar, atualizar,deletar um usuário do sistema:
+- [x] O Usuário faz login no sistema e se autentica.
 - [x] O Usuário pode criar, editar, atualizar e deletar um colaborador no banco de dados:
   - [x] cadastra nome do colaborador;
   - [x] cadastra e-mail (único);
