@@ -5,7 +5,7 @@ export type ColaboradorDto = {
   nome: string;
   email: string;
   telefone: string;
-  dataInicio: string;
+  dataInicio: Date;
   endereco: CadastrarEnderecoDto;
 };
 export type CriarColaboradorDto = Omit<ColaboradorDto, "id">;
