@@ -5,6 +5,7 @@ import { EquipamentoNaoExiste } from "../@types/errors/EquipamentoNaoExiste";
 import { EquipamentoJaExiste } from "../@types/errors/EquipamentoJaExiste";
 import RequestWithUserData from "../@types/controllers/RequestWithUserData";
 import { TipoEquipamentoNaoExiste } from "../@types/errors/TipoEquipamentoNaoExiste";
+import { EmailNaoEnviado } from "../@types/errors/EmailNaoEnviado";
 
 @Service("EquipamentoController")
 export class EquipamentoController {
@@ -93,6 +94,11 @@ export class EquipamentoController {
     } catch (error) {
       if (error instanceof EquipamentoNaoExiste) {
         res.status(404).send();
+        return;
+      }
+
+      if (error instanceof EmailNaoEnviado) {
+        res.status(200).send();
         return;
       }
       res.status(500).send("erro interno do servidor");
