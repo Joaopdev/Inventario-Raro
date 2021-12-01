@@ -215,8 +215,6 @@ export class MovimentacaoService implements IMovimentacaoService {
       await this.equipamentoRepository.findEquipamentoComParametro(
         equipamentoId
       );
-    console.log(equipamento);
-    console.log("equipamento com colabroador", equipamento.colaborador);
     if (!equipamento) {
       throw new EquipamentoNaoExiste();
     }
