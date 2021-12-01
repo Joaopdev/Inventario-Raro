@@ -31,7 +31,6 @@ describe("TipoEquipamentoService", () => {
     movimentacaoRepository = new MovimentacaoRepository();
     movimentacaoService = new MovimentacaoService(
       movimentacaoRepository,
-      emailService,
       equipamentoRepository
     );
     tipoEquipamentoRepository = new TipoEquipamentoRepository();

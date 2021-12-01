@@ -1,7 +1,10 @@
 import * as faker from "faker";
 import { CepClient } from "../../clients/CepClient";
 import { EnderecoService } from "../../services/EnderecoService";
-import { EnderecoDto } from "../../@types/dto/EnderecoDto";
+import {
+  CadastrarEnderecoDto,
+  EnderecoDto,
+} from "../../@types/dto/EnderecoDto";
 
 const resultadoApiCepFactory = (): EnderecoDto => ({
   cep: faker.address.zipCode(),
@@ -39,11 +42,17 @@ describe("EnderecoService", () => {
 
   it("deve buscar um endereço através do CEP", async () => {
     const endereco: EnderecoDto = resultadoApiCepFactory();
-    jest.spyOn(cepClient, "buscaEnderecoPorCEP").mockResolvedValue(endereco);
-
+    const { ibge, gia, ddd, siafi, ...novoCep } = endereco;
+    const cepTratado: CadastrarEnderecoDto = {
+      ...novoCep,
+      ...{ numero: null },
+    };
+    const clienteCep = jest.spyOn(cepClient, "buscaEnderecoPorCEP");
+    clienteCep.mockResolvedValue(endereco);
     const cep = faker.address.zipCode();
-    await enderecoService.buscaPorCep(cep);
+    const busca = enderecoService.buscaPorCep(cep);
 
-    expect(void cepClient.buscaEnderecoPorCEP).toHaveBeenCalledWith(cep);
+    await expect(busca).resolves.toEqual(cepTratado);
+    expect(clienteCep).toBeCalledWith(cep);
   });
 });

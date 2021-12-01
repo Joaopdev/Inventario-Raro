@@ -57,12 +57,12 @@ describe("ColaboradorService", () => {
     colaboradorRepository = new ColaboradorRepository();
     movimentacaoService = new MovimentacaoService(
       movimentacaoRepository,
-      emailService,
       equipamentoRepository
     );
     colaboradorService = new ColaboradorService(
       colaboradorRepository,
-      movimentacaoService
+      movimentacaoService,
+      emailService
     );
   });
 
@@ -215,10 +215,19 @@ describe("ColaboradorService", () => {
             token,
             novaMovimentacao
           );
+        const buscaEquipamento = jest.spyOn(
+          colaboradorService,
+          "buscaEquipamentoAdicionado"
+        );
+        buscaEquipamento.mockReturnValue(new Equipamento());
+        const envioEmail = jest.spyOn(emailService, "alertarQuantidadeCritica");
+        envioEmail.mockResolvedValue(undefined);
+
         await expect(gerarMovimentacao).resolves.not.toBeDefined();
         expect(findColaboradorCompleto).toHaveBeenCalledWith(colaborador.id);
         expect(criarMovimentacaoEnvio).toHaveBeenCalledTimes(1);
         expect(save).toHaveBeenCalledWith(colaborador);
+        expect(envioEmail).toHaveBeenCalledTimes(1);
       });
       it("deve gerar movimentacao de devolucao", async () => {
         const token =
