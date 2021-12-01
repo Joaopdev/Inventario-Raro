@@ -112,7 +112,6 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
   ): Promise<void> {
     const tipoEquipamento =
       await this.tipoEquipamentoRepository.findTipoEquipamentoComEquiEMovi(id);
-    console.log(tipoEquipamento);
     if (!tipoEquipamento) {
       throw new TipoEquipamentoNaoExiste();
     }
@@ -127,7 +126,6 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
 
     const usuario = decode(authorization) as TokenPayload;
     tipoEquipamento.ativo = false;
-    console.log("Desativou", tipoEquipamento);
     await this.movimentacaoService.criarMovimentacaoTipoEquipamento(
       usuario.id,
       tipoEquipamento,
