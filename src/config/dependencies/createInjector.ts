@@ -4,7 +4,6 @@ import { UsuarioRepository } from "../../repositories/UsuarioRepository";
 import { ColaboradorRepository } from "../../repositories/ColaboradorRepository";
 import { EquipamentoRepository } from "../../repositories/EquipamentoRepository";
 import { TipoEquipamentoRepository } from "../../repositories/TipoEquipamentoRepository";
-import { ParametroRepository } from "../../repositories/ParametroRepository";
 import { MovimentacaoRepository } from "../../repositories/MovimentacaoRepository";
 
 // inicializador de dependências:
@@ -22,7 +21,6 @@ import "../../services/EnderecoService";
 import "../../services/ColaboradorService";
 import "../../services/EquipamentoService";
 import "../../services/TipoEquipamentoService";
-import "../../services/ParametroService";
 import "../../services/MovimentacaoService";
 import "../../services/EmailService";
 
@@ -44,10 +42,6 @@ const createDependencyInjector = (): void => {
   Container.set(
     "TipoEquipamentoRepository",
     getCustomRepository(TipoEquipamentoRepository)
-  );
-  Container.set(
-    "ParametroRepository",
-    getCustomRepository(ParametroRepository)
   );
   Container.set(
     "MovimentacaoRepository",
