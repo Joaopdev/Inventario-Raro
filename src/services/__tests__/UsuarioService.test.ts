@@ -3,6 +3,7 @@ import { UsuarioService } from "../UsuarioService";
 import { UsuarioDto } from "../../@types/dto/UsuarioDto";
 import { UsuarioRepository } from "../../repositories/UsuarioRepository";
 import { Usuario } from "../../models/UsuarioEntity";
+import { Role } from "../../@types/enums/Role";
 
 describe("UserService", () => {
   let usuarioDto: UsuarioDto;
@@ -16,6 +17,7 @@ describe("UserService", () => {
       nome: faker.name.findName(),
       senha: faker.internet.password(),
       email: faker.internet.email(),
+      role: Role.Admin,
     };
     usuarioRepository = new UsuarioRepository();
     userService = new UsuarioService(usuarioRepository);

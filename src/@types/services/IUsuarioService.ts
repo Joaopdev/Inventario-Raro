@@ -7,6 +7,9 @@ export interface IUsuarioService {
   buscar(id: number): Promise<Usuario>;
   criar(usuarioDto: UsuarioDto): Promise<TokenPayload>;
   autenticar(usuarioEmail: string, usuarioSenha: string): Promise<string>;
-  atualizar(usuarioAtualizadoDto: AtualizarUsuarioDto): Promise<void>;
+  atualizar(
+    id: number,
+    usuarioAtualizadoDto: AtualizarUsuarioDto
+  ): Promise<void>;
   remover(id: number): Promise<void>;
 }

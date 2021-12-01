@@ -9,7 +9,6 @@ export type UsuarioDto = {
 };
 
 export type AtualizarUsuarioDto = {
-  id: number;
   nome?: string;
   email?: string;
   senha?: string;

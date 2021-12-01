@@ -51,8 +51,11 @@ export class UsuarioService implements IUsuarioService {
     return resultadoTratado;
   }
 
-  async atualizar(usuarioAtualizadoDto: AtualizarUsuarioDto): Promise<void> {
-    const usuario = await this.buscar(usuarioAtualizadoDto.id);
+  async atualizar(
+    id: number,
+    usuarioAtualizadoDto: AtualizarUsuarioDto
+  ): Promise<void> {
+    const usuario = await this.usuarioRepository.findOne(id);
     const usuarioAtualizado = { ...usuario, ...usuarioAtualizadoDto };
     await this.usuarioRepository.save(usuarioAtualizado);
   }
