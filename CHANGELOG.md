@@ -1,6 +1,5 @@
 # Changelog
 
-movimentações na tabela de movimentação eram deletados juntos também.
 ## [1.1.0] - 2021-12-01
 
 ### Added
@@ -34,7 +33,7 @@ movimentações na tabela de movimentação eram deletados juntos também.
         - Metodo remover substituido pelo inativar.
         - Refatorado buscando otimizar o tempo de processamento na hora de criar e inativar.
     - Repository
-        - metodo de buscas alterados para filtrar os equipamentos ativados
+        - metodos de buscas alterados para filtrar os equipamentos ativados
 
 - Equipamento 
     - Service
