@@ -72,7 +72,6 @@ export class TipoEquipamentoController {
         res.status(422).send({ error: error.message });
         return;
       }
-      console.log(error,error.message);
       res.status(500).send("erro interno do servidor");
     }
   }
