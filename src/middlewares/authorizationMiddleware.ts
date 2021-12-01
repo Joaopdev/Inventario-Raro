@@ -8,7 +8,6 @@ export const authorizationMiddleware = (
   next: NextFunction
 ): void => {
   const { usuario } = req;
-  console.log("usuariooooo", usuario);
 
   if (usuario.role !== "admin") {
     res.status(403).send("Forbidden");

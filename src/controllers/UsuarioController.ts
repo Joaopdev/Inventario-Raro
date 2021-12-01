@@ -82,7 +82,6 @@ export class UsuarioController {
       response.status(400);
       throw new InformacoesIncorretas();
     }
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", request.params.id);
     const usuario = await this.usuarioService.atualizar(
       Number(request.params.id),
       request.body
