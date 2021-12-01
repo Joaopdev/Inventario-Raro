@@ -37,7 +37,7 @@ Com o sistema, a empresa poderá acompanhar agora quais equipamentos foram envia
 
 ##  Documentação
 
-A documentação da api pode ser encontrada no swagger neste [link](https://app.swaggerhub.com/apis-docs/grupo_undefined/Projeto-Inventario-Raro-Academy/1.0.0)
+A documentação da api pode ser encontrada no swagger neste [link](https://app.swaggerhub.com/apis-docs/grupo_undefined/Projeto-Inventario-Raro-Academy/1.1.0)
 
 ---
 

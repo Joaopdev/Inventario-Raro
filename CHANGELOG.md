@@ -14,6 +14,10 @@ movimentações na tabela de movimentação eram deletados juntos também.
 
 ### Changed
 
+- Usuario
+    - Router
+        - correção nas rotas por conta do middleware de autenticação.
+
 - Colaborador    
     - Service
         - Refatorado buscando otimizar o tempo de processamento na hora de criar movimentações de envio e devolução.
@@ -40,6 +44,7 @@ movimentações na tabela de movimentação eram deletados juntos também.
 
 - error dos response melhorados.
 - operacoes no banco reduzidas para os services : colaborador, movimentacao, equipamento e tipoEQuipamento.
+- requisições de patch e delete no usuario corrigidas.
 
 ## [1.0.0] - 2021-11-29
 
