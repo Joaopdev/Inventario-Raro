@@ -1,4 +1,16 @@
 # Changelog
+## [1.1.1] - 2021-12-01
+
+### Added
+- Adicionado a documentação o link do diagrama de relações.
+
+### Changed
+- responsabilidade por enviar email a respeito da quantidade critica saiu da movimentacao de devolucao e foi para o colaborador no gera movimentação.
+
+### Fixed 
+- correção do metodo de gerar movimentacao na devolucao, caso o email falhasse nada estava sendo salvo, o envio do equipamento não acontecia.
+- correção no teste do service de endereço.
+- correção do erro caso o email nao seja enviado, retornar 200 pois a ação de enviar o equipamento aconteceu, apenas alguns remetentes nao receberam o email por serem falsos.
 
 ## [1.1.0] - 2021-12-01
 

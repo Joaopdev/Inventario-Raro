@@ -26,8 +26,6 @@ export class MovimentacaoService implements IMovimentacaoService {
   constructor(
     @Inject("MovimentacaoRepository")
     private movimentacaoRepository: IMovimentacaoRepository,
-    @Inject("EmailService")
-    private emailService: IEmailService,
     @Inject("EquipamentoRepository")
     private equipamentoRepository: IEquipamentoRepository
   ) {}
@@ -160,9 +158,6 @@ export class MovimentacaoService implements IMovimentacaoService {
         novaMovimentacao.tipoMovimentacao,
         equipamentoAdcionado.tipoEquipamento
       );
-    await this.emailService.alertarQuantidadeCritica(
-      equipamentoAdcionado.tipoEquipamento
-    );
     equipamentoAdcionado.colaborador = colaboradorComEquipamento;
     colaboradorComEquipamento.equipamentos.push(equipamentoAdcionado);
     const movimentacao = movimentacaoFactory(
