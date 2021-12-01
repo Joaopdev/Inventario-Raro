@@ -14,6 +14,8 @@ movimentações na tabela de movimentação eram deletados juntos também.
 
 ### Changed
 
+-Novo link: [swagger](https://app.swaggerhub.com/apis-docs/grupo_undefined/Projeto-Inventario-Raro-Academy/1.1.0)
+
 - Usuario
     - Router
         - correção nas rotas por conta do middleware de autenticação.
