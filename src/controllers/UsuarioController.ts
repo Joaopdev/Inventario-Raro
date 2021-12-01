@@ -82,7 +82,10 @@ export class UsuarioController {
       response.status(400);
       throw new InformacoesIncorretas();
     }
-    const usuario = await this.usuarioService.atualizar(request.body);
+    const usuario = await this.usuarioService.atualizar(
+      Number(request.params.id),
+      request.body
+    );
     response.send(usuario).status(200);
   }
 
