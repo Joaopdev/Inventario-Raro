@@ -40,17 +40,18 @@ export class EquipamentoService implements IEquipamentoService {
     equipamentoDto: CriarEquipamentoDto
   ): Promise<RetornoEquipamentoDto> {
     try {
-      const equipamento = equipamentoFactory(equipamentoDto);
       const usuario = decode(authorization) as TokenPayload;
-      await this.movimentacaoService.geraMovimentacaoEquipamento(
+      const equipamento = equipamentoFactory(equipamentoDto);
+
+      equipamento.tipoEquipamento =
+        await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
+          equipamento.tipoEquipamento.id,
+          Operacao.soma
+        );
+      await this.movimentacaoService.criarMovimentacaoEquipamento(
         usuario.id,
         equipamento,
         TipoMovimentacao.Entrada
-      );
-
-      await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
-        equipamento.tipoEquipamento.id,
-        Operacao.soma
       );
 
       return omitTipoEquipamentoDoEquipamento(equipamento);
@@ -109,21 +110,20 @@ export class EquipamentoService implements IEquipamentoService {
     if (!equipamento) {
       throw new EquipamentoNaoExiste();
     }
-
-    equipamento.ativo = false;
-    await this.movimentacaoService.geraMovimentacaoEquipamento(
-      usuario.id,
-      equipamento,
-      TipoMovimentacao.Saida
-    );
-
-    const tipoEquipamento =
+    equipamento.tipoEquipamento =
       await this.tipoEquipamentoService.atualizaQuantidadeTipoEquipamento(
         equipamento.tipoEquipamento.id,
         Operacao.subtracao
       );
-
-    await this.emailService.alertarQuantidadeCritica(tipoEquipamento);
+    equipamento.ativo = false;
+    await this.movimentacaoService.criarMovimentacaoEquipamento(
+      usuario.id,
+      equipamento,
+      TipoMovimentacao.Saida
+    );
+    await this.emailService.alertarQuantidadeCritica(
+      equipamento.tipoEquipamento
+    );
     return;
   }
 }

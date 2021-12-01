@@ -5,6 +5,7 @@ import { InformacoesIncorretas } from "../@types/errors/InformacoesIncorretas";
 import { DadosParaLogin } from "../@types/controllers/DadosParaLogin";
 import RequestWithUserData from "../@types/controllers/RequestWithUserData";
 import { EmailInvalido } from "../@types/errors/EmailInvalido";
+import { RoleDeUsuarioInadequada } from "../@types/errors/RoleDeUsuarioInadequada";
 
 @Service("UsuarioController")
 export class UsuarioController {
@@ -62,7 +63,11 @@ export class UsuarioController {
       response.send(usuario).status(201);
     } catch (error) {
       if (error instanceof EmailInvalido) {
-        response.status(400).send({ error });
+        response.status(400).send({ error: error.message });
+        return;
+      }
+      if (error instanceof RoleDeUsuarioInadequada) {
+        response.status(400).send({ error: error.message });
         return;
       }
       if (error instanceof Error) {
@@ -77,7 +82,10 @@ export class UsuarioController {
       response.status(400);
       throw new InformacoesIncorretas();
     }
-    const usuario = await this.usuarioService.atualizar(request.body);
+    const usuario = await this.usuarioService.atualizar(
+      Number(request.params.id),
+      request.body
+    );
     response.send(usuario).status(200);
   }
 

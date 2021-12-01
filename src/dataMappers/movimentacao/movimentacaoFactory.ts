@@ -3,11 +3,12 @@ import { Equipamento } from "../../models/EquipamentoEntity";
 import { Usuario } from "../../models/UsuarioEntity";
 import { Movimentacao } from "../../models/MovimentacaoEntity";
 import { CriarMovimentacaoDto } from "../../@types/dto/MovimentacaoDto";
+import { TipoEquipamento } from "../../models/TipoEquipamentoEntity";
 
 export const movimentacaoFactory = (
   usuarioId: number,
   novaMovimentacao: CriarMovimentacaoDto,
-  tipoEquipamentoId?: number,
+  tipoEquipamento?: TipoEquipamento,
   equipamento?: Equipamento
 ): Movimentacao => {
   const usuarioCriado = new Usuario();
@@ -27,8 +28,8 @@ export const movimentacaoFactory = (
     movimentacao.equipamento = equipamento;
     movimentacao.tipoEquipamento = equipamento.tipoEquipamento;
   } else {
-    movimentacao.equipamento.id = novaMovimentacao.equipamentoId;
-    movimentacao.tipoEquipamento.id = tipoEquipamentoId;
+    movimentacao.tipoEquipamento = tipoEquipamento;
+    tipoEquipamento.movimentacoes.push(movimentacao);
   }
 
   return movimentacao;

@@ -22,7 +22,11 @@ export class EquipamentoRepository
 
   findEquipamentoComParametro(equipamentoId: number): Promise<Equipamento> {
     return this.findOne({
-      relations: ["tipoEquipamento", "tipoEquipamento.parametro"],
+      relations: [
+        "tipoEquipamento",
+        "tipoEquipamento.parametro",
+        "colaborador",
+      ],
       where: { id: equipamentoId, ativo: true },
     });
   }

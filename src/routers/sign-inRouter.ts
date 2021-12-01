@@ -7,7 +7,7 @@ const getController = (): UsuarioController => {
   return Container.get<UsuarioController>("UsuarioController");
 };
 
-const createRouter = () => {
+const createRouter = (): Router => {
   router.post("", (async (req, res) => {
     await getController().autenticar(req, res);
   }) as RequestHandler);

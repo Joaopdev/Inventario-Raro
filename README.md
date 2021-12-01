@@ -37,14 +37,14 @@ Com o sistema, a empresa poderá acompanhar agora quais equipamentos foram envia
 
 ##  Documentação
 
-A documentação da api pode ser encontrada no swagger neste [link](https://app.swaggerhub.com/apis-docs/grupo_undefined/Projeto-Inventario-Raro-Academy/1.0.0)
+A documentação da api pode ser encontrada no swagger neste [link](https://app.swaggerhub.com/apis-docs/grupo_undefined/Projeto-Inventario-Raro-Academy/1.1.0)
 
 ---
 
 ## Funcionalidades
 
-- [x] O Administrador pode criar um usuário do sistema:
-- [x] O Usuário faz login no sistema e se autenticar.
+- [x] O Administrador pode criar, atualizar,deletar um usuário do sistema:
+- [x] O Usuário faz login no sistema e se autentica.
 - [x] O Usuário pode criar, editar, atualizar e deletar um colaborador no banco de dados:
   - [x] cadastra nome do colaborador;
   - [x] cadastra e-mail (único);

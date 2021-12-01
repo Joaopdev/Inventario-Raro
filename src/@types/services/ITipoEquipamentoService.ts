@@ -18,7 +18,7 @@ export interface ITipoEquipamentoService {
     id: number,
     tipoEquipamentoDto: AtualizarTipoEquipamentoDto
   ): Promise<void>;
-  removerTipoEquipamento(id: number): Promise<void>;
+  inativarTipoEquipamento(authorization: string, id: number): Promise<void>;
   atualizaQuantidadeTipoEquipamento(
     id: number,
     operacao: Operacao
