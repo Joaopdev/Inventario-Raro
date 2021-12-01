@@ -4,6 +4,7 @@ import { IColaboradorService } from "../@types/services/IColaboradorService";
 import { ColaboradorNaoExiste } from "../@types/errors/ColaboradorNaoExiste";
 import RequestWithUserData from "../@types/controllers/RequestWithUserData";
 import { ColaboradorJaExiste } from "../@types/errors/ColaboradorJaExiste";
+import { EmailNaoEnviado } from "../@types/errors/EmailNaoEnviado";
 
 @Service("ColaboradorController")
 export class ColaboradorController {
@@ -113,6 +114,9 @@ export class ColaboradorController {
       response.send(movimentacao).status(201);
       return;
     } catch (error) {
+      if (error instanceof EmailNaoEnviado) {
+        response.status(200).send({ error: error.message });
+      }
       if (error instanceof Error) {
         response.status(422).send({ error: error.message });
         return;

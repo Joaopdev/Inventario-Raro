@@ -37,13 +37,14 @@ describe("CepClient", () => {
   it("deve retornar dados do cep encontrados com sucesso.", async () => {
     const cep = faker.address.zipCode();
     const resultadoEsperado = httpSuccessfullResponseFactory(endereco);
-    jest.spyOn(httpClient, "get").mockResolvedValue(resultadoEsperado);
+    const metodoGet = jest.spyOn(httpClient, "get");
+    metodoGet.mockResolvedValue(resultadoEsperado);
 
     const cepClient = new CepClient(httpClient);
-    const response = await cepClient.buscaEnderecoPorCEP(cep);
+    const response = cepClient.buscaEnderecoPorCEP(cep);
 
-    expect(response).toBe(endereco);
-    expect(void httpClient.get).toHaveBeenCalledWith(
+    await expect(response).resolves.toBe(endereco);
+    expect(metodoGet).toHaveBeenCalledWith(
       expect.stringMatching(new RegExp(cep))
     );
   });

@@ -21,6 +21,8 @@ import { EnumMovimentacaoColaboradorIncorreta } from "../@types/errors/EnumMovim
 import { ColaboradorPossuiEquipamentos } from "../@types/errors/ColaboradorPossuiEquipamentos";
 import { TokenPayload } from "../@types/controllers/TokenPayload";
 import { decode } from "jsonwebtoken";
+import { IEmailService } from "../@types/services/IEmailService";
+import { Equipamento } from "../models/EquipamentoEntity";
 
 @Service("ColaboradorService")
 export class ColaboradorService implements IColaboradorService {
@@ -28,7 +30,9 @@ export class ColaboradorService implements IColaboradorService {
     @Inject("ColaboradorRepository")
     private colaboradorRepository: IColaboradorRepository,
     @Inject("MovimentacaoService")
-    private movimentacaoService: IMovimentacaoService
+    private movimentacaoService: IMovimentacaoService,
+    @Inject("EmailService")
+    private emailService: IEmailService
   ) {}
   async listar(): Promise<RetornoColaboradorCriadoDto[]> {
     const colaboradores = await this.colaboradorRepository.findAll();
@@ -111,7 +115,16 @@ export class ColaboradorService implements IColaboradorService {
         colaboradorComEquipamento,
         novaMovimentacao
       );
-      await this.colaboradorRepository.save(colaboradorComEquipamento);
+      const colaborador = await this.colaboradorRepository.save(
+        colaboradorComEquipamento
+      );
+      const equipamentoEnviado = this.buscaEquipamentoAdicionado(
+        colaborador,
+        novaMovimentacao.equipamentoId
+      );
+      await this.emailService.alertarQuantidadeCritica(
+        equipamentoEnviado.tipoEquipamento
+      );
       return;
     } else {
       throw new EnumMovimentacaoColaboradorIncorreta();
@@ -133,5 +146,14 @@ export class ColaboradorService implements IColaboradorService {
       throw new ColaboradorNaoExiste();
     }
     return colaborador;
+  }
+  buscaEquipamentoAdicionado(
+    colaborador: Colaborador,
+    equipamentoId: number
+  ): Equipamento {
+    const equipamentoEnviado = colaborador.equipamentos.find(
+      (equipamento) => equipamento.id === equipamentoId
+    );
+    return equipamentoEnviado;
   }
 }
