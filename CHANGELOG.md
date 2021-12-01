@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+- Adcionado: a função de inativar para que não seja perdido as movimentações do tipo equipamento.
+- Removido: a função de deletar o tipo equipamento, pois quando deletava os registros de movimentações na tabela de movimentação eram deletados juntos também.
+
 ## [1.0.0] - 2021-11-29
 
 ### Added

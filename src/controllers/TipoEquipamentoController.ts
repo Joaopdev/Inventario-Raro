@@ -26,7 +26,7 @@ export class TipoEquipamentoController {
       return;
     } catch (error) {
       if (error instanceof TipoEquipamentoJaExiste) {
-        res.status(422).send();
+        res.status(422).send({ error });
         return;
       }
       res.status(500).send("erro interno do servidor");
@@ -50,9 +50,11 @@ export class TipoEquipamentoController {
     }
   }
 
-  async remover(req: Request, res: Response): Promise<void> {
+  async inativar(req: Request, res: Response): Promise<void> {
     try {
-      await this.tipoEquipamentoService.removerTipoEquipamento(
+      const authorization = req.headers.authorization;
+      await this.tipoEquipamentoService.inativarTipoEquipamento(
+        authorization,
         Number(req.params.id)
       );
 
@@ -70,6 +72,7 @@ export class TipoEquipamentoController {
         res.status(422).send({ error });
         return;
       }
+      console.log(error,error.message);
       res.status(500).send("erro interno do servidor");
     }
   }

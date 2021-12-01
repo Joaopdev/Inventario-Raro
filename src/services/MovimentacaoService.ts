@@ -65,20 +65,6 @@ export class MovimentacaoService implements IMovimentacaoService {
     return await this.movimentacaoRepository.save(novaMovimentacao);
   }
 
-  // criarMovimentacaoColaborador(
-  //   authorization: string,
-  //   movimentacaoDto: CriarMovimentacaoDto,
-  //   equipamento: Equipamento
-  // ): Movimentacao {
-  //   const usuario = decode(authorization) as TokenPayload;
-  //   const novaMovimentacao = movimentacaoFactory(
-  //     usuario.id,
-  //     movimentacaoDto,
-  //     null,
-  //     equipamento
-  //   );
-  //   return novaMovimentacao;
-  // }
   async atualizar(
     id: number,
     movimentacaoAlterada: AlteraMovimentacaoDto
