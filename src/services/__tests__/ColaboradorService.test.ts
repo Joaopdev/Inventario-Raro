@@ -13,9 +13,12 @@ import { EnviarEmail } from "../../clients/EnviarEmail";
 import { UsuarioRepository } from "../../repositories/UsuarioRepository";
 import { colaboradorFactory } from "../../dataMappers/colaborador/colaboradorFactory";
 import { Equipamento } from "../../models/EquipamentoEntity";
-import { Colaborador } from "../../models/ColaboradorEntity";
 import { ColaboradorNaoExiste } from "../../@types/errors/ColaboradorNaoExiste";
 import { ColaboradorPossuiEquipamentos } from "../../@types/errors/ColaboradorPossuiEquipamentos";
+import { CriarMovimentacaoDto } from "../../@types/dto/MovimentacaoDto";
+import { TipoMovimentacao } from "../../@types/enums/TipoMovimentacao";
+import { Usuario } from "../../models/UsuarioEntity";
+import { EnumMovimentacaoColaboradorIncorreta } from "../../@types/errors/EnumMovimentacaoColaboradorIncorreta";
 
 describe("ColaboradorService", () => {
   let colaboradorDto: ColaboradorDto;
@@ -168,6 +171,161 @@ describe("ColaboradorService", () => {
       );
       expect(findOne).toHaveBeenCalledWith(colaborador.id);
       expect(save).not.toHaveBeenCalledWith(colaborador);
+    });
+    describe("remover", () => {
+      it("deve remover um colaborador", async () => {
+        const colaborador = colaboradorFactory(colaboradorDto);
+        colaborador.id = faker.datatype.number();
+        const findOne = jest.spyOn(colaboradorRepository, "findById");
+        findOne.mockResolvedValue(colaborador);
+        const remove = jest.spyOn(colaboradorRepository, "remove");
+        remove.mockResolvedValue(undefined);
+        const remover = colaboradorService.remover(colaborador.id);
+        await expect(remover).resolves.not.toBeDefined();
+        expect(remove).toHaveBeenCalledWith(colaborador);
+      });
+    });
+    describe("geraMovimentacaoColaborador", () => {
+      it("deve gerar movimentacao de envio", async () => {
+        const token =
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJub21lIjoidGVzdGUiLCJpZCI6MjAsImVtYWlsIjoiZmFrZUBnbWFpbC5jb20iLCJpYXQiOjE2Mzc5Mzk3OTF9.v4Z7tb-el29f0Bf2HOoVGqQ0bKoWJ5V8mBTc4C96sBM";
+        const colaborador = colaboradorFactory(colaboradorDto);
+        colaborador.id = faker.datatype.number();
+        const usuario = new Usuario();
+        usuario.id = faker.datatype.number();
+        const novaMovimentacao: CriarMovimentacaoDto = {
+          tipoMovimentacao: TipoMovimentacao.Envio,
+          colaboradorId: colaborador.id,
+        };
+        const findColaboradorCompleto = jest.spyOn(
+          colaboradorRepository,
+          "findColaboradorCompleto"
+        );
+        findColaboradorCompleto.mockResolvedValue(colaborador);
+        const criarMovimentacaoEnvio = jest.spyOn(
+          movimentacaoService,
+          "criarMovimentacaoEnvio"
+        );
+        criarMovimentacaoEnvio.mockResolvedValue(undefined);
+        const save = jest.spyOn(colaboradorRepository, "save");
+        save.mockResolvedValue(colaborador);
+        const gerarMovimentacao =
+          colaboradorService.geraMovimentacaoColaborador(
+            colaborador.id,
+            token,
+            novaMovimentacao
+          );
+        await expect(gerarMovimentacao).resolves.not.toBeDefined();
+        expect(findColaboradorCompleto).toHaveBeenCalledWith(colaborador.id);
+        expect(criarMovimentacaoEnvio).toHaveBeenCalledTimes(1);
+        expect(save).toHaveBeenCalledWith(colaborador);
+      });
+      it("deve gerar movimentacao de devolucao", async () => {
+        const token =
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJub21lIjoidGVzdGUiLCJpZCI6MjAsImVtYWlsIjoiZmFrZUBnbWFpbC5jb20iLCJpYXQiOjE2Mzc5Mzk3OTF9.v4Z7tb-el29f0Bf2HOoVGqQ0bKoWJ5V8mBTc4C96sBM";
+        const colaborador = colaboradorFactory(colaboradorDto);
+        colaborador.id = faker.datatype.number();
+        const usuario = new Usuario();
+        usuario.id = faker.datatype.number();
+        const novaMovimentacao: CriarMovimentacaoDto = {
+          tipoMovimentacao: TipoMovimentacao.Devolucao,
+          colaboradorId: colaborador.id,
+        };
+        const findColaboradorCompleto = jest.spyOn(
+          colaboradorRepository,
+          "findColaboradorCompleto"
+        );
+        findColaboradorCompleto.mockResolvedValue(colaborador);
+        const criarMovimentacaoDevolucao = jest.spyOn(
+          movimentacaoService,
+          "criarMovimentacaoDevolucao"
+        );
+        criarMovimentacaoDevolucao.mockReturnValue(undefined);
+        const save = jest.spyOn(colaboradorRepository, "save");
+        save.mockResolvedValue(colaborador);
+        const gerarMovimentacao =
+          colaboradorService.geraMovimentacaoColaborador(
+            colaborador.id,
+            token,
+            novaMovimentacao
+          );
+        await expect(gerarMovimentacao).resolves.not.toBeDefined();
+        expect(findColaboradorCompleto).toHaveBeenCalledWith(colaborador.id);
+        expect(criarMovimentacaoDevolucao).toHaveBeenCalledTimes(1);
+        expect(save).toHaveBeenCalledWith(colaborador);
+      });
+      it("deve lancar um erro caso o colaborador nao exista", async () => {
+        const token =
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJub21lIjoidGVzdGUiLCJpZCI6MjAsImVtYWlsIjoiZmFrZUBnbWFpbC5jb20iLCJpYXQiOjE2Mzc5Mzk3OTF9.v4Z7tb-el29f0Bf2HOoVGqQ0bKoWJ5V8mBTc4C96sBM";
+        const colaborador = colaboradorFactory(colaboradorDto);
+        colaborador.id = faker.datatype.number();
+        const usuario = new Usuario();
+        usuario.id = faker.datatype.number();
+        const novaMovimentacao: CriarMovimentacaoDto = {
+          tipoMovimentacao: TipoMovimentacao.Devolucao,
+          colaboradorId: colaborador.id,
+        };
+        const findColaboradorCompleto = jest.spyOn(
+          colaboradorRepository,
+          "findColaboradorCompleto"
+        );
+        findColaboradorCompleto.mockResolvedValue(undefined);
+        const criarMovimentacaoDevolucao = jest.spyOn(
+          movimentacaoService,
+          "criarMovimentacaoDevolucao"
+        );
+        criarMovimentacaoDevolucao.mockReturnValue(undefined);
+        const save = jest.spyOn(colaboradorRepository, "save");
+        save.mockResolvedValue(colaborador);
+        const gerarMovimentacao =
+          colaboradorService.geraMovimentacaoColaborador(
+            colaborador.id,
+            token,
+            novaMovimentacao
+          );
+        await expect(gerarMovimentacao).rejects.toThrow(
+          new ColaboradorNaoExiste()
+        );
+        expect(findColaboradorCompleto).toHaveBeenCalledWith(colaborador.id);
+        expect(criarMovimentacaoDevolucao).not.toHaveBeenCalled();
+        expect(save).not.toHaveBeenCalled();
+      });
+      it("deve lancar um erro caso o tipo de movimentacao seja mandado errado", async () => {
+        const token =
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJub21lIjoidGVzdGUiLCJpZCI6MjAsImVtYWlsIjoiZmFrZUBnbWFpbC5jb20iLCJpYXQiOjE2Mzc5Mzk3OTF9.v4Z7tb-el29f0Bf2HOoVGqQ0bKoWJ5V8mBTc4C96sBM";
+        const colaborador = colaboradorFactory(colaboradorDto);
+        colaborador.id = faker.datatype.number();
+        const usuario = new Usuario();
+        usuario.id = faker.datatype.number();
+        const novaMovimentacao: CriarMovimentacaoDto = {
+          tipoMovimentacao: TipoMovimentacao.Entrada,
+          colaboradorId: colaborador.id,
+        };
+        const findColaboradorCompleto = jest.spyOn(
+          colaboradorRepository,
+          "findColaboradorCompleto"
+        );
+        findColaboradorCompleto.mockResolvedValue(colaborador);
+        const criarMovimentacaoDevolucao = jest.spyOn(
+          movimentacaoService,
+          "criarMovimentacaoDevolucao"
+        );
+        criarMovimentacaoDevolucao.mockReturnValue(undefined);
+        const save = jest.spyOn(colaboradorRepository, "save");
+        save.mockResolvedValue(colaborador);
+        const gerarMovimentacao =
+          colaboradorService.geraMovimentacaoColaborador(
+            colaborador.id,
+            token,
+            novaMovimentacao
+          );
+        await expect(gerarMovimentacao).rejects.toThrow(
+          new EnumMovimentacaoColaboradorIncorreta()
+        );
+        expect(findColaboradorCompleto).toHaveBeenCalledWith(colaborador.id);
+        expect(criarMovimentacaoDevolucao).not.toHaveBeenCalled();
+        expect(save).not.toHaveBeenCalled();
+      });
     });
   });
 });

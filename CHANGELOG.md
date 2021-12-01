@@ -1,8 +1,45 @@
 # Changelog
 
-## Unreleased
-- Adcionado: a função de inativar para que não seja perdido as movimentações do tipo equipamento.
-- Removido: a função de deletar o tipo equipamento, pois quando deletava os registros de movimentações na tabela de movimentação eram deletados juntos também.
+movimentações na tabela de movimentação eram deletados juntos também.
+## [1.1.0] - 2021-12-01
+
+### Added
+- Metodo inativar para o tipo Equipamento service e assim garantir que nenhum log de movimentação se perca, não é possivel inativa-lo caso equipamentos com seu tipo estejam ativos.
+- Metodo de busca por equipamentos com todas suas relations, implementado no repository.
+- testes unitários para o colaborador Service.
+- testes unitários para o TipoEquipamento Service.
+- Error implementado para caso o Envio de email não ocorra.
+- Error implementado para caso o tipoEquipamento não possa ser inativado.
+- Error implementado para caso a role do usuario seja passada de forma errada.
+
+### Changed
+
+- Colaborador    
+    - Service
+        - Refatorado buscando otimizar o tempo de processamento na hora de criar movimentações de envio e devolução.
+
+- Movimentacao    
+    - Service
+        - Implementados 2 metodos, criaMovimentacaoEnvio e criaMovimentacaoDevolucao utilizados para serem salvos dentro do colaborador.
+        - metodos criaMovimentacaoTipoEquipamento e criaMovimentacaoTipoEquipamento agora utilizam o factory de movimentacao
+        
+- Tipo Equipamento    
+    - Service
+        - Metodo remover substituido pelo inativar.
+        - Refatorado buscando otimizar o tempo de processamento na hora de criar e inativar.
+    - Repository
+        - metodo de buscas alterados para filtrar os equipamentos ativados
+
+- Equipamento 
+    - Service
+        - Refatorado buscando otimizar o tempo de processamento na hora de criar e inativar.
+ 
+
+
+### Fixed
+
+- error dos response melhorados.
+- operacoes no banco reduzidas para os services : colaborador, movimentacao, equipamento e tipoEQuipamento.
 
 ## [1.0.0] - 2021-11-29
 
