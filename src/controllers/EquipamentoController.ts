@@ -25,12 +25,12 @@ export class EquipamentoController {
       return;
     } catch (error) {
       if (error instanceof EquipamentoJaExiste) {
-        res.status(422).send({ error });
+        res.status(422).send({ error: error.message });
         return;
       }
 
       if (error instanceof TipoEquipamentoNaoExiste) {
-        res.status(400).send({ error });
+        res.status(400).send({ error: error.message });
       }
       res.status(500).send("erro interno do servidor");
     }
