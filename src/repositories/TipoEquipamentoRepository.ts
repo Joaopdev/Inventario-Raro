@@ -27,4 +27,10 @@ export class TipoEquipamentoRepository
       relations: ["equipamentos"],
     });
   }
+  findTipoEquipamentoComEquiEMovi(id: number): Promise<TipoEquipamento> {
+    return this.findOne({
+      where: { id: id, ativo: true },
+      relations: ["equipamentos", "movimentacoes"],
+    });
+  }
 }

@@ -21,5 +21,5 @@ export type CriarMovimentacaoDto = {
   dataEntrega?: Date;
   descricao?: string;
   colaboradorId?: number;
-  equipamentoId: number;
+  equipamentoId?: number;
 };

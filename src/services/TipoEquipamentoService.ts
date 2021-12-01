@@ -37,13 +37,11 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
     try {
       const usuario = decode(token) as TokenPayload;
       const tipoEquipamento = tipoEquipamentoFactory(tipoEquipamentoDto);
-
       await this.movimentacaoService.criarMovimentacaoTipoEquipamento(
         usuario.id,
         tipoEquipamento,
         TipoMovimentacao.Entrada
       );
-
       return omitEquipamentoEMovimentacoesDoTipoEquipamento(tipoEquipamento);
     } catch (error) {
       if (error instanceof QueryFailedError) {
@@ -113,10 +111,7 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
     id: number
   ): Promise<void> {
     const tipoEquipamento =
-      await this.tipoEquipamentoRepository.findTipoEquipamentoComEquipamentos(
-        id
-      );
-
+      await this.tipoEquipamentoRepository.findTipoEquipamentoComEquiEMovi(id);
     if (!tipoEquipamento) {
       throw new TipoEquipamentoNaoExiste();
     }
@@ -131,7 +126,6 @@ export class TipoEquipamentoService implements ITipoEquipamentoService {
 
     const usuario = decode(authorization) as TokenPayload;
     tipoEquipamento.ativo = false;
-
     await this.movimentacaoService.criarMovimentacaoTipoEquipamento(
       usuario.id,
       tipoEquipamento,
